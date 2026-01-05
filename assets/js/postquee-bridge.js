@@ -77,12 +77,13 @@ jQuery(document).ready(function ($) {
         var iframe = document.getElementById('postquee-modal-iframe');
 
         // Function to send data
+        // Function to send data
         var sendMessage = function () {
             if (iframe && iframe.contentWindow) {
                 iframe.contentWindow.postMessage({
-                    type: 'create-post-from-wp', // Specific event type for the App to listen to
+                    type: 'create-post-from-wp',
                     data: postData
-                }, targetOrigin);
+                }, '*'); // Changed to wildcard to ensure delivery across protocols/redirects
             }
         };
 
@@ -94,9 +95,11 @@ jQuery(document).ready(function ($) {
             sendMessage();
         };
 
-        // Retry mechanism to ensure App catches it after initialization
+        // Retry mechanism: extended duration to handle slow app loading/hydration
         setTimeout(sendMessage, 1500);
         setTimeout(sendMessage, 3000);
+        setTimeout(sendMessage, 5000);
+        setTimeout(sendMessage, 8000);
     });
 
 });
