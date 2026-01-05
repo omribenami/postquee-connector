@@ -1,0 +1,128 @@
+/* Apply styles only when the specific page class is present */
+
+/* Hide the Sidebar */
+body.toplevel_page_postquee #adminmenumain,
+body.toplevel_page_postquee #adminmenuback,
+body.toplevel_page_postquee #adminmenuwrap {
+    display: none !important;
+}
+
+/* Reset margins for content area to be full width */
+body.toplevel_page_postquee #wpcontent,
+body.toplevel_page_postquee #wpfooter {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding: 0 !important;
+}
+
+body.toplevel_page_postquee .auto-fold #wpcontent {
+    padding-left: 0 !important;
+}
+
+
+body.toplevel_page_postquee #wpbody-content {
+    padding-bottom: 0 !important;
+    float: none !important;
+    overflow: visible !important;
+}
+
+/* Hide WP Footer */
+body.toplevel_page_postquee #wpfooter {
+    display: none !important;
+}
+
+/* Wrapper and Iframe */
+.postquee-wrapper {
+    /* Height calculation to subtract Admin Bar */
+    height: calc(100vh - 32px);
+    width: 100%;
+    background-color: #f0f0f1;
+    /* Match WP Admin BG */
+    position: relative;
+    box-sizing: border-box;
+}
+
+#postquee-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background-color: transparent;
+    /* Let wrapper color show through initially */
+}
+
+/* Adjust for Admin Bar on smaller screens */
+@media screen and (max-width: 782px) {
+    .postquee-wrapper {
+        height: calc(100vh - 46px);
+    }
+}
+
+/* --- Modal Styles (For Post List/Editor Integration) --- */
+
+.postquee-modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+
+.postquee-modal-content {
+    background: #fff;
+    width: 90%;
+    height: 90%;
+    margin: 2.5vh auto;
+    /* Vertical centering roughly */
+    position: relative;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    animation: postqueeSlideIn 0.3s ease-out;
+}
+
+@keyframes postqueeSlideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.postquee-close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transition: transform 0.2s;
+}
+
+.postquee-close-btn:hover {
+    transform: scale(1.1);
+    background: #ff3333;
+}
+
+#postquee-modal-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
