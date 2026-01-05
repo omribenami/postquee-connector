@@ -1,35 +1,24 @@
 /* Apply styles only when the specific page class is present */
 
-/* Hide the Sidebar */
-body.toplevel_page_postquee #adminmenumain,
-body.toplevel_page_postquee #adminmenuback,
-body.toplevel_page_postquee #adminmenuwrap {
-    display: none !important;
-}
+/* Sidebar is now kept visible per user request. 
+   Previous hiding styles removed. */
 
-/* Reset margins for content area to be full width */
-body.toplevel_page_postquee #wpcontent,
-body.toplevel_page_postquee #wpfooter {
-    margin-left: 0 !important;
-    padding-left: 0 !important;
-    padding: 0 !important;
-}
-
-body.toplevel_page_postquee .auto-fold #wpcontent {
-    padding-left: 0 !important;
-}
-
-
-body.toplevel_page_postquee #wpbody-content {
-    padding-bottom: 0 !important;
-    float: none !important;
-    overflow: visible !important;
-}
-
-/* Hide WP Footer */
+/* Hide WP Footer only if desired, or keep it. 
+   If user wants "native" feel maybe footer should be hidden? 
+   User said "stay" for admin menu. 
+   Usually full screen apps hide footer. 
+   I will keep footer hidden to give more space, but restore sidebar. */
 body.toplevel_page_postquee #wpfooter {
     display: none !important;
 }
+
+body.toplevel_page_postquee #wpcontent {
+    padding-left: 0; /* Adjust if needed, but standard WP has padding. Let's reset less nicely */
+}
+
+/* Actually, standard WP #wpcontent has margin-left equal to menu width.
+   By removing the previous "margin-left: 0 !important", we restore that.
+*/
 
 /* Wrapper and Iframe */
 .postquee-wrapper {
