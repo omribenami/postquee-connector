@@ -9,11 +9,12 @@ class PostQuee_Admin {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
-		$this->app_url     = get_option( 'postquee_app_url', 'https://app.postquee.com' );
+		// Hardcoded App URL as requested
+		$this->app_url     = 'https://app.postquee.com';
 	}
 
 	public function add_plugin_admin_menu() {
-		// Main Page
+		// Main Page only, no settings submenu
 		add_menu_page(
 			'PostQuee', 
 			'PostQuee', 
@@ -23,53 +24,12 @@ class PostQuee_Admin {
 			'dashicons-share', 
 			25
 		);
-
-		// Settings Submenu
-		add_submenu_page(
-			'postquee', 
-			'Settings', 
-			'Settings', 
-			'manage_options', 
-			'postquee-settings', 
-			array( $this, 'display_settings_page' )
-		);
-	}
-
-	public function register_settings() {
-		register_setting( 'postquee_options', 'postquee_app_url', array(
-			'sanitize_callback' => 'esc_url_raw',
-			'default'           => 'https://app.postquee.com'
-		) );
 	}
 
 	public function display_plugin_admin_page() {
 		?>
 		<div class="postquee-wrapper">
 			<iframe src="<?php echo esc_url( $this->app_url ); ?>" id="postquee-iframe" allow="clipboard-read; clipboard-write; camera; microphone;" frameborder="0"></iframe>
-		</div>
-		<?php
-	}
-
-	public function display_settings_page() {
-		?>
-		<div class="wrap">
-			<h1>PostQuee Settings</h1>
-			<form method="post" action="options.php">
-				<?php
-				settings_fields( 'postquee_options' );
-				do_settings_sections( 'postquee_options' );
-				?>
-				<table class="form-table">
-					<tr valign="top">
-						<th scope="row">App URL</th>
-						<td>
-							<input type="text" name="postquee_app_url" value="<?php echo esc_attr( get_option( 'postquee_app_url', 'https://app.postquee.com' ) ); ?>" class="regular-text" />
-							<p class="description">The URL of your PostQuee application (e.g., https://app.postquee.com).</p>
-						</td>
-					</tr>
-				</table>
-				<?php submit_button(); ?>
-			</form>
 		</div>
 		<?php
 	}
