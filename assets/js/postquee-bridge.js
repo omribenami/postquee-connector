@@ -71,19 +71,27 @@ jQuery(document).ready(function ($) {
             excerpt: $btn.data('excerpt')
         };
 
+        console.log('[PostQuee Bridge] Send to PostQuee clicked');
+        console.log('[PostQuee Bridge] Post data:', postData);
+
         var $modal = getOrCreateModal();
         $modal.show();
 
         var iframe = document.getElementById('postquee-modal-iframe');
 
         // Function to send data
-        // Function to send data
+        var sendAttempts = 0;
         var sendMessage = function () {
+            sendAttempts++;
             if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.postMessage({
+                var message = {
                     type: 'create-post-from-wp',
                     data: postData
-                }, '*'); // Changed to wildcard to ensure delivery across protocols/redirects
+                };
+                console.log('[PostQuee Bridge] Sending message (attempt ' + sendAttempts + '):', message);
+                iframe.contentWindow.postMessage(message, '*'); // Changed to wildcard to ensure delivery across protocols/redirects
+            } else {
+                console.warn('[PostQuee Bridge] Iframe not ready (attempt ' + sendAttempts + ')');
             }
         };
 
@@ -92,6 +100,7 @@ jQuery(document).ready(function ($) {
 
         // Also send when it finishes loading (if new)
         iframe.onload = function () {
+            console.log('[PostQuee Bridge] Iframe loaded');
             sendMessage();
         };
 
