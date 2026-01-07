@@ -2,9 +2,9 @@
 Contributors: omribenami
 Tags: social media, scheduler, postquee, automation, dashboard
 Requires at least: 5.8
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,13 @@ Yes! The plugin works with both the Gutenberg block editor and the Classic Edito
 
 == Changelog ==
 
+= 1.0.6 =
+* Compliance: Replaced parse_url() with wp_parse_url() per WordPress coding standards
+* Compliance: Updated "Tested up to" version to 6.9
+* Compliance: Removed "Domain Path" header (no languages folder yet)
+* Cleanup: Deleted internal documentation files (CLAUDE.md, POSTQUEE_APP_INTEGRATION.md)
+* All Plugin Check (PCP) errors resolved - ready for WordPress.org submission
+
 = 1.0.5 =
 * Compliance: Updated plugin name to "PostQuee Connector" for WordPress.org submission
 * Compliance: Changed license format to "GPL-2.0-or-later" per WordPress.org standards
@@ -125,6 +132,9 @@ Yes! The plugin works with both the Gutenberg block editor and the Classic Edito
 * Secure postMessage communication bridge
 
 == Upgrade Notice ==
+
+= 1.0.6 =
+Final compliance update for WordPress.org Plugin Check (PCP). Fixes all validation errors. All users should upgrade before WordPress.org submission.
 
 = 1.0.5 =
 Compliance update for WordPress.org submission. Updates plugin naming, license format, and text domain. Recommended for all users.

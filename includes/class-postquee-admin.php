@@ -61,7 +61,7 @@ class PostQuee_Admin {
 			'postqueeObj',
 			array(
 				'appUrl' => esc_url_raw( $this->app_url ),
-				'origin' => esc_url_raw( parse_url( $this->app_url, PHP_URL_SCHEME ) . '://' . parse_url( $this->app_url, PHP_URL_HOST ) ),
+				'origin' => esc_url_raw( wp_parse_url( $this->app_url, PHP_URL_SCHEME ) . '://' . wp_parse_url( $this->app_url, PHP_URL_HOST ) ),
 			)
 		);
 	}
