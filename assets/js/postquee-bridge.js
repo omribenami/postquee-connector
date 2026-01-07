@@ -89,7 +89,8 @@ jQuery(document).ready(function ($) {
                     data: postData
                 };
                 console.log('[PostQuee Bridge] Sending message (attempt ' + sendAttempts + '):', message);
-                iframe.contentWindow.postMessage(message, '*'); // Changed to wildcard to ensure delivery across protocols/redirects
+                // Use explicit targetOrigin for security - never use wildcard '*'
+                iframe.contentWindow.postMessage(message, targetOrigin);
             } else {
                 console.warn('[PostQuee Bridge] Iframe not ready (attempt ' + sendAttempts + ')');
             }

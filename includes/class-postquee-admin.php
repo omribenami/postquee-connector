@@ -55,11 +55,15 @@ class PostQuee_Admin {
 
 		wp_enqueue_script( $this->plugin_name, POSTQUEE_BRIDGE_URL . 'assets/js/postquee-bridge.js', array( 'jquery' ), $this->version, true );
 
-		// Localize script to pass PHP data to JS
-		wp_localize_script( $this->plugin_name, 'postqueeObj', array(
-			'appUrl' => $this->app_url,
-			'origin' => parse_url( $this->app_url, PHP_URL_SCHEME ) . '://' . parse_url( $this->app_url, PHP_URL_HOST )
-		) );
+		// Localize script to pass PHP data to JS (automatically escaped by wp_localize_script)
+		wp_localize_script(
+			$this->plugin_name,
+			'postqueeObj',
+			array(
+				'appUrl' => esc_url_raw( $this->app_url ),
+				'origin' => esc_url_raw( parse_url( $this->app_url, PHP_URL_SCHEME ) . '://' . parse_url( $this->app_url, PHP_URL_HOST ) ),
+			)
+		);
 	}
 
 	public function enqueue_styles( $hook ) {

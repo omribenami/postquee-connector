@@ -3,7 +3,7 @@
  * Plugin Name: PostQuee for WordPress
  * Plugin URI: https://postquee.com
  * Description: Integrates PostQuee directly into your WordPress dashboard, allowing seamless content pushing and scheduling.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: PostQuee
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'POSTQUEE_BRIDGE_VERSION', '1.0.3' );
+define( 'POSTQUEE_BRIDGE_VERSION', '1.0.4' );
 define( 'POSTQUEE_BRIDGE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'POSTQUEE_BRIDGE_URL', plugin_dir_url( __FILE__ ) );
 
@@ -29,9 +29,9 @@ require_once POSTQUEE_BRIDGE_PATH . 'includes/class-postquee-bridge.php';
  *
  * @since 1.0.0
  */
-function wppq_run_postquee_bridge() {
+function postquee_run_bridge() {
 	$plugin = new PostQuee_Bridge();
 	$plugin->run();
 }
 
-wppq_run_postquee_bridge();
+postquee_run_bridge();

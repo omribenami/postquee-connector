@@ -4,7 +4,7 @@ Tags: social media, scheduling, content management, automation, marketing
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,8 +97,15 @@ Yes! The plugin works with both the Gutenberg block editor and the Classic Edito
 
 == Changelog ==
 
+= 1.0.4 =
+* **CRITICAL SECURITY FIX**: Replaced wildcard '*' with explicit targetOrigin in postMessage calls to prevent cross-origin data leakage
+* Enhanced security: Added esc_url_raw() to wp_localize_script data for defense-in-depth
+* Improved code: Changed function prefix from wppq_ to postquee_ for better branding consistency
+* Improved documentation: Updated readme.txt with detailed postMessage security information
+
 = 1.0.3 =
-* Enhanced security: Added ABSPATH checks to all PHP files
+* Enhanced security: Added ABSPATH checks to all PHP files to prevent direct access
+* Enhanced security: Strict origin validation on incoming postMessage events (event.origin === targetOrigin)
 * Enhanced security: Added explicit capability checks (current_user_can) for all admin operations
 * Enhanced security: Improved data sanitization and output escaping using WordPress best practices
 * Improved code: Prefixed global functions with wppq_ to prevent naming collisions
@@ -125,8 +132,11 @@ Yes! The plugin works with both the Gutenberg block editor and the Classic Edito
 
 == Upgrade Notice ==
 
+= 1.0.4 =
+CRITICAL SECURITY UPDATE: Fixes postMessage wildcard vulnerability that could expose post data to malicious origins. All users must upgrade immediately.
+
 = 1.0.3 =
-Important security and compliance update. Adds explicit capability checks, improves data sanitization, and meets WordPress.org Plugin Directory requirements. Recommended for all users.
+Important security update. Adds capability checks, improves data sanitization, and meets WordPress.org Plugin Directory requirements. Recommended for all users.
 
 = 1.0.2 =
 Improves reliability of message delivery between WordPress and PostQuee. Recommended update for all users.
