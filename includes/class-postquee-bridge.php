@@ -21,7 +21,7 @@ class PostQuee_Bridge {
 	}
 
 	private function define_admin_hooks() {
-		$plugin_admin = new PostQuee_Admin( 'postquee-bridge', POSTQUEE_BRIDGE_VERSION );
+		$plugin_admin = new PostQuee_Admin( 'postquee-connector', POSTQUEE_BRIDGE_VERSION );
 		add_action( 'admin_menu', array( $plugin_admin, 'add_plugin_admin_menu' ) );
 		// Removed settings registration as requested
 		add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_styles' ) );

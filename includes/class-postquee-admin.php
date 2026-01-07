@@ -37,7 +37,7 @@ class PostQuee_Admin {
 
 	public function display_plugin_admin_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'postquee-bridge' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'postquee-connector' ) );
 		}
 		?>
 		<div class="postquee-wrapper">
@@ -96,7 +96,7 @@ class PostQuee_Admin {
 		$actions['send_to_postquee'] = sprintf(
 			'<a href="#" class="send-to-postquee" %s>%s</a>',
 			$data_attrs,
-			esc_html__( 'Send to PostQuee', 'postquee-bridge' )
+			esc_html__( 'Send to PostQuee', 'postquee-connector' )
 		);
 
 		return $actions;
@@ -133,9 +133,9 @@ class PostQuee_Admin {
 			data-image="<?php echo esc_attr( $featured_image ); ?>"
 			data-excerpt="<?php echo esc_attr( get_the_excerpt( $post->ID ) ); ?>"
 		>
-			<?php esc_html_e( 'Send to PostQuee', 'postquee-bridge' ); ?>
+			<?php esc_html_e( 'Send to PostQuee', 'postquee-connector' ); ?>
 		</button>
-		<p class="description"><?php esc_html_e( 'Push this post to PostQuee to schedule or publish.', 'postquee-bridge' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Push this post to PostQuee to schedule or publish.', 'postquee-connector' ); ?></p>
 		<?php
 	}
 }

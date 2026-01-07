@@ -1,18 +1,18 @@
-=== PostQuee for WordPress ===
-Contributors: postquee
-Tags: social media, scheduling, content management, automation, marketing
+=== PostQuee Connector ===
+Contributors: omribenami
+Tags: social media, scheduler, postquee, automation, dashboard
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.4
-License: GPLv2 or later
+Stable tag: 1.0.5
+License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Seamlessly integrate PostQuee into your WordPress dashboard for effortless social media content scheduling and publishing.
+Bridges your WordPress site with the PostQuee social media dashboard for seamless content scheduling and publishing.
 
 == Description ==
 
-PostQuee for WordPress embeds the powerful PostQuee social media scheduling platform directly into your WordPress admin dashboard. Push your WordPress posts to PostQuee with a single click, making content distribution across social media platforms faster and more efficient.
+PostQuee Connector embeds the powerful PostQuee social media scheduling platform directly into your WordPress admin dashboard. Push your WordPress posts to PostQuee with a single click, making content distribution across social media platforms faster and more efficient.
 
 **Key Features:**
 
@@ -42,25 +42,11 @@ PostQuee is an open-source social media scheduling tool that helps you plan, cre
 
 == Installation ==
 
-**From WordPress Admin:**
-
-1. Navigate to Plugins > Add New
-2. Search for "PostQuee for WordPress"
-3. Click "Install Now" and then "Activate"
-4. Click on "PostQuee" in the admin menu to start using the plugin
-
-**Manual Installation:**
-
-1. Download the plugin zip file
-2. Navigate to Plugins > Add New > Upload Plugin
-3. Choose the downloaded zip file and click "Install Now"
-4. Activate the plugin through the 'Plugins' menu in WordPress
-
-**After Activation:**
-
-1. Look for the "PostQuee" menu item in your WordPress admin sidebar
-2. Click it to access the PostQuee dashboard (requires a PostQuee account)
-3. When editing posts, use the "Send to PostQuee" button in the post editor sidebar or post list
+1. Upload the plugin folder to the `/wp-content/plugins/` directory
+2. Activate the plugin through the 'Plugins' menu in WordPress
+3. Look for the "PostQuee" menu item in your WordPress admin sidebar
+4. Click it to access the PostQuee dashboard (requires a PostQuee account)
+5. When editing posts, use the "Send to PostQuee" button in the post editor sidebar or post list
 
 == Frequently Asked Questions ==
 
@@ -97,6 +83,14 @@ Yes! The plugin works with both the Gutenberg block editor and the Classic Edito
 
 == Changelog ==
 
+= 1.0.5 =
+* Compliance: Updated plugin name to "PostQuee Connector" for WordPress.org submission
+* Compliance: Changed license format to "GPL-2.0-or-later" per WordPress.org standards
+* Compliance: Updated author information and metadata
+* Compliance: Changed text domain from "postquee-bridge" to "postquee-connector"
+* Documentation: Simplified installation instructions
+* Code quality: Enhanced inline security comments
+
 = 1.0.4 =
 * **CRITICAL SECURITY FIX**: Replaced wildcard '*' with explicit targetOrigin in postMessage calls to prevent cross-origin data leakage
 * Enhanced security: Added esc_url_raw() to wp_localize_script data for defense-in-depth
@@ -131,6 +125,9 @@ Yes! The plugin works with both the Gutenberg block editor and the Classic Edito
 * Secure postMessage communication bridge
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+Compliance update for WordPress.org submission. Updates plugin naming, license format, and text domain. Recommended for all users.
 
 = 1.0.4 =
 CRITICAL SECURITY UPDATE: Fixes postMessage wildcard vulnerability that could expose post data to malicious origins. All users must upgrade immediately.
