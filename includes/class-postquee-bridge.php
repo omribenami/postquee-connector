@@ -1,4 +1,13 @@
 <?php
+/**
+ * Core plugin class
+ *
+ * @package PostQuee
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class PostQuee_Bridge {
 

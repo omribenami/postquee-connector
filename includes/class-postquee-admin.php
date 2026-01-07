@@ -1,4 +1,13 @@
 <?php
+/**
+ * Admin functionality class
+ *
+ * @package PostQuee
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class PostQuee_Admin {
 
@@ -27,6 +36,9 @@ class PostQuee_Admin {
 	}
 
 	public function display_plugin_admin_page() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'postquee-bridge' ) );
+		}
 		?>
 		<div class="postquee-wrapper">
 			<iframe src="<?php echo esc_url( $this->app_url ); ?>" id="postquee-iframe" allow="clipboard-read; clipboard-write; camera; microphone;" frameborder="0"></iframe>
@@ -60,7 +72,7 @@ class PostQuee_Admin {
 
 	// Add link to Post List
 	public function add_post_row_action( $actions, $post ) {
-		if ( 'post' !== $post->post_type ) {
+		if ( 'post' !== $post->post_type || ! current_user_can( 'edit_post', $post->ID ) ) {
 			return $actions;
 		}
 
@@ -80,7 +92,7 @@ class PostQuee_Admin {
 		$actions['send_to_postquee'] = sprintf(
 			'<a href="#" class="send-to-postquee" %s>%s</a>',
 			$data_attrs,
-			__( 'Send to PostQuee', 'postquee-bridge' )
+			esc_html__( 'Send to PostQuee', 'postquee-bridge' )
 		);
 
 		return $actions;
@@ -88,27 +100,27 @@ class PostQuee_Admin {
 
 	// Add Meta Box to Editor
 	public function add_meta_box() {
+		$post_type = 'post';
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+
 		add_meta_box(
 			'postquee_meta_box',
 			'PostQuee',
 			array( $this, 'render_meta_box' ),
-			'post',
+			$post_type,
 			'side',
 			'high'
 		);
 	}
 
 	public function render_meta_box( $post ) {
+		if ( ! current_user_can( 'edit_post', $post->ID ) ) {
+			return;
+		}
+
 		$featured_image = get_the_post_thumbnail_url( $post->ID, 'full' );
-		// For the editor (current state), we might want to grab values via JS from the editor fields if they are dirty, 
-		// but using saved values is safer for PHP rendering.
-		// However, the user wants "Send to PostQuee" which implies sending current content?
-		// "The Bridge Mechanism: When clicked... send... post_title, post_url..."
-		// If I use PHP values here, I'm sending the SAVED version.
-		// To send the "current" edited version (especially in Gutenberg), I'd need complex JS to read the store.
-		// For simplicity/v1, I'll rely on the PHP values (Saved Post) and maybe try to grab simple fields via JS if possible, 
-		// but for now, let's assume sending the SAVED post state is acceptable or I'll use JS to grab standard fields.
-		
 		?>
 		<button type="button" class="button button-primary send-to-postquee-editor"
 			data-id="<?php echo esc_attr( $post->ID ); ?>"
@@ -117,9 +129,9 @@ class PostQuee_Admin {
 			data-image="<?php echo esc_attr( $featured_image ); ?>"
 			data-excerpt="<?php echo esc_attr( get_the_excerpt( $post->ID ) ); ?>"
 		>
-			Send to PostQuee
+			<?php esc_html_e( 'Send to PostQuee', 'postquee-bridge' ); ?>
 		</button>
-		<p class="description">Push this post to PostQuee to schedule/publish.</p>
+		<p class="description"><?php esc_html_e( 'Push this post to PostQuee to schedule or publish.', 'postquee-bridge' ); ?></p>
 		<?php
 	}
 }
