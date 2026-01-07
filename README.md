@@ -1,4 +1,4 @@
-# PostQuee Smart Bridge for WordPress
+# PostQuee Connector for WordPress
 
 **PostQuee Smart Bridge** seamlessly integrates the [PostQuee](https://postquee.com) content scheduling platform directly into your WordPress dashboard.
 
