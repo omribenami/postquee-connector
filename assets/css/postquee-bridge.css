@@ -1,34 +1,52 @@
 /* Apply styles only when the specific page class is present */
 
-/* Sidebar is now kept visible per user request. 
-   Previous hiding styles removed. */
+/* Sidebar is now kept visible per user request. */
 
-/* Hide WP Footer only if desired, or keep it. 
-   If user wants "native" feel maybe footer should be hidden? 
-   User said "stay" for admin menu. 
-   Usually full screen apps hide footer. 
-   I will keep footer hidden to give more space, but restore sidebar. */
 body.toplevel_page_postquee #wpfooter {
     display: none !important;
 }
 
 body.toplevel_page_postquee #wpcontent {
-    padding-left: 0; /* Adjust if needed, but standard WP has padding. Let's reset less nicely */
+    padding-left: 0;
+    background: #0f172a;
+    /* Match the new site background */
 }
-
-/* Actually, standard WP #wpcontent has margin-left equal to menu width.
-   By removing the previous "margin-left: 0 !important", we restore that.
-*/
 
 /* Wrapper and Iframe */
 .postquee-wrapper {
-    /* Height calculation to subtract Admin Bar */
     height: calc(100vh - 32px);
     width: 100%;
-    background-color: #f0f0f1;
-    /* Match WP Admin BG */
+    background: radial-gradient(circle at top right, #1e293b, #0f172a);
     position: relative;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Vibrant Loading State */
+.postquee-wrapper::before {
+    content: "PostQuee is connecting...";
+    position: absolute;
+    color: #94A3B8;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    animation: postqueePulse 2s infinite ease-in-out;
+}
+
+@keyframes postqueePulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(0.98);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 #postquee-iframe {
@@ -37,7 +55,8 @@ body.toplevel_page_postquee #wpcontent {
     border: none;
     display: block;
     background-color: transparent;
-    /* Let wrapper color show through initially */
+    position: relative;
+    z-index: 1;
 }
 
 /* Adjust for Admin Bar on smaller screens */
@@ -47,7 +66,7 @@ body.toplevel_page_postquee #wpcontent {
     }
 }
 
-/* --- Modal Styles (For Post List/Editor Integration) --- */
+/* --- Premium Modal Styles --- */
 
 .postquee-modal-overlay {
     display: none;
@@ -57,61 +76,104 @@ body.toplevel_page_postquee #wpcontent {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    animation: postqueeFadeIn 0.3s ease;
 }
 
-.postquee-modal-content {
-    background: #fff;
-    width: 90%;
-    height: 90%;
-    margin: 2.5vh auto;
-    /* Vertical centering roughly */
-    position: relative;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    overflow: hidden;
-    animation: postqueeSlideIn 0.3s ease-out;
-}
-
-@keyframes postqueeSlideIn {
+@keyframes postqueeFadeIn {
     from {
-        transform: translateY(20px);
         opacity: 0;
     }
 
     to {
-        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.postquee-modal-content {
+    background: #1e293b;
+    width: 90%;
+    height: 90%;
+    margin: 2.5vh auto;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    animation: postqueeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes postqueeSlideUp {
+    from {
+        transform: translateY(40px) scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 }
 
 .postquee-close-btn {
     position: absolute;
-    right: 15px;
-    top: 15px;
-    background: #ff4d4d;
+    right: 20px;
+    top: 20px;
+    background: rgba(255, 255, 255, 0.1);
     color: white;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 20px;
-    line-height: 32px;
-    text-align: center;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    transition: transform 0.2s;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
 }
 
 .postquee-close-btn:hover {
-    transform: scale(1.1);
-    background: #ff3333;
+    transform: rotate(90deg);
+    background: #ff4d4d;
+    border-color: #ff4d4d;
 }
 
 #postquee-modal-iframe {
     width: 100%;
     height: 100%;
     border: none;
+}
+
+/* Vibrant Buttons for Admin UI */
+.send-to-postquee,
+.send-to-postquee-editor {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.send-to-postquee:hover {
+    color: #FF8C00 !important;
+    transform: translateX(2px);
+}
+
+.send-to-postquee-editor {
+    background: linear-gradient(135deg, #FF8C00 0%, #FF6B00 100%) !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3) !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
+}
+
+.send-to-postquee-editor:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4) !important;
+    filter: brightness(1.1);
 }
