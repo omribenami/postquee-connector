@@ -13,7 +13,7 @@ class PostQuee_Admin
 {
 	private $plugin_name;
 	private $version;
-	private $api_url_default = 'https://app.postquee.com/api/public/v1'; // Default per instructions
+	private $api_url_default = 'https://api.postiz.com'; // Default per instructions
 
 	public function __construct($plugin_name, $version)
 	{
@@ -75,57 +75,18 @@ class PostQuee_Admin
 
 	public function enqueue_scripts($hook)
 	{
-		// Only load React calendar on our admin page
-		if ($hook === 'toplevel_page_postquee') {
-			// Enqueue React calendar bundle
-			wp_enqueue_script(
-				'postquee-calendar',
-				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.bundle.js',
-				array(), // React is bundled, no dependencies
-				$this->version,
-				true
-			);
+		// Basic hook check to avoid loading globally on backend if not needed, 
+		// but we need it on edit screens and our page.
+		wp_enqueue_script($this->plugin_name, POSTQUEE_BRIDGE_URL . 'assets/js/postquee-bridge.js', array('jquery'), $this->version, true);
 
-			// Get initial data for React
-			$channels = $this->get_channels_cached();
-			if (is_wp_error($channels)) {
-				$channels = [];
-			}
-
-			// Pass data to React via window.postqueeWP
-			wp_localize_script(
-				'postquee-calendar',
-				'postqueeWP',
-				array(
-					'restUrl' => rest_url('postquee/v1/'),
-					'nonce' => wp_create_nonce('wp_rest'),
-					'apiKey' => get_option('postquee_api_key'),
-					'integrations' => $channels,
-					'ajaxUrl' => admin_url('admin-ajax.php'),
-					'user' => wp_get_current_user()->display_name,
-				)
-			);
-		}
-
-		// Legacy JS for metaboxes and other pages
-		if ($hook === 'post.php' || $hook === 'post-new.php') {
-			wp_enqueue_script(
-				$this->plugin_name . '-metabox',
-				POSTQUEE_BRIDGE_URL . 'assets/js/postquee-bridge.js',
-				array('jquery'),
-				$this->version,
-				true
-			);
-
-			wp_localize_script(
-				$this->plugin_name . '-metabox',
-				'postqueeObj',
-				array(
-					'ajaxUrl' => admin_url('admin-ajax.php'),
-					'nonce' => wp_create_nonce('postquee_nonce'),
-				)
-			);
-		}
+		wp_localize_script(
+			$this->plugin_name,
+			'postqueeObj',
+			array(
+				'ajaxUrl' => admin_url('admin-ajax.php'),
+				'nonce' => wp_create_nonce('postquee_nonce'),
+			)
+		);
 	}
 
 	// --------------------------------------------------------------------------
@@ -142,7 +103,7 @@ class PostQuee_Admin
 		$args = array(
 			'method' => $method,
 			'headers' => array(
-				'Authorization' => $api_key,
+				'Authorization' => 'Bearer ' . $api_key,
 				'Content-Type' => 'application/json',
 				'Accept' => 'application/json'
 			),
@@ -170,142 +131,167 @@ class PostQuee_Admin
 		return $data;
 	}
 
+	// --------------------------------------------------------------------------
+	// Admin Dashboard (Tabs)
+	// --------------------------------------------------------------------------
 	public function display_plugin_admin_page()
 	{
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('Permission denied.', 'postquee-connector'));
 		}
 
-		$channels = $this->get_channels_cached();
-		$tab = isset($_GET['tab']) ? $_GET['tab'] : 'calendar';
+		$active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'feed';
 		?>
-		<div class="postquee-app-wrapper">
-			<!-- Sidebar -->
-			<div class="pq-sidebar">
-				<div class="pq-sidebar-header">
-					<span>Channels</span>
-					<!-- Back to WP Dashboard if needed -->
-					<a href="<?php echo admin_url(); ?>" class="pq-nav-btn"><span
-							class="dashicons dashicons-arrow-left-alt2"></span></a>
-				</div>
-
-				<!-- Add Channel removed as per request -->
-
-				<a href="<?php echo esc_url(admin_url('admin.php?page=postquee')); ?>" class="pq-btn-create-post"
-					id="pq-create-post-btn">
-					+ <?php esc_html_e('Create Post', 'postquee-connector'); ?>
-				</a>
-
-				<div class="pq-channel-list">
-					<?php if (!empty($channels) && !is_wp_error($channels)): ?>
-						<?php foreach ($channels as $ch):
-							$icon = substr(isset($ch['provider']) ? $ch['provider'] : 'G', 0, 1);
-							?>
-							<div class="pq-channel-item">
-								<div class="pq-channel-icon"><?php echo esc_html(strtoupper($icon)); ?></div>
-								<div class="pq-channel-name"><?php echo esc_html($ch['name']); ?></div>
-								<div style="margin-left:auto;"><span class="dashicons dashicons-ellipsis"></span></div>
-							</div>
-						<?php endforeach; ?>
-					<?php else: ?>
-						<div style="padding:10px; opacity:0.6; font-size:13px;">No channels connected.</div>
-					<?php endif; ?>
-				</div>
-
-				<div class="pq-sidebar-footer"
-					style="margin-top:auto; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
-					<div class="pq-user-card"
-						style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; color:var(--new-textColor);">
-						<div class="pq-user-avatar-wrap"
-							style="width:32px; height:32px; border-radius:50%; overflow:hidden; border:1px solid #555; flex-shrink:0;">
-							<img src="<?php echo esc_url(get_avatar_url(get_current_user_id(), ['size' => 64])); ?>"
-								style="width:100%; height:100%; object-fit:cover; display:block;">
-						</div>
-						<div class="pq-user-name"
-							style="font-size:14px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-							<?php echo esc_html(wp_get_current_user()->display_name); ?>
-						</div>
-						<a href="<?php echo esc_url(admin_url('admin.php?page=postquee&tab=settings')); ?>"
-							style="margin-left:auto; color:#999; text-decoration:none;"><span
-								class="dashicons dashicons-admin-generic"></span></a>
-					</div>
-				</div>
-			</div>
-
-			<!-- Main Content Area -->
-			<div class="pq-main-content">
+		<div class="wrap">
+			<h1><?php esc_html_e('PostQuee Hub', 'postquee-connector'); ?></h1>
+			<h2 class="nav-tab-wrapper">
+				<a href="?page=postquee&tab=feed"
+					class="nav-tab <?php echo $active_tab == 'feed' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Feed', 'postquee-connector'); ?></a>
+				<a href="?page=postquee&tab=channels"
+					class="nav-tab <?php echo $active_tab == 'channels' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Channels', 'postquee-connector'); ?></a>
+				<a href="?page=postquee&tab=settings"
+					class="nav-tab <?php echo $active_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_html_e('Settings', 'postquee-connector'); ?></a>
+			</h2>
+			<div class="postquee-tab-content" style="margin-top:20px;">
 				<?php
-				if ($tab === 'settings' || $tab === 'connect') {
-					$this->render_settings_view();
-				} else {
-					$this->render_calendar_view();
+				switch ($active_tab) {
+					case 'channels':
+						$this->render_channels_tab();
+						break;
+					case 'settings':
+						$this->render_settings_tab();
+						break;
+					case 'feed':
+					default:
+						$this->render_feed_tab();
+						break;
 				}
 				?>
 			</div>
 		</div>
-
-		<!-- Modal Overlay -->
-		<div id="pq-modal-overlay" style="display:none;">
-			<div id="pq-modal-content"></div>
-		</div>
 		<?php
 	}
 
-	private function render_calendar_view()
+	private function render_settings_tab()
 	{
 		?>
-		<!-- React Calendar Mount Point -->
-		<div id="postquee-calendar-root" style="width: 100%; height: 100%;"></div>
+		<form method="post" action="options.php" class="card" style="padding:20px; max-width:600px;">
+			<?php
+			settings_fields('postquee_options');
+			do_settings_sections('postquee_options');
+			?>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e('API Key', 'postquee-connector'); ?></th>
+					<td>
+						<input type="password" name="postquee_api_key"
+							value="<?php echo esc_attr(get_option('postquee_api_key')); ?>" class="regular-text"
+							style="width:100%;" />
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php esc_html_e('Base URL', 'postquee-connector'); ?></th>
+					<td>
+						<input type="url" name="postquee_base_url"
+							value="<?php echo esc_attr(get_option('postquee_base_url', $this->api_url_default)); ?>"
+							class="regular-text" style="width:100%;" />
+						<p class="description"><?php esc_html_e('Default: https://api.postiz.com', 'postquee-connector'); ?></p>
+					</td>
+				</tr>
+			</table>
+			<?php submit_button(); ?>
+		</form>
 		<?php
 	}
 
-	private function render_settings_view()
+	private function render_feed_tab()
 	{
-		?>
-		<div style="padding:40px; max-width:800px; color:var(--new-textColor);">
-			<h1 style="margin-bottom:30px; border-bottom:1px solid var(--new-border); padding-bottom:20px;">Settings & Connect
-			</h1>
+		$posts = $this->request('/posts'); // GET /posts
+		if (is_wp_error($posts)) {
+			echo '<div class="notice notice-error"><p>' . esc_html($posts->get_error_message()) . '</p></div>';
+			return;
+		}
 
-			<form method="post" action="options.php" class="card"
-				style="background:var(--new-settings); padding:30px; border:1px solid var(--new-border); border-radius:12px;">
-				<?php
-				settings_fields('postquee_options');
-				do_settings_sections('postquee_options');
-				?>
-				<table class="form-table">
-					<tr valign="top">
-						<th scope="row" style="color:var(--new-textColor);">
-							<?php esc_html_e('API Key', 'postquee-connector'); ?>
-						</th>
-						<td>
-							<input type="password" name="postquee_api_key"
-								value="<?php echo esc_attr(get_option('postquee_api_key')); ?>" class="regular-text"
-								style="width:100%; background:var(--new-input-bg); color:var(--new-textColor); border:1px solid var(--new-border); padding:10px;" />
-						</td>
+		// Structure depends on actual API response. Assuming basic array of objects.
+		// If wrapper exists (e.g. data => []), adjust. Assuming direct array or data key.
+		$items = isset($posts['data']) ? $posts['data'] : $posts;
+		if (!is_array($items)) {
+			echo '<p>' . esc_html__('No posts found or invalid response.', 'postquee-connector') . '</p>';
+			return;
+		}
+		?>
+		<table class="wp-list-table widefat fixed striped">
+			<thead>
+				<tr>
+					<th><?php esc_html_e('Content', 'postquee-connector'); ?></th>
+					<th><?php esc_html_e('Scheduled Date', 'postquee-connector'); ?></th>
+					<th><?php esc_html_e('Status', 'postquee-connector'); ?></th>
+					<th><?php esc_html_e('Actions', 'postquee-connector'); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if (empty($items)): ?>
+					<tr>
+						<td colspan="4"><?php esc_html_e('No posts yet.', 'postquee-connector'); ?></td>
 					</tr>
-					<tr valign="top">
-						<th scope="row" style="color:var(--new-textColor);">
-							<?php esc_html_e('Base URL', 'postquee-connector'); ?>
-						</th>
-						<td>
-							<input type="url" name="postquee_base_url"
-								value="<?php echo esc_attr(get_option('postquee_base_url', $this->api_url_default)); ?>"
-								class="regular-text"
-								style="width:100%; background:var(--new-input-bg); color:var(--new-textColor); border:1px solid var(--new-border); padding:10px;" />
-							<p class="description" style="color:var(--color-gray); margin-top:5px;">
-								<?php esc_html_e('Default: https://app.postquee.com/api/public/v1', 'postquee-connector'); ?>
-							</p>
-						</td>
-					</tr>
-				</table>
-				<div style="margin-top:20px; text-align:right;">
-					<?php submit_button('Save Settings', 'primary', 'submit', false, ['style' => 'background:var(--new-btn-primary); border:none; padding:10px 20px; color:white; border-radius:8px; cursor:pointer;']); ?>
-				</div>
-			</form>
-		</div>
+				<?php else: ?>
+					<?php foreach ($items as $item):
+						$content = isset($item['content']) ? $item['content'] : (isset($item['title']) ? $item['title'] : '-');
+						$date = isset($item['scheduledAt']) ? $item['scheduledAt'] : '-';
+						$status = isset($item['status']) ? $item['status'] : 'draft';
+						$id = isset($item['id']) ? $item['id'] : '';
+						?>
+						<tr>
+							<td><?php echo esc_html(substr($content, 0, 100)) . '...'; ?></td>
+							<td><?php echo esc_html($date); ?></td>
+							<td><span class="badge"><?php echo esc_html($status); ?></span></td>
+							<td>
+								<?php if ($id): ?>
+									<button class="button button-small postquee-delete-btn" data-id="<?php echo esc_attr($id); ?>"
+										style="color:#b32d2e; border-color:#b32d2e;"><?php esc_html_e('Delete', 'postquee-connector'); ?></button>
+								<?php endif; ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</tbody>
+		</table>
 		<?php
 	}
 
+	private function render_channels_tab()
+	{
+		$channels = $this->get_channels_cached();
+		?>
+		<table class="wp-list-table widefat fixed striped" style="max-width:800px;">
+			<thead>
+				<tr>
+					<th><?php esc_html_e('Channel Name', 'postquee-connector'); ?></th>
+					<th><?php esc_html_e('Type', 'postquee-connector'); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if (empty($channels) || is_wp_error($channels)): ?>
+					<tr>
+						<td colspan="2">
+							<?php esc_html_e('No channels connected. Please connect channels in PostQuee.', 'postquee-connector'); ?>
+						</td>
+					</tr>
+				<?php else: ?>
+					<?php foreach ($channels as $ch):
+						$name = isset($ch['name']) ? $ch['name'] : 'Unknown';
+						$type = isset($ch['provider']) ? $ch['provider'] : 'Unknown';
+						?>
+						<tr>
+							<td><strong><?php echo esc_html($name); ?></strong></td>
+							<td><?php echo esc_html(ucfirst($type)); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</tbody>
+		</table>
+		<?php
+	}
 
 	// --------------------------------------------------------------------------
 	// Meta Box & Post Integration
@@ -352,7 +338,7 @@ class PostQuee_Admin
 		<hr>
 		<p>
 			<a
-				href="<?php echo esc_url(admin_url('admin.php?page=postquee')); ?>"><?php esc_html_e('Configure Settings', 'postquee-connector'); ?></a>
+				href="<?php echo esc_url(admin_url('admin.php?page=postquee&tab=settings')); ?>"><?php esc_html_e('Configure Settings', 'postquee-connector'); ?></a>
 		</p>
 		<?php
 	}
@@ -378,29 +364,45 @@ class PostQuee_Admin
 		$permalink = get_permalink($post_id);
 		$selected_channels = isset($_POST['postquee_channels']) ? $_POST['postquee_channels'] : array();
 
-		// Construct content
+		// Construct Payload
 		$content = $title . "\n\n" . $permalink;
 
-		// Get featured image if available
-		$media = array();
-		$featured_image = get_the_post_thumbnail_url($post_id, 'full');
-		if ($featured_image) {
-			$media[] = $featured_image;
-		}
-
-		// Build integrations array per PostQuee API spec
-		$integrations = array();
-		foreach ($selected_channels as $ch_id) {
-			$integrations[] = array('id' => $ch_id);
-		}
-
-		// Construct payload per PostQuee API documentation
-		$payload = array(
+		// POST /posts endpoint per instructions
+		$body = array(
 			'content' => $content,
-			'media' => $media,
-			'integrations' => $integrations,
-			'date' => current_time('c') // ISO 8601 format
+			'providers' => $selected_channels, // Assuming API expects 'providers' or 'channels' array of IDs. Adjusting based on standard Postiz structure. 
+			// If Postiz API expects 'posts' array structure, we map it:
+			// "posts": [ { "content": ..., "channels": [...] } ] ?
+			// The instructions just said "trigger a POST /posts... with title, link, selected channels".
+			// I will try a standard flat payload or the one seen in typical Postiz docs.
+			// Reverting to documented Postiz structure: { type: 'draft', posts: [ { content:..., integration: {id: ...} } ] } works best if creating multiple.
+			// But for a single post distribution, typically:
+			'title' => $title, // Some APIs take title separate
 		);
+		// Let's refine payload based on "Create a new social post"
+		// If it's a unified creation:
+		$payload = array(
+			'type' => 'draft', // Safe default
+			'posts' => array()
+		);
+
+		// If channels selected, create a post entry for each or one unified?
+		// Postiz usually handles one 'post' object per channel OR one master.
+		// Detailed prompt didn't specify JSON structure, only fields.
+		// I will create one entry per channel to be safe, or just one global if supported.
+		// Let's assume one global content.
+
+		if (empty($selected_channels)) {
+			// If no channels, just draft it generally?
+			$payload['posts'][] = array('content' => $content);
+		} else {
+			foreach ($selected_channels as $ch_id) {
+				$payload['posts'][] = array(
+					'content' => $content,
+					'integration' => array('id' => $ch_id)
+				);
+			}
+		}
 
 		// Fire request
 		$this->request('/posts', 'POST', $payload);
@@ -416,7 +418,7 @@ class PostQuee_Admin
 			return $cached;
 		}
 
-		$response = $this->request('/integrations'); // GET /integrations
+		$response = $this->request('/social/channels'); // GET /social/channels
 
 		if (is_wp_error($response)) {
 			return $response; // Return error to caller
@@ -451,7 +453,7 @@ class PostQuee_Admin
 		wp_send_json_success('Deleted');
 	}
 
-	// AJAX Handler for creating posts (both Admin Bar and Calendar Modal)
+	// Manual Trigger from Admin Bar
 	public function ajax_send_post_manual()
 	{
 		check_ajax_referer('postquee_nonce', 'nonce');
@@ -460,34 +462,16 @@ class PostQuee_Admin
 
 		$title = isset($_POST['title']) ? sanitize_text_field(wp_unslash($_POST['title'])) : '';
 		$url = isset($_POST['url']) ? esc_url_raw(wp_unslash($_POST['url'])) : '';
-		$raw_content = isset($_POST['content']) ? sanitize_textarea_field(wp_unslash($_POST['content'])) : '';
 
-		$providers = isset($_POST['providers']) ? array_map('sanitize_text_field', $_POST['providers']) : [];
-
-		// Build content
-		if ($raw_content) {
-			$content = $raw_content;
-		} else {
-			$content = $title;
-			if ($url)
-				$content .= "\n\n" . $url;
-		}
-
-		// Build integrations array
-		$integrations = array();
-		foreach ($providers as $provider_id) {
-			$integrations[] = array('id' => $provider_id);
-		}
-
-		// Construct payload per PostQuee API documentation
-		$payload = array(
-			'content' => $content,
-			'media' => array(),
-			'integrations' => $integrations,
-			'date' => current_time('c') // ISO 8601 format
+		$content = $title . "\n\n" . $url;
+		$body = array(
+			'type' => 'draft',
+			'posts' => array(
+				array('content' => $content)
+			)
 		);
 
-		$res = $this->request('/posts', 'POST', $payload);
+		$res = $this->request('/posts', 'POST', $body);
 
 		if (is_wp_error($res)) {
 			wp_send_json_error($res->get_error_message());
@@ -535,4 +519,3 @@ class PostQuee_Admin
 		}
 	}
 }
-

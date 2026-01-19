@@ -1,0 +1,79 @@
+jQuery(document).ready(function ($) {
+    var appUrl = postqueeObj.appUrl;
+    console.log('[PostQuee] Bridge Loaded. App URL:', appUrl);
+
+    // --- 1. Dashboard "Launch Studio" Button ---
+
+    $('#postquee-launch-btn').on('click', function (e) {
+        // Standard link behavior is usually best, but if we want to force
+        // a "clean" new tab without referrers:
+        e.preventDefault();
+        var link = document.createElement('a');
+        link.href = appUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+    });
+
+    // --- 2. Send to PostQuee via API (AJAX) - Admin Bar & Buttons ---
+    $(document).on('click', '.send-to-postquee-api', function (e) {
+        e.preventDefault();
+
+        var $btn = $(this);
+        var originalText = $btn.text();
+
+        // Visual Feedback
+        $btn.text('Sending...').prop('disabled', true);
+
+        var data = {
+            action: 'postquee_send_post',
+            nonce: postqueeObj.nonce,
+            title: $btn.data('title'),
+            url: $btn.data('url'),
+            image: $btn.data('image'),
+            excerpt: $btn.data('excerpt')
+        };
+
+        $.post(postqueeObj.ajaxUrl, data, function (response) {
+            if (response.success) {
+                alert(response.data.message || 'Sent successfully!');
+            } else {
+                alert('Error: ' + (response.data.message || response.data || 'Unknown error'));
+            }
+        }).fail(function () {
+            alert('Network error. Please try again.');
+        }).always(function () {
+            // Reset button
+            if ($btn.is('button')) {
+                $btn.text(originalText).prop('disabled', false);
+            } else {
+                $btn.text(originalText); // For anchor tags
+            }
+        });
+    });
+
+    // --- 3. Delete Post from Feed (Dashboard) ---
+    $(document).on('click', '.postquee-delete-btn', function (e) {
+        e.preventDefault();
+        if (!confirm('Are you sure you want to delete this post from PostQuee?')) return;
+
+        var $btn = $(this);
+        var id = $btn.data('id');
+        $btn.prop('disabled', true).text('...');
+
+        $.post(postqueeObj.ajaxUrl, {
+            action: 'postquee_delete_post',
+            nonce: postqueeObj.nonce,
+            id: id
+        }, function (response) {
+            if (response.success) {
+                $btn.closest('tr').fadeOut(function () { $(this).remove(); });
+            } else {
+                alert('Error: ' + (response.data || 'Unknown error'));
+                $btn.prop('disabled', false).text('Delete');
+            }
+        });
+    });
+
+});

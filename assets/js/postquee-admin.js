@@ -440,7 +440,7 @@ jQuery(document).ready(function ($) {
 
         // Mimic the API structure used in PHP
         $.post(postqueeObj.ajaxUrl, {
-            action: 'postquee_send_post_manual',
+            action: 'postquee_send_post',
             content: content,
             providers: selectedChannels,
             status: mode,

@@ -1,16 +1,16 @@
 # PostQuee Connector for WordPress
 
-**PostQuee Connector** seamlessly integrates the [PostQuee](https://postquee.com) content scheduling platform directly into your WordPress dashboard.
+**PostQuee Connector** seamlessly integrates the [PostQuee](https://postquee.com) content scheduling platform with your WordPress dashboard.
 
 ## Features
 
-*   **Embedded Dashboard**: Access your full PostQuee workspace (`app.postquee.com`) without leaving the WordPress admin area.
+*   **Connected Dashboard**: Quickly access your full PostQuee workspace (`app.postquee.com`) from the WordPress admin area.
 *   **"Send to PostQuee" Workflow**: Instantly push WordPress posts to PostQuee to schedule or publish them to your social networks.
     *   Works from the **Post List** ("Send to PostQuee" hover action).
     *   Works from the **Post Editor** (dedicated sidebar button).
-*   **Smart Bridge Technology**:
-    *   Uses secure `postMessage` communication to pre-fill the PostQuee composer with your post's Title, URL, Excerpt, and Featured Image.
-    *   Automatically resizes the interface to prevent double scrollbars, ensuring a native WordPress feel.
+*   **Smart Links**:
+    *   Uses secure URL parameters to pre-fill the PostQuee composer with your post's Title, URL, Excerpt, and Featured Image.
+    *   Opens in a new tab for a focused, native editing experience.
 *   **Performance Optimized**: Scripts and styles are only loaded on the PostQuee pages, keeping your site fast.
 
 ## Installation
@@ -22,13 +22,13 @@
 
 ## Configuration
 
-1.  Navigate to **PostQuee** -> **Settings** in the WordPress admin menu.
-2.  **App URL**: By default, this is set to `https://app.postquee.com`. If you are using a white-labeled version or a self-hosted instance, update this URL to point to your PostQuee application.
+1.  Navigate to **PostQuee** in the WordPress admin menu.
+2.  Use the link to access your dashboard.
 
 ## How It Works
 
-1.  **Dashboard**: Clicking the "PostQuee" menu item loads the app in a smart iframe. Authentication is handled via your browser session (if you are logged into PostQuee, you are auto-logged in here).
-2.  **Pushing Content**: When you click "Send to PostQuee" on a post, the plugin opens a lightweight modal overlay, sends the post data to the PostQuee app, and launches the "Create Post" composer automatically.
+1.  **Dashboard**: Clicking the "PostQuee" menu item provides a quick gateway to your PostQuee dashboard.
+2.  **Pushing Content**: When you click "Send to PostQuee" on a post, the plugin opens a new tab, loading the PostQuee composer pre-filled with your post content.
 
 ## Requirements
 

@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PostQuee WordPress Plugin - Global Styles */
+
+/* Reset WordPress admin styles within our app */
+.postquee-calendar-app {
+  all: initial;
+  * {
+    all: revert;
+  }
+}
+
+/* PostQuee Dark Theme - CSS Variables */
+.postquee-calendar-app {
+  /* Backgrounds */
+  --new-bgColor: #030304;
+  --new-bgColorInner: rgba(20, 23, 30, 0.4);
+  --new-settings: #14171E;
+  --new-back-drop: rgba(0, 0, 0, 0.7);
+
+  /* Interactive */
+  --new-box-hover: rgba(255, 105, 0, 0.1);
+  --new-boxFocused: #FF6900;
+  --new-btn-simple: rgba(255, 255, 255, 0.05);
+  --new-btn-text: #FFFFFF;
+  --new-btn-primary: #FF6900;
+  --new-btn-primary-hover: #FF8533;
+  --new-ai-btn: #FF6900;
+
+  /* Borders */
+  --new-border: rgba(255, 255, 255, 0.15);
+  --new-bgLineColor: rgba(255, 255, 255, 0.06);
+  --new-sep: rgba(255, 255, 255, 0.08);
+  --new-blockSeparator: rgba(255, 255, 255, 0.08);
+  --new-table-border: rgba(255, 255, 255, 0.06);
+
+  /* Text */
+  --new-textColor: #F9FAFB;
+  --new-textItemFocused: #FFFFFF;
+  --new-textItemBlur: #9CA3AF;
+  --color-text: #F9FAFB;
+  --color-gray: #9CA3AF;
+
+  /* Tables */
+  --new-table-header: rgba(255, 255, 255, 0.03);
+  --new-table-text: #E5E7EB;
+  --new-table-text-focused: #FF6900;
+  --new-col-color: rgba(255, 255, 255, 0.02);
+  --new-menu-dots: #9CA3AF;
+  --new-menu-hover: #FFFFFF;
+
+  /* Popups */
+  --popup-color: rgba(18, 21, 28, 0.85);
+  --popup-border: rgba(255, 255, 255, 0.1);
+
+  /* Social platforms */
+  --linkedin-bg: #1b1f23;
+  --linkedin-text: #c6c7c8;
+  --linkedin-border: #2e3438;
+  --facebook-bg: #242526;
+  --instagram-bg: #0b1014;
+  --youtube-bg: #0F0F0F;
+}
+
+/* Base font and antialiasing */
+.postquee-calendar-app {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+.postquee-calendar-app ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.postquee-calendar-app ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.postquee-calendar-app ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.postquee-calendar-app ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
