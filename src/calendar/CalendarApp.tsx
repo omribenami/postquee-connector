@@ -74,11 +74,10 @@ const CalendarHeader: React.FC = () => {
           <button
             key={viewType}
             onClick={() => setView(viewType)}
-            className={`px-4 py-1.5 rounded capitalize text-sm transition-colors ${
-              view === viewType
+            className={`px-4 py-1.5 rounded capitalize text-sm transition-colors ${view === viewType
                 ? 'bg-btnPrimary text-white'
                 : 'text-textItemBlur hover:text-newTextColor'
-            }`}
+              }`}
           >
             {viewType}
           </button>
@@ -101,11 +100,24 @@ const CalendarContent: React.FC<CalendarContentProps> = ({ onCreatePost, onEditP
   const { isLoading, error } = useCalendarContext();
 
   if (error) {
+    // Check if it's the specific database corruption error
+    const isChecksumError = error.message?.includes('checksum') || error.message?.includes('Corruption');
+
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-center">
-          <div className="text-red-500 text-lg mb-2">Error loading calendar</div>
-          <div className="text-textItemBlur text-sm">{error.message || 'Failed to load posts'}</div>
+        <div className="text-center p-6 bg-red-900/10 rounded-lg border border-red-500/20">
+          <div className="text-red-500 text-lg mb-2 font-semibold">Unable to load posts</div>
+          <div className="text-textItemBlur text-sm mb-4 max-w-md mx-auto">
+            {isChecksumError
+              ? 'The external database is currently experiencing issues. Please try again later.'
+              : (error.message || 'Failed to load posts from the server.')}
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-btnPrimary text-white rounded hover:bg-opacity-90 transition"
+          >
+            Retry Connection
+          </button>
         </div>
       </div>
     );
@@ -216,13 +228,14 @@ const CalendarAppInner: React.FC = () => {
 
   return (
     <>
-      <div className="postquee-calendar-app bg-newBgColor min-h-screen p-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-newTextColor mb-6">PostQuee Calendar</h1>
+      <div className="postquee-calendar-app flex flex-col w-full h-full bg-newBgColor">
+        <div className="flex-shrink-0 px-6 pt-4">
+          <h1 className="text-2xl font-bold text-newTextColor mb-4">PostQuee Calendar</h1>
           <CalendarHeader />
+        </div>
+        <div className="flex-1 px-6 pb-6" style={{ minHeight: 0 }}>
           <div
-            className="bg-newBgColorInner rounded-lg border border-newBorder overflow-hidden"
-            style={{ height: 'calc(100vh - 250px)' }}
+            className="bg-newBgColorInner rounded-lg border border-newBorder overflow-hidden h-full"
           >
             <CalendarContent onCreatePost={handleCreatePost} onEditPost={handleEditPost} />
           </div>

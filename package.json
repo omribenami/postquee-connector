@@ -39,6 +39,7 @@
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.17",
     "css-loader": "^6.10.0",
+    "mini-css-extract-plugin": "^2.10.0",
     "postcss": "^8.4.35",
     "postcss-loader": "^8.1.0",
     "style-loader": "^3.3.4",

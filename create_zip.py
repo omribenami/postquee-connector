@@ -5,7 +5,7 @@ def zip_plugin(output_filename, source_dir):
     # The name of the root directory inside the zip
     plugin_slug = 'postquee-connector'
 
-    # Files/Dirs to exclude (System files, build scripts, and legacy bridge mode files)
+    # Files/Dirs to exclude (System files, build scripts, and development files)
     excludes = {
         '.git',
         '.claude',
@@ -13,22 +13,24 @@ def zip_plugin(output_filename, source_dir):
         'Plugin install.mp4',
         output_filename, # Don't zip the zip itself
         'create_zip.py',
+        'create-release-zip.py',
+        'create-release-zip.sh',
         'verify_zip.py',
         'README.md', # GitHub readme, not for WP plugin (we use readme.txt)
+        'CLAUDE.md', # Development instructions
         '.gitignore',
         'node_modules',
-    }
-
-    # Define LEGACY BRIDGE MODE files to EXCLUDE (v1.0.0 - replaced by v2.0.0 connector)
-    legacy_bridge_excludes = {
-        'postquee-bridge.php',  # OLD main file
-        'includes/class-postquee-bridge.php',  # OLD bridge class
-        'includes/class-postquee-admin.php',  # OLD admin class (replaced by Admin/class-dashboard.php)
-        'assets/css/postquee-bridge.css',  # OLD bridge CSS
-        'assets/css/postquee-bridge.css.bak',
-        'assets/js/postquee-bridge.js',  # OLD bridge JS
-        'assets/js/postquee-bridge.js.bak',
-        'includes/class-postquee-admin.php.bak',
+        'src', # TypeScript source (we use compiled assets/dist)
+        'webpack.config.js',
+        'tsconfig.json',
+        'tailwind.config.js',
+        'postcss.config.js',
+        'package.json',
+        'package-lock.json',
+        'INSTALLATION_COMPLETE.txt',
+        'check-config.php',
+        'fix-wordpress-conflict.sh',
+        'postquee-connector.php',  # Disabled v2.0.0 connector (we use bridge mode)
     }
 
     # Helper to check if file should be excluded based on path
@@ -43,16 +45,14 @@ def zip_plugin(output_filename, source_dir):
         if filename.endswith('.bak'):
             return True
 
-        # Check legacy bridge mode files
-        rel_path = os.path.relpath(file_path, source_dir)
-        for legacy_file in legacy_bridge_excludes:
-            if rel_path == legacy_file or rel_path.endswith(legacy_file):
-                return True
+        # Exclude source maps in production
+        if filename.endswith('.map'):
+            return True
 
         return False
 
     with zipfile.ZipFile(output_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        print(f"\nCreating PostQuee Connector v2.0.0 Plugin ZIP...\n")
+        print(f"\nCreating PostQuee Connector Plugin ZIP (Bridge Mode)...\n")
 
         for root, dirs, files in os.walk(source_dir):
             # Prune excluded directories
@@ -78,22 +78,24 @@ def zip_plugin(output_filename, source_dir):
                 zipf.write(full_path, arcname)
 
         print(f"\n✅ ZIP created successfully: {output_filename}")
-        print(f"\nIncluded files for PostQuee Connector v2.0.0:")
-        print("  • postquee-connector.php (Main plugin file)")
-        print("  • includes/Admin/ (Dashboard, Settings, Metabox)")
-        print("  • includes/API/ (Client, Endpoints)")
-        print("  • includes/Core/ (Hooks, Mapper)")
-        print("  • includes/Rest/ (REST API Controller)")
-        print("  • includes/Utils/ (Utilities)")
-        print("  • assets/js/ (Calendar, Admin, Gutenberg)")
-        print("  • assets/css/ (Modern styling)")
-        print("  • readme.txt (WordPress.org readme)")
-        print("\nExcluded legacy bridge mode files (v1.0.0)")
-        print("  ✗ postquee-bridge.php")
-        print("  ✗ includes/class-postquee-bridge.php")
-        print("  ✗ includes/class-postquee-admin.php (old)")
-        print("  ✗ assets/**/postquee-bridge.* (old)")
-        print("  ✗ Build scripts and .bak files\n")
+        print(f"\nIncluded files for PostQuee Connector (Bridge Mode):")
+        print("  • postquee-bridge.php (Main plugin file)")
+        print("  • includes/class-postquee-bridge.php (Core loader)")
+        print("  • includes/class-postquee-admin.php (Admin interface)")
+        print("  • includes/API/ (PostQuee API client)")
+        print("  • includes/Admin/ (Settings, Metabox)")
+        print("  • includes/Core/ (Mapper utilities)")
+        print("  • includes/Rest/ (WordPress REST API)")
+        print("  • includes/Utils/ (Helper functions)")
+        print("  • assets/dist/ (Compiled React calendar)")
+        print("  • assets/css/ (Admin styles)")
+        print("  • assets/js/ (Metabox, Gutenberg integration)")
+        print("\nExcluded files:")
+        print("  ✗ postquee-connector.php (disabled v2.0.0)")
+        print("  ✗ src/ (TypeScript source - compiled to assets/dist)")
+        print("  ✗ node_modules/ (build dependencies)")
+        print("  ✗ Build scripts and development files")
+        print("  ✗ .bak and .map files\n")
 
 if __name__ == "__main__":
     zip_plugin('postquee-connector.zip', '/root/WP_PostQuee')

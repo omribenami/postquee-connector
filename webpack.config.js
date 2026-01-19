@@ -1,5 +1,6 @@
 const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const shouldAnalyze = process.env.ANALYZE === 'true';
@@ -35,7 +36,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
         ],
@@ -49,6 +50,9 @@ module.exports = {
   },
 
   plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+    }),
     ...(shouldAnalyze ? [new BundleAnalyzerPlugin()] : []),
   ],
 

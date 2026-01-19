@@ -1,0 +1,76 @@
+========================================
+PostQuee Connector v2.0.0
+INSTALLATION COMPLETE
+========================================
+
+Installation Date: $(date)
+Installation Path: /opt/PostQuee/wp-content/plugins/postquee-connector
+
+✅ WHAT WAS INSTALLED:
+
+1. Main Plugin File: postquee-bridge.php (2.0.0)
+   - This is the ONLY file WordPress will detect as a plugin
+   - Updated description and version
+
+2. Legacy File: postquee-connector.php (NO plugin header)
+   - Kept for backwards compatibility only
+   - Will NOT show up as a separate plugin
+
+3. React Bundle: assets/dist/calendar.bundle.js (1.45 MB)
+   - Complete calendar application
+   - AI assistant included
+   - Drag-and-drop functionality
+
+4. PHP Backend: includes/ directory
+   - API client for PostQuee
+   - REST endpoints
+   - WordPress integration
+
+5. Documentation:
+   - README.md - Full feature documentation
+   - USER_GUIDE.md - Step-by-step tutorial
+
+✅ WHAT TO DO NEXT:
+
+1. Go to WordPress Admin (http://your-domain/wp-admin)
+
+2. Navigate to: Plugins → Installed Plugins
+
+3. You should see ONLY ONE plugin:
+   "PostQuee Connector v2.0.0"
+
+4. Click "Activate"
+
+5. Go to: PostQuee → Settings
+   - Enter your PostQuee API key
+   - Save changes
+
+6. Go to: PostQuee → Calendar
+   - Your calendar should load!
+
+✅ VERIFICATION:
+
+Plugin Files: ✓ Installed
+Permissions: ✓ Set (www-data:www-data)
+React Bundle: ✓ Present (1.45 MB)
+Main File: ✓ postquee-bridge.php only
+
+✅ TROUBLESHOOTING:
+
+If you see TWO plugins:
+1. Deactivate both
+2. Delete both through WordPress
+3. The files are already in place - just reactivate
+
+If calendar doesn't load:
+1. Check: PostQuee → Settings (API key entered?)
+2. Check browser console (F12) for errors
+3. Verify you have connected channels in PostQuee app
+
+If you get permission errors:
+Run: chown -R www-data:www-data /opt/PostQuee/wp-content/plugins/postquee-connector
+
+========================================
+Installation performed by Claude Code
+$(date)
+========================================

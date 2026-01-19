@@ -21,7 +21,7 @@ module.exports = {
 
         // Modern PostQuee Color System (from colors.scss)
         newBgColor: '#030304',
-        newBgColorInner: 'rgba(20, 23, 30, 0.4)',
+        newBgColorInner: 'rgba(255, 255, 255, 0.05)',
         newSettings: '#14171E',
         newBackdrop: 'rgba(0, 0, 0, 0.7)',
         newBoxHover: 'rgba(255, 105, 0, 0.1)',

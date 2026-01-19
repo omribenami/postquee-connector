@@ -56,8 +56,20 @@ body.toplevel_page_postquee {
 
 body.toplevel_page_postquee #wpcontent {
     padding-left: 0 !important;
-    margin-left: 0 !important;
+    margin-left: 160px !important; /* Account for WordPress admin menu */
     background: var(--new-bgColor) !important;
+}
+
+/* Adjust for folded admin menu */
+body.toplevel_page_postquee.folded #wpcontent {
+    margin-left: 36px !important;
+}
+
+/* On mobile, collapse WP menu completely */
+@media (max-width: 960px) {
+    body.toplevel_page_postquee #wpcontent {
+        margin-left: 0 !important;
+    }
 }
 
 /* Admin Bar Styles can go here if needed */

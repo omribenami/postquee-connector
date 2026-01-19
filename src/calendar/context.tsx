@@ -74,27 +74,27 @@ function getDateRange(currentDate: Date, view: ViewType): { start: string; end: 
   switch (view) {
     case 'day':
       return {
-        start: current.startOf('day').format('YYYY-MM-DD'),
-        end: current.endOf('day').format('YYYY-MM-DD'),
+        start: current.startOf('day').toISOString(),
+        end: current.endOf('day').toISOString(),
       };
     case 'week':
       // ISO week starts on Monday
       return {
-        start: current.startOf('isoWeek').format('YYYY-MM-DD'),
-        end: current.endOf('isoWeek').format('YYYY-MM-DD'),
+        start: current.startOf('isoWeek').toISOString(),
+        end: current.endOf('isoWeek').toISOString(),
       };
     case 'month':
       // Include full weeks at start/end of month
       const monthStart = current.startOf('month');
       const monthEnd = current.endOf('month');
       return {
-        start: monthStart.startOf('isoWeek').format('YYYY-MM-DD'),
-        end: monthEnd.endOf('isoWeek').format('YYYY-MM-DD'),
+        start: monthStart.startOf('isoWeek').toISOString(),
+        end: monthEnd.endOf('isoWeek').toISOString(),
       };
     default:
       return {
-        start: current.startOf('week').format('YYYY-MM-DD'),
-        end: current.endOf('week').format('YYYY-MM-DD'),
+        start: current.startOf('week').toISOString(),
+        end: current.endOf('week').toISOString(),
       };
   }
 }

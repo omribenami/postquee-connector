@@ -39,7 +39,7 @@ export const AIRefineModal: React.FC<AIRefineModalProps> = ({
 
       // Call WordPress REST endpoint for AI refinement
       const { restUrl, nonce } = window.postqueeWP;
-      const response = await fetch(`${restUrl}postquee/v1/ai/refine`, {
+      const response = await fetch(`${restUrl}ai/refine`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -59,18 +59,17 @@ export const MonthView: React.FC<MonthViewProps> = ({ onCreate, onEdit }) => {
           return (
             <div
               key={day.format('YYYY-MM-DD')}
-              className={`rounded-lg ${!isCurrentMonth ? 'opacity-40' : ''}`}
+              className={`rounded-lg bg-newBgColor ${!isCurrentMonth ? 'opacity-40' : ''}`}
             >
               {/* Day number */}
               <div className="flex items-center justify-between p-2">
                 <span
-                  className={`text-sm font-semibold ${
-                    isToday
+                  className={`text-sm font-semibold ${isToday
                       ? 'bg-btnPrimary text-white px-2 py-1 rounded-full'
                       : isCurrentMonth
-                      ? 'text-newTextColor'
-                      : 'text-textItemBlur'
-                  }`}
+                        ? 'text-newTextColor'
+                        : 'text-textItemBlur'
+                    }`}
                 >
                   {day.format('D')}
                 </span>

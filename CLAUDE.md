@@ -4,264 +4,370 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-PostQuee Connector is a WordPress plugin that integrates the PostQuee social media scheduling platform with WordPress. The plugin provides two main integration approaches:
+PostQuee Connector is a WordPress plugin that embeds a full-featured PostQuee calendar and post scheduler directly into the WordPress admin. It provides a native React-powered UI that matches the PostQuee app aesthetic, allowing users to schedule social media posts without leaving WordPress.
 
-1. **Bridge Mode** (`postquee-bridge.php`): iframe-based embedding with admin dashboard
-2. **Connector Mode** (`postquee-connector.php`): Direct API integration with automatic/manual syncing
+**Current Version**: 2.0.0
+**Requires WordPress**: 5.8+
+**Requires PHP**: 7.4+
+**PostQuee API**: `https://app.postquee.com/api/public/v1`
 
-**Current Version**: 1.0.7 (bridge), 1.0.0 (connector)
-**Target WordPress**: 5.8+
-**Target PHP**: 7.4+
-**PostQuee API Base**: `https://app.postquee.com/api/public/v1`
+## Build & Development Commands
 
-## Important: Dual Architecture
+### Frontend Build
 
-This plugin currently has **two entry points** reflecting different design approaches:
+```bash
+# Install dependencies
+npm install
 
-- **`postquee-bridge.php`**: Legacy bridge mode with custom UI and iframe integration
-- **`postquee-connector.php`**: Modern API-first connector with namespaced architecture
+# Development build with watch mode (auto-rebuilds on file changes)
+npm run dev
 
-When modifying code, verify which architecture is currently active by checking which main file WordPress loads. The connector mode uses PSR-4 autoloading with the `PostQuee\Connector` namespace.
+# Production build (minified, optimized)
+npm run build
+
+# Analyze bundle size
+npm run analyze
+```
+
+The build outputs to `assets/dist/calendar.bundle.js` and `assets/dist/calendar.css`.
+
+### No Backend Build Required
+
+The PHP backend has no build step. Changes to PHP files are immediately active.
+
+## Architecture Overview
+
+The plugin uses a **two-tier proxy architecture**:
+
+```
+React Frontend (TypeScript)
+    ↓ WordPress REST API (with nonce authentication)
+WordPress Backend (PHP)
+    ↓ PostQuee API (with API key authentication)
+PostQuee Service
+```
+
+This keeps the PostQuee API key secure on the server while providing a rich JavaScript experience.
+
+### Key Architectural Decisions
+
+1. **Single Entry Point**: Despite historical dual-mode references, the plugin now uses **`postquee-bridge.php`** as the sole entry point. The `postquee-connector.php` file is disabled for backwards compatibility.
+
+2. **React + WordPress Hybrid**: The calendar page is a React SPA that mounts into a WordPress admin page. WordPress editor integration uses vanilla JS to communicate via `sessionStorage`.
+
+3. **State Management**:
+   - **Zustand**: Global UI state (current view, selected date, modal state)
+   - **SWR**: Server state with automatic caching and revalidation
+   - **Context**: Calendar-specific state (posts, loading state)
+
+4. **Drag & Drop**: Uses `react-dnd` with HTML5 backend for rescheduling posts by dragging to different time slots.
+
+5. **Rich Text Editing**: TipTap (ProseMirror-based) editor with formatting toolbar, link support, and emoji picker.
 
 ## Directory Structure
 
 ```
-/root/WP_PostQuee/
-├── postquee-bridge.php          # Main plugin file (bridge mode)
-├── postquee-connector.php       # Main plugin file (connector mode)
-├── includes/
-│   ├── class-postquee-bridge.php    # Bridge core loader
-│   ├── class-postquee-admin.php     # Bridge admin functionality
+/opt/PostQuee/wp-content/plugins/postquee-connector/
+├── postquee-bridge.php              # Main plugin file (WordPress recognizes this)
+├── postquee-connector.php           # Disabled legacy file
+│
+├── includes/                        # PHP backend
+│   ├── class-postquee-bridge.php    # Core plugin loader
+│   ├── class-postquee-admin.php     # Admin page setup & asset enqueuing
 │   ├── API/
 │   │   ├── class-client.php         # HTTP client for PostQuee API
-│   │   └── class-endpoints.php      # API endpoint wrappers
+│   │   └── class-endpoints.php      # API method wrappers
 │   ├── Admin/
-│   │   ├── class-dashboard.php      # Admin dashboard UI
-│   │   ├── class-settings.php       # Settings page
-│   │   └── class-metabox.php        # Post editor metabox
+│   │   ├── class-settings.php       # Settings page (API key config)
+│   │   └── class-send-metabox.php   # "Send to PostQuee" button in post editor
 │   ├── Core/
-│   │   ├── class-hooks.php          # Auto-sync and manual triggers
-│   │   └── class-mapper.php         # Post data mapping
+│   │   └── class-mapper.php         # WordPress post → PostQuee payload mapper
 │   ├── Rest/
-│   │   └── class-controller.php     # WordPress REST API endpoints
+│   │   └── class-controller.php     # WordPress REST API endpoints for React
 │   └── Utils/
-│       └── class-date-helper.php    # Date utilities
+│       └── class-date-helper.php    # Date formatting utilities
+│
+├── src/                             # React/TypeScript frontend
+│   ├── calendar/                    # Main calendar application
+│   │   ├── index.tsx                # React app entry point
+│   │   ├── CalendarApp.tsx          # Root calendar component
+│   │   ├── context.tsx              # Calendar state context
+│   │   ├── types.ts                 # TypeScript interfaces
+│   │   ├── views/                   # Day/Week/Month view components
+│   │   └── components/              # CalendarSlot, PostCard, DndProvider
+│   ├── post-creator/                # Post creation modal
+│   │   ├── PostCreatorModal.tsx     # Main modal component
+│   │   ├── components/              # Editor, media, tags, preview, etc.
+│   │   └── platform-settings/       # X, Facebook, LinkedIn, Instagram settings
+│   ├── shared/
+│   │   └── api/client.ts            # WordPress REST API client
+│   └── styles/
+│       └── globals.css              # Tailwind base + custom styles
+│
 ├── assets/
-│   ├── css/
-│   │   ├── postquee-bridge.css      # Main styles
-│   │   └── postquee-admin.css       # Admin-specific styles
+│   ├── dist/                        # Compiled bundles (git-ignored)
+│   │   ├── calendar.bundle.js       # Main React bundle (~1.4 MB)
+│   │   └── calendar.css             # Compiled styles
+│   ├── css/                         # Legacy/admin styles
 │   └── js/
-│       ├── postquee-bridge.js       # Calendar UI and AJAX handlers
-│       ├── postquee-admin.js        # Admin UI handlers
-│       └── gutenberg-sidebar.js     # Block editor integration
-└── README.md
+│       └── gutenberg-sidebar.js     # Gutenberg "Send to PostQuee" integration
+│
+├── webpack.config.js                # Webpack 5 build config
+├── tsconfig.json                    # TypeScript configuration
+├── tailwind.config.js               # Tailwind CSS config (PostQuee theme)
+└── package.json                     # NPM dependencies
 ```
 
-## Key Architecture Patterns
+## API Integration Details
 
-### 1. PostQuee API Integration
+### PostQuee API Authentication
 
-**Authentication**: Raw API key in `Authorization` header (no "Bearer" prefix)
+**Critical**: The PostQuee API uses raw API key authentication, NOT Bearer token:
 
 ```php
-// API Client (includes/API/class-client.php)
-'Authorization' => $this->api_key,  // NOT 'Bearer ' . $this->api_key
+// includes/API/class-client.php
+'Authorization' => $this->api_key,  // NO "Bearer " prefix!
 ```
 
-**Base URL**: `https://app.postquee.com/api/public/v1` (filterable via `postquee_api_base`)
+### WordPress REST API Endpoints
 
-**Key Endpoints**:
-- `GET /integrations` - Fetch connected channels
+All endpoints are registered under `postquee-connector/v1`:
+
+- `GET /integrations` - Fetch connected social channels
+- `GET /posts?startDate=X&endDate=Y` - Fetch posts for calendar
 - `POST /posts` - Create new scheduled post
-- `DELETE /posts/{id}` - Remove post
+- `DELETE /posts/{id}` - Delete post
+- `PUT /posts/{id}/date` - Update post date (drag & drop)
+- `POST /media` - Upload media file
+- `GET /tags` - Fetch available tags
+- `POST /tags` - Create new tag
+- `POST /ai/refine` - AI content refinement (demo logic)
 
-### 2. Auto-Sync Flow (Connector Mode)
+See `includes/Rest/class-controller.php` for full implementation.
 
-Located in `includes/Core/class-hooks.php`:
+### React → WordPress Communication
 
-1. Hook: `transition_post_status` fires when post status changes
-2. Guard clauses check:
-   - New status is 'publish'
-   - Old status was NOT 'publish' (prevents re-sync on edits)
-   - Post meta `_postquee_enabled` is true
-   - Post meta `_postquee_synced_id` is empty (idempotency)
-3. `sync_post()` maps content via `Core\Mapper` and calls API
-4. On success: stores returned UUID in `_postquee_synced_id` meta
+The React app calls WordPress REST endpoints via the `wpApiFetch` wrapper:
 
-### 3. Manual Sync Triggers
+```typescript
+// src/shared/api/client.ts
+export const wpApiFetch = async ({ path, method = 'GET', data }) => {
+  const { restUrl, nonce } = window.postqueeWP;
 
-**Row Actions**: "Send to PostQuee" links in post list
-- Handler: `admin_post_postquee_trigger_sync` action
-- Nonce: `postquee_sync_link`
-- Redirects back with query param for admin notice
+  return fetch(`${restUrl}${path}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': nonce,  // WordPress nonce authentication
+    },
+    body: data ? JSON.stringify(data) : undefined,
+  });
+};
+```
 
-**AJAX Push**: "Push Now" button in metabox
-- Action: `wp_ajax_postquee_push_now`
-- Returns JSON success/error
+The `window.postqueeWP` object is localized from PHP via `wp_localize_script()`.
 
-**Gutenberg Sidebar**: Button in block editor panel
-- Script: `assets/js/gutenberg-sidebar.js`
-- Calls same AJAX handler as metabox
+## WordPress Editor Integration
 
-### 4. Caching Strategy
+### Classic Editor
 
-Channels are cached via WordPress transients:
-- Transient key: `postquee_channels`
-- TTL: 1 hour (`HOUR_IN_SECONDS`)
-- Invalidate manually via `delete_transient('postquee_channels')`
+`includes/Admin/class-send-metabox.php` adds a metabox with a "Send to PostQuee" button. When clicked:
 
-### 5. Calendar UI (Bridge Mode)
+1. Extracts post title, content, and featured image URL
+2. Stores data in `sessionStorage` as JSON
+3. Opens PostQuee calendar page in new tab
+4. Calendar reads from `sessionStorage` and pre-fills post creator modal
 
-JavaScript calendar implementation in `assets/js/postquee-bridge.js`:
+### Gutenberg
 
-- Views: Day, Week, Month
-- State management with local JS object
-- Posts fetched from `postqueeObj.posts` (localized from PHP)
-- Modal-based post creation with channel selection
-- Real-time preview in modal
+`assets/js/gutenberg-sidebar.js` registers a sidebar panel with the same "Send to PostQuee" button using WordPress block editor APIs.
 
-**Important**: Calendar currently displays posts but does NOT fetch live updates. Posts are loaded once via `wp_localize_script()` in `class-postquee-admin.php:enqueue_scripts()`.
+## Key React Components
 
-## Common Development Tasks
+### Calendar Views
 
-### Adding a New API Endpoint
+- **DayView** (`src/calendar/views/DayView.tsx`): Hourly grid for single day
+- **WeekView** (`src/calendar/views/WeekView.tsx`): 7-day view with hourly rows
+- **MonthView** (`src/calendar/views/MonthView.tsx`): Traditional month calendar
 
-1. Add method to `includes/API/class-endpoints.php`:
+All views render `CalendarSlot` components that accept drops and show `PostCard` items.
+
+### Post Creator Modal
+
+`src/post-creator/PostCreatorModal.tsx` is a complex modal with:
+
+- **TipTapEditor**: Rich text with bold, italic, underline, links, lists, emoji picker
+- **ChannelSelector**: Multi-select checkboxes for social channels
+- **MediaUpload**: Drag & drop image/video upload (Uppy.js)
+- **TagsInput**: Tag creation and selection
+- **DateTimePicker**: Schedule date/time selector
+- **PlatformSettings**: X, Facebook, LinkedIn, Instagram-specific options
+- **AIRefineModal**: Content refinement with 6 styles (demo logic)
+
+### State Management Pattern
+
+```typescript
+// Zustand for UI state (no server interaction)
+const useCalendarStore = create((set) => ({
+  view: 'week',
+  currentDate: dayjs(),
+  setView: (view) => set({ view }),
+  // ...
+}));
+
+// SWR for server state (automatic caching & revalidation)
+const { data: posts, mutate } = useSWR(
+  ['posts', startDate, endDate],
+  () => calendarAPI.getPosts({ startDate, endDate })
+);
+```
+
+## Styling & Theme
+
+The plugin uses **Tailwind CSS** with a custom PostQuee-themed config:
+
+- Primary color: `#FF6900` (orange)
+- Dark theme: `#1a1a1a` background, `#2a2a2a` boxes
+- Custom colors: `newBoxColor`, `newBoxHover`, `newTextColor`, etc.
+
+Tailwind classes are used throughout React components. Legacy admin pages use standard CSS.
+
+## Common Development Patterns
+
+### Adding a New REST Endpoint
+
+1. Register route in `includes/Rest/class-controller.php`:
+
 ```php
-public function get_analytics($integration_id) {
-    return $this->client->request("/analytics/{$integration_id}");
+register_rest_route('postquee-connector/v1', '/my-endpoint', [
+    'methods' => 'GET',
+    'callback' => [$this, 'my_callback'],
+    'permission_callback' => [$this, 'check_permission'],
+]);
+```
+
+2. Add method to `CalendarAPI` in `src/shared/api/client.ts`:
+
+```typescript
+async myEndpoint() {
+  return wpApiFetch({
+    path: 'postquee-connector/v1/my-endpoint',
+    method: 'GET',
+  });
 }
 ```
 
-2. Call from hooks or admin classes:
-```php
-$endpoints = new \PostQuee\Connector\API\Endpoints($client);
-$analytics = $endpoints->get_analytics($channel_id);
+3. Use in React component with SWR:
+
+```typescript
+const { data } = useSWR('my-endpoint', () => calendarAPI.myEndpoint());
 ```
 
-### Modifying Post Sync Payload
+### Modifying Post Payload
 
-Edit `includes/Core/class-mapper.php`:
+Edit `includes/Core/class-mapper.php` to change how WordPress posts are converted to PostQuee API format:
+
 ```php
 public function map(\WP_Post $post, $channel_id) {
-    // Add custom fields, taxonomies, etc.
+    return [
+        'content' => $this->format_content($post),
+        'media' => $this->get_media_urls($post),
+        'integrations' => [['id' => $channel_id]],
+        'date' => $this->format_date($post),
+        // Add custom fields here
+    ];
 }
 ```
 
-Payload structure follows PostQuee API schema:
-```json
-{
-  "content": "Post content with link",
-  "media": ["https://example.com/image.jpg"],
-  "integrations": [{"id": "channel-uuid"}],
-  "date": "2024-01-15T10:00:00Z"
-}
-```
+### Adding a React Component
 
-### Adding Custom Meta Fields
+1. Create component in appropriate directory (`src/calendar/components/` or `src/post-creator/components/`)
+2. Use TypeScript interfaces from `types.ts` files
+3. Follow existing patterns: functional components with hooks
+4. Use Tailwind classes for styling
+5. Run `npm run dev` to auto-rebuild on save
 
-Register in `includes/Admin/class-metabox.php`:
-```php
-public function render($post) {
-    // Add custom checkboxes, dropdowns, etc.
-}
-```
+## Plugin Settings
 
-Save in `includes/Core/class-hooks.php`:
-```php
-private function sync_post($post_id) {
-    $custom_value = get_post_meta($post_id, '_my_custom_field', true);
-    // Include in payload via mapper
-}
-```
+WordPress options (stored in `wp_options`):
 
-### Debugging API Requests
-
-Enable WordPress debug logging in `wp-config.php`:
-```php
-define('WP_DEBUG', true);
-define('WP_DEBUG_LOG', true);
-```
-
-Add logging to `includes/API/class-client.php`:
-```php
-error_log('PostQuee Request: ' . $url);
-error_log('PostQuee Response: ' . print_r($data, true));
-```
-
-## Settings and Options
-
-WordPress options (stored in `wp_options` table):
-
-- `postquee_api_key` - API authentication key
-- `postquee_base_url` - API base URL (default: `https://api.postiz.com`)
-- `postquee_default_channel` - UUID of default channel for auto-sync
+- `postquee_api_key` - PostQuee API key (required)
 
 Post meta keys:
 
-- `_postquee_enabled` - Boolean, enable auto-sync for this post
-- `_postquee_synced_id` - UUID returned from PostQuee API
-- `_postquee_error_log` - Last error message if sync failed
-
-## WordPress Hooks & Filters
-
-**Actions**:
-- `transition_post_status` - Auto-sync trigger
-- `admin_post_postquee_trigger_sync` - Manual sync handler
-- `wp_ajax_postquee_push_now` - AJAX sync handler
-- `enqueue_block_editor_assets` - Load Gutenberg sidebar
-
-**Filters**:
-- `postquee_api_base` - Modify API base URL
-- `post_row_actions` - Add "Send to PostQuee" link
+- `_postquee_synced_id` - UUID of synced post (if applicable)
 
 ## Security Notes
 
-- All AJAX actions verify nonces
-- Direct file access blocked with `defined('ABSPATH')` checks
-- User capabilities checked: `manage_options` for settings, `edit_posts` for syncing
-- API key stored as plain option (WordPress encrypts database at rest)
+- All REST endpoints verify WordPress nonce via `X-WP-Nonce` header
+- Permission callback checks `manage_options` or `edit_posts` capability
+- PostQuee API key stored as plain WordPress option (encrypted at rest by WordPress)
+- Direct file access blocked via `defined('ABSPATH')` checks
 - Input sanitization: `sanitize_text_field()`, `esc_url_raw()`, `esc_attr()`, `esc_html()`
 
-## Testing Sync Functionality
+## Testing the Plugin
 
-1. Configure API key in **Settings > PostQuee Connector**
-2. Select default channel from dropdown
-3. Create/edit a post
-4. Enable "Schedule for PostQuee" checkbox in metabox
-5. Publish post
-6. Check post meta: `_postquee_synced_id` should contain UUID
-7. Verify post appears in PostQuee dashboard at `https://app.postquee.com`
+1. Install plugin in WordPress (copy to `wp-content/plugins/` and activate)
+2. Navigate to **PostQuee → Settings** and enter API key from https://app.postquee.com/settings
+3. Ensure at least one social channel is connected in PostQuee
+4. Navigate to **PostQuee → Calendar** to open React calendar
+5. Click a future time slot to create a post
+6. Test "Send to PostQuee" from any post editor
 
-For errors: Check `_postquee_error_log` post meta or WordPress debug log.
+## Debugging
 
-## Deployment
+### Frontend Debugging
 
-Plugin can be deployed via:
+- Open browser DevTools console
+- Check `window.postqueeWP` object for localized data
+- React DevTools extension shows component state
+- Network tab shows REST API calls
+- Webpack source maps available in dev mode
 
-1. **Manual upload**: Zip entire `/root/WP_PostQuee` directory, upload via WordPress admin
-2. **FTP/SSH**: Copy to `/wp-content/plugins/postquee-connector/`
-3. **WordPress.org**: Submit via SVN (requires compliance with Plugin Check tool)
+### Backend Debugging
 
-Build process: None required. Plugin is pure PHP/JS/CSS with no build step.
+Enable WordPress debugging in `wp-config.php`:
 
-## Related Projects
+```php
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('WP_DEBUG_DISPLAY', false);
+```
 
-This plugin integrates with the main PostQuee application:
-- **PostQuee App**: `/opt/PostQuee` (see `/opt/PostQuee/CLAUDE.md`)
-- **Production Deployment**: `/opt/postiz/` (Docker Compose setup)
-- **Production URL**: `https://app.postquee.com`
+Add logging in PHP:
+
+```php
+error_log('PostQuee: ' . print_r($data, true));
+```
+
+Logs appear in `wp-content/debug.log`.
+
+### Common Issues
+
+1. **Calendar not loading**: Check API key is valid, at least one channel connected
+2. **"Send to PostQuee" not working**: Ensure `sessionStorage` enabled, calendar page exists
+3. **Drag & drop not working**: Browser must support HTML5 drag API
+4. **Build errors**: Run `npm install` again, check Node version (14+)
 
 ## Git Workflow
 
-Repository: `https://github.com/omribenami/WP_PostQuee`
+This repository is at: `https://github.com/omribenami/WP_PostQuee`
 
-Git is pre-configured with authentication token. Standard workflow:
+Current branch: `master` (also the main branch)
 
+Standard workflow:
 ```bash
 git add .
 git commit -m "Description"
 git push origin master
 ```
 
-Current branch: `master` (also the main branch for PRs)
+Git authentication is pre-configured.
+
+## Related Ecosystem
+
+- **Main PostQuee App**: `/opt/PostQuee` (Next.js application)
+- **Production Deployment**: `/opt/postiz/` (Docker Compose)
+- **Production URL**: `https://app.postquee.com`
+
+This plugin is a WordPress-specific client for the PostQuee platform.

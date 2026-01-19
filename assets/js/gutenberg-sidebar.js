@@ -193,7 +193,30 @@
 
                         el('p', { style: { fontSize: '11px', color: '#718096', textAlign: 'center', margin: 0 } },
                             'Channel: ' + (state.currentChannel ? state.currentChannel : 'None')
-                        )
+                        ),
+
+                        // Settings Link
+                        el('hr', { style: { margin: '15px 0', borderColor: '#e2e8f0' } }),
+                        el('a', {
+                            href: '/wp-admin/admin.php?page=postquee&tab=settings',
+                            style: {
+                                display: 'block',
+                                textAlign: 'center',
+                                padding: '8px',
+                                color: '#FF6900',
+                                textDecoration: 'none',
+                                fontSize: '13px',
+                                fontWeight: '500',
+                                borderRadius: '4px',
+                                transition: 'background 0.2s'
+                            },
+                            onMouseOver: function(e) {
+                                e.target.style.background = 'rgba(255, 105, 0, 0.1)';
+                            },
+                            onMouseOut: function(e) {
+                                e.target.style.background = 'transparent';
+                            }
+                        }, '⚙️ PostQuee Settings')
                     ) : null
                 ),
 

@@ -4,19 +4,30 @@
 
 /* PostQuee WordPress Plugin - Global Styles */
 
-/* Reset WordPress admin styles within our app */
+/* Reset WordPress admin styles within our app - targeted approach */
 .postquee-calendar-app {
-  all: initial;
-  * {
-    all: revert;
-  }
+  /* Override WordPress admin styles without breaking layout */
+  font-family: 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  color: #F9FAFB !important;
+  background: #030304 !important;
+
+  /* Ensure box-sizing is preserved for Tailwind */
+  box-sizing: border-box !important;
+}
+
+.postquee-calendar-app *,
+.postquee-calendar-app *::before,
+.postquee-calendar-app *::after {
+  box-sizing: border-box !important;
 }
 
 /* PostQuee Dark Theme - CSS Variables */
 .postquee-calendar-app {
   /* Backgrounds */
   --new-bgColor: #030304;
-  --new-bgColorInner: rgba(20, 23, 30, 0.4);
+  --new-bgColorInner: rgba(255, 255, 255, 0.05);
   --new-settings: #14171E;
   --new-back-drop: rgba(0, 0, 0, 0.7);
 

@@ -225,4 +225,21 @@ class Endpoints
     {
         return $this->client->request('/generate', 'POST', array('prompt' => $prompt));
     }
+
+    /**
+     * Refine content using PostQuee's OpenAI-powered AI.
+     *
+     * @param string $content The content to refine.
+     * @param string $prompt The refinement style (improve, shorten, expand, casual, professional, emojis).
+     * @return array|\WP_Error Response with 'refined' field containing AI-refined content.
+     */
+    public function refine_content($content, $prompt)
+    {
+        $payload = [
+            'content' => $content,
+            'prompt' => $prompt,
+        ];
+
+        return $this->client->request('/ai/refine', 'POST', $payload);
+    }
 }

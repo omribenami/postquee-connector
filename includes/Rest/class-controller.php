@@ -30,7 +30,7 @@ class Controller
      */
     public function register_routes()
     {
-        $namespace = 'postquee-connector/v1';
+        $namespace = 'postquee/v1';
 
         // Get Status & Integrations (legacy - for block editor)
         register_rest_route($namespace, '/status', array(
@@ -439,47 +439,33 @@ class Controller
     }
 
     /**
-     * AI Refine Content (Phase 6).
-     * Note: This is a placeholder. Full OpenAI/CopilotKit integration requires API key configuration.
+     * AI Refine Content.
+     * Proxies to PostQuee's OpenAI-powered content refinement API.
      */
     public function ai_refine($request)
     {
         $content = $request->get_param('content');
         $prompt = $request->get_param('prompt');
 
-        // TODO: Implement OpenAI/CopilotKit integration
-        // For now, return a simple refined version with basic rules
-
-        $refined = $content;
-
-        switch ($prompt) {
-            case 'improve':
-                $refined = $content . ' 🚀';
-                break;
-            case 'shorten':
-                $words = explode(' ', $content);
-                $refined = implode(' ', array_slice($words, 0, min(count($words), 20)));
-                break;
-            case 'expand':
-                $refined = $content . ' This is an exciting opportunity to engage with your audience!';
-                break;
-            case 'casual':
-                $refined = str_replace('.', '!', $content);
-                break;
-            case 'professional':
-                $refined = ucfirst($content);
-                break;
-            case 'emojis':
-                $refined = $content . ' ✨💡📈';
-                break;
-            default:
-                $refined = $content;
+        if (empty($content) || empty($prompt)) {
+            return new \WP_Error('missing_params', 'Content and prompt are required', array('status' => 400));
         }
 
-        return rest_ensure_response(array(
-            'success' => true,
-            'refined' => $refined,
-            'note' => 'AI refinement is a demo. Configure CopilotKit API key in Settings for full AI features.',
-        ));
+        $api_key = get_option(Settings::OPTION_API_KEY);
+        if (!$api_key) {
+            return new \WP_Error('no_api_key', 'API key not configured', array('status' => 400));
+        }
+
+        // Call PostQuee's AI refinement endpoint
+        $client = new Client($api_key);
+        $endpoints = new Endpoints($client);
+
+        $result = $endpoints->refine_content($content, $prompt);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return rest_ensure_response($result);
     }
 }

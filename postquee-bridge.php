@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       PostQuee Connector
  * Plugin URI:        https://postquee.com/
- * Description:       Full-featured PostQuee calendar integration with React UI, AI assistance, drag-and-drop scheduling, and seamless WordPress editor integration.
- * Version:           2.0.0
+ * Description:       Integrates the PostQuee social media dashboard directly into your WordPress admin.
+ * Version:           1.2.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Omri Ben Ami
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('POSTQUEE_BRIDGE_VERSION', '1.0.7');
+define('POSTQUEE_BRIDGE_VERSION', '1.2.0');
 define('POSTQUEE_BRIDGE_PATH', plugin_dir_path(__FILE__));
 define('POSTQUEE_BRIDGE_URL', plugin_dir_url(__FILE__));
 
