@@ -139,6 +139,8 @@ interface CalendarContextType {
   isLoading: boolean;
   error: any;
   refresh: () => void;
+  deletePost: (postId: string) => Promise<void>;
+  reschedulePost: (postId: string, newDate: string) => Promise<void>;
 }
 
 const CalendarContext = createContext<CalendarContextType | null>(null);
@@ -147,8 +149,30 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const { posts, isLoading, error, refresh } = useCalendarPosts();
   const integrations = useIntegrations();
 
+  const deletePost = async (postId: string) => {
+    try {
+      await calendarAPI.deletePost(postId);
+      refresh(); // Refresh calendar after deletion
+    } catch (err) {
+      console.error('Failed to delete post:', err);
+      throw err;
+    }
+  };
+
+  const reschedulePost = async (postId: string, newDate: string) => {
+    try {
+      await calendarAPI.updatePostDate(postId, newDate);
+      refresh(); // Refresh calendar after rescheduling
+    } catch (err) {
+      console.error('Failed to reschedule post:', err);
+      throw err;
+    }
+  };
+
   return (
-    <CalendarContext.Provider value={{ posts, integrations, isLoading, error, refresh }}>
+    <CalendarContext.Provider
+      value={{ posts, integrations, isLoading, error, refresh, deletePost, reschedulePost }}
+    >
       {children}
     </CalendarContext.Provider>
   );

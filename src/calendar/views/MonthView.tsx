@@ -2,13 +2,19 @@ import React from 'react';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { useCalendarStore, useCalendarContext } from '../context';
+import { CalendarSlot } from '../components/CalendarSlot';
 import type { Post } from '../types';
 
 dayjs.extend(isoWeek);
 
-export const MonthView: React.FC = () => {
+interface MonthViewProps {
+  onCreate: (date: dayjs.Dayjs) => void;
+  onEdit: (post: Post) => void;
+}
+
+export const MonthView: React.FC<MonthViewProps> = ({ onCreate, onEdit }) => {
   const { currentDate } = useCalendarStore();
-  const { posts } = useCalendarContext();
+  const { posts, deletePost, reschedulePost } = useCalendarContext();
 
   const monthStart = dayjs(currentDate).startOf('month');
   const calendarStart = monthStart.startOf('isoWeek'); // Start from Monday
@@ -19,6 +25,17 @@ export const MonthView: React.FC = () => {
   // Get posts for a specific day
   const getPostsForDay = (day: dayjs.Dayjs) => {
     return posts.filter((post: Post) => dayjs(post.publishDate).isSame(day, 'day'));
+  };
+
+  const handleDrop = async (post: Post, newDate: dayjs.Dayjs) => {
+    // Keep the original time, just change the date
+    const originalTime = dayjs(post.publishDate);
+    const newDateTime = newDate.hour(originalTime.hour()).minute(originalTime.minute());
+    await reschedulePost(post.id, newDateTime.toISOString());
+  };
+
+  const handleDelete = async (postId: string) => {
+    await deletePost(postId);
   };
 
   return (
@@ -33,22 +50,19 @@ export const MonthView: React.FC = () => {
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-1" style={{ gridAutoRows: 'minmax(100px, 1fr)' }}>
+      <div className="grid grid-cols-7 gap-1" style={{ gridAutoRows: 'minmax(120px, 1fr)' }}>
         {calendarDays.map((day) => {
           const dayPosts = getPostsForDay(day);
           const isToday = day.isSame(dayjs(), 'day');
           const isCurrentMonth = day.month() === monthStart.month();
-          const isPast = day.isBefore(dayjs(), 'day');
 
           return (
             <div
               key={day.format('YYYY-MM-DD')}
-              className={`border border-newBorder rounded-lg p-2 group hover:bg-newBoxHover transition-colors ${
-                !isCurrentMonth ? 'opacity-40' : ''
-              } ${isPast ? 'bg-newBgLineColor cursor-not-allowed' : 'cursor-pointer'}`}
+              className={`rounded-lg ${!isCurrentMonth ? 'opacity-40' : ''}`}
             >
               {/* Day number */}
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between p-2">
                 <span
                   className={`text-sm font-semibold ${
                     isToday
@@ -60,47 +74,26 @@ export const MonthView: React.FC = () => {
                 >
                   {day.format('D')}
                 </span>
-
-                {/* Orange + on hover for empty future days */}
-                {!isPast && dayPosts.length === 0 && (
-                  <span className="hidden group-hover:inline-block text-btnPrimary text-xl font-bold">
-                    +
-                  </span>
-                )}
               </div>
 
-              {/* Posts */}
-              <div className="space-y-1">
-                {dayPosts.slice(0, 3).map((post: Post) => (
-                  <div
-                    key={post.id}
-                    className="text-xs p-1.5 rounded bg-newColColor border-l-2 border-btnPrimary hover:bg-newBoxHover cursor-pointer"
-                  >
-                    <div className="flex items-center gap-1 mb-0.5">
-                      {post.integration.picture && (
-                        <img
-                          src={post.integration.picture}
-                          alt={post.integration.name}
-                          className="w-3 h-3 rounded-full"
-                        />
-                      )}
-                      <span className="text-newTextColor font-medium">
-                        {dayjs(post.publishDate).format('HH:mm')}
-                      </span>
-                    </div>
-                    <div className="text-textItemBlur line-clamp-1">
-                      {post.value[0]?.content.replace(/<[^>]*>/g, '') || 'No content'}
-                    </div>
-                  </div>
-                ))}
+              {/* Calendar slot for the day */}
+              <CalendarSlot
+                date={day}
+                posts={dayPosts}
+                onDrop={handleDrop}
+                onCreate={onCreate}
+                onDeletePost={handleDelete}
+                onEditPost={onEdit}
+                variant="month"
+                className="px-2 pb-2 min-h-[80px]"
+              />
 
-                {/* Show "+X more" if there are more posts */}
-                {dayPosts.length > 3 && (
-                  <div className="text-xs text-btnPrimary font-medium text-center">
-                    +{dayPosts.length - 3} more
-                  </div>
-                )}
-              </div>
+              {/* Show "+X more" if there are more posts than displayed */}
+              {dayPosts.length > 3 && (
+                <div className="text-xs text-btnPrimary font-medium text-center px-2 pb-2">
+                  +{dayPosts.length - 3} more
+                </div>
+              )}
             </div>
           );
         })}
