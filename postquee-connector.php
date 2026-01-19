@@ -1,13 +1,15 @@
 <?php
 /**
- * Plugin Name: PostQuee Connector
- * Description: Full-featured PostQuee calendar integration with API-based post scheduling, media uploads, and AI assistance.
- * Version: 2.0.2
- * Author: PostQuee
- * Text Domain: postquee-connector
- * Requires at least: 5.8
- * Requires PHP: 7.4
+ * PostQuee Connector - Legacy Entry Point
+ *
+ * This file is kept for backwards compatibility but is no longer used as the main plugin file.
+ * The actual plugin is loaded via postquee-bridge.php
+ *
+ * DO NOT activate this file directly - use postquee-bridge.php instead
  */
+
+// This file is intentionally disabled to prevent dual-plugin conflicts
+// The plugin header has been removed - use postquee-bridge.php
 
 namespace PostQuee\Connector;
 
