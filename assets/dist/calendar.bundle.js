@@ -1,10 +1,10 @@
 /******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 56:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -21,6 +21,7 @@ module.exports = setAttributesWithoutAttributes;
 /***/ 72:
 /***/ (function(module) {
 
+"use strict";
 
 
 var stylesInDOM = [];
@@ -111,6 +112,7 @@ module.exports = function (list, options) {
 /***/ 113:
 /***/ (function(module) {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -131,6 +133,7 @@ module.exports = styleTagTransform;
 /***/ 159:
 /***/ (function(module) {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -147,6 +150,7 @@ module.exports = insertStyleElement;
 /***/ 287:
 /***/ (function(__unused_webpack_module, exports) {
 
+"use strict";
 /**
  * @license React
  * react.production.min.js
@@ -177,9 +181,17 @@ exports.useMemo=function(a,b){return U.current.useMemo(a,b)};exports.useReducer=
 
 /***/ }),
 
+/***/ 313:
+/***/ (function(module) {
+
+!function(e,t){ true?module.exports=t():0}(this,(function(){"use strict";var e="day";return function(t,i,s){var a=function(t){return t.add(4-t.isoWeekday(),e)},d=i.prototype;d.isoWeekYear=function(){return a(this).year()},d.isoWeek=function(t){if(!this.$utils().u(t))return this.add(7*(t-this.isoWeek()),e);var i,d,n,o,r=a(this),u=(i=this.isoWeekYear(),d=this.$u,n=(d?s.utc:s)().year(i).startOf("year"),o=4-n.isoWeekday(),n.isoWeekday()>4&&(o+=7),n.add(o,e));return r.diff(u,"week")+1},d.isoWeekday=function(e){return this.$utils().u(e)?this.day()||7:this.day(this.day()%7?e:e-7)};var n=d.startOf;d.startOf=function(e,t){var i=this.$utils(),s=!!i.u(t)||t;return"isoweek"===i.p(e)?s?this.date(this.date()-(this.isoWeekday()-1)).startOf("day"):this.date(this.date()-1-(this.isoWeekday()-1)+7).endOf("day"):n.bind(this)(e,t)}}}));
+
+/***/ }),
+
 /***/ 314:
 /***/ (function(module) {
 
+"use strict";
 
 
 /*
@@ -271,6 +283,7 @@ module.exports = function (cssWithMappingToString) {
 /***/ 321:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(354);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(314);
@@ -280,7 +293,7 @@ module.exports = function (cssWithMappingToString) {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "*, ::before, ::after {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x:  ;\n  --tw-pan-y:  ;\n  --tw-pinch-zoom:  ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position:  ;\n  --tw-gradient-via-position:  ;\n  --tw-gradient-to-position:  ;\n  --tw-ordinal:  ;\n  --tw-slashed-zero:  ;\n  --tw-numeric-figure:  ;\n  --tw-numeric-spacing:  ;\n  --tw-numeric-fraction:  ;\n  --tw-ring-inset:  ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur:  ;\n  --tw-brightness:  ;\n  --tw-contrast:  ;\n  --tw-grayscale:  ;\n  --tw-hue-rotate:  ;\n  --tw-invert:  ;\n  --tw-saturate:  ;\n  --tw-sepia:  ;\n  --tw-drop-shadow:  ;\n  --tw-backdrop-blur:  ;\n  --tw-backdrop-brightness:  ;\n  --tw-backdrop-contrast:  ;\n  --tw-backdrop-grayscale:  ;\n  --tw-backdrop-hue-rotate:  ;\n  --tw-backdrop-invert:  ;\n  --tw-backdrop-opacity:  ;\n  --tw-backdrop-saturate:  ;\n  --tw-backdrop-sepia:  ;\n  --tw-contain-size:  ;\n  --tw-contain-layout:  ;\n  --tw-contain-paint:  ;\n  --tw-contain-style:  ;\n}\n\n::backdrop {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x:  ;\n  --tw-pan-y:  ;\n  --tw-pinch-zoom:  ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position:  ;\n  --tw-gradient-via-position:  ;\n  --tw-gradient-to-position:  ;\n  --tw-ordinal:  ;\n  --tw-slashed-zero:  ;\n  --tw-numeric-figure:  ;\n  --tw-numeric-spacing:  ;\n  --tw-numeric-fraction:  ;\n  --tw-ring-inset:  ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur:  ;\n  --tw-brightness:  ;\n  --tw-contrast:  ;\n  --tw-grayscale:  ;\n  --tw-hue-rotate:  ;\n  --tw-invert:  ;\n  --tw-saturate:  ;\n  --tw-sepia:  ;\n  --tw-drop-shadow:  ;\n  --tw-backdrop-blur:  ;\n  --tw-backdrop-brightness:  ;\n  --tw-backdrop-contrast:  ;\n  --tw-backdrop-grayscale:  ;\n  --tw-backdrop-hue-rotate:  ;\n  --tw-backdrop-invert:  ;\n  --tw-backdrop-opacity:  ;\n  --tw-backdrop-saturate:  ;\n  --tw-backdrop-sepia:  ;\n  --tw-contain-size:  ;\n  --tw-contain-layout:  ;\n  --tw-contain-paint:  ;\n  --tw-contain-style:  ;\n}/*\n! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com\n*//*\n1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)\n2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)\n*/\n\n*,\n::before,\n::after {\n  box-sizing: border-box; /* 1 */\n  border-width: 0; /* 2 */\n  border-style: solid; /* 2 */\n  border-color: currentColor; /* 2 */\n}\n\n::before,\n::after {\n  --tw-content: '';\n}\n\n/*\n1. Use a consistent sensible line-height in all browsers.\n2. Prevent adjustments of font size after orientation changes in iOS.\n3. Use a more readable tab size.\n4. Use the user's configured `sans` font-family by default.\n5. Use the user's configured `sans` font-feature-settings by default.\n6. Use the user's configured `sans` font-variation-settings by default.\n7. Disable tap highlights on iOS\n*/\n\nhtml,\n:host {\n  line-height: 1.5; /* 1 */\n  -webkit-text-size-adjust: 100%; /* 2 */\n  -moz-tab-size: 4; /* 3 */\n  -o-tab-size: 4;\n     tab-size: 4; /* 3 */\n  font-family: Helvetica Neue, Arial, sans-serif; /* 4 */\n  font-feature-settings: normal; /* 5 */\n  font-variation-settings: normal; /* 6 */\n  -webkit-tap-highlight-color: transparent; /* 7 */\n}\n\n/*\n1. Remove the margin in all browsers.\n2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.\n*/\n\nbody {\n  margin: 0; /* 1 */\n  line-height: inherit; /* 2 */\n}\n\n/*\n1. Add the correct height in Firefox.\n2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)\n3. Ensure horizontal rules are visible by default.\n*/\n\nhr {\n  height: 0; /* 1 */\n  color: inherit; /* 2 */\n  border-top-width: 1px; /* 3 */\n}\n\n/*\nAdd the correct text decoration in Chrome, Edge, and Safari.\n*/\n\nabbr:where([title]) {\n  -webkit-text-decoration: underline dotted;\n          text-decoration: underline dotted;\n}\n\n/*\nRemove the default font size and weight for headings.\n*/\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-size: inherit;\n  font-weight: inherit;\n}\n\n/*\nReset links to optimize for opt-in styling instead of opt-out.\n*/\n\na {\n  color: inherit;\n  text-decoration: inherit;\n}\n\n/*\nAdd the correct font weight in Edge and Safari.\n*/\n\nb,\nstrong {\n  font-weight: bolder;\n}\n\n/*\n1. Use the user's configured `mono` font-family by default.\n2. Use the user's configured `mono` font-feature-settings by default.\n3. Use the user's configured `mono` font-variation-settings by default.\n4. Correct the odd `em` font sizing in all browsers.\n*/\n\ncode,\nkbd,\nsamp,\npre {\n  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace; /* 1 */\n  font-feature-settings: normal; /* 2 */\n  font-variation-settings: normal; /* 3 */\n  font-size: 1em; /* 4 */\n}\n\n/*\nAdd the correct font size in all browsers.\n*/\n\nsmall {\n  font-size: 80%;\n}\n\n/*\nPrevent `sub` and `sup` elements from affecting the line height in all browsers.\n*/\n\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\n\nsub {\n  bottom: -0.25em;\n}\n\nsup {\n  top: -0.5em;\n}\n\n/*\n1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)\n2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)\n3. Remove gaps between table borders by default.\n*/\n\ntable {\n  text-indent: 0; /* 1 */\n  border-color: inherit; /* 2 */\n  border-collapse: collapse; /* 3 */\n}\n\n/*\n1. Change the font styles in all browsers.\n2. Remove the margin in Firefox and Safari.\n3. Remove default padding in all browsers.\n*/\n\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  font-family: inherit; /* 1 */\n  font-feature-settings: inherit; /* 1 */\n  font-variation-settings: inherit; /* 1 */\n  font-size: 100%; /* 1 */\n  font-weight: inherit; /* 1 */\n  line-height: inherit; /* 1 */\n  letter-spacing: inherit; /* 1 */\n  color: inherit; /* 1 */\n  margin: 0; /* 2 */\n  padding: 0; /* 3 */\n}\n\n/*\nRemove the inheritance of text transform in Edge and Firefox.\n*/\n\nbutton,\nselect {\n  text-transform: none;\n}\n\n/*\n1. Correct the inability to style clickable types in iOS and Safari.\n2. Remove default button styles.\n*/\n\nbutton,\ninput:where([type='button']),\ninput:where([type='reset']),\ninput:where([type='submit']) {\n  -webkit-appearance: button; /* 1 */\n  background-color: transparent; /* 2 */\n  background-image: none; /* 2 */\n}\n\n/*\nUse the modern Firefox focus style for all focusable elements.\n*/\n\n:-moz-focusring {\n  outline: auto;\n}\n\n/*\nRemove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)\n*/\n\n:-moz-ui-invalid {\n  box-shadow: none;\n}\n\n/*\nAdd the correct vertical alignment in Chrome and Firefox.\n*/\n\nprogress {\n  vertical-align: baseline;\n}\n\n/*\nCorrect the cursor style of increment and decrement buttons in Safari.\n*/\n\n::-webkit-inner-spin-button,\n::-webkit-outer-spin-button {\n  height: auto;\n}\n\n/*\n1. Correct the odd appearance in Chrome and Safari.\n2. Correct the outline style in Safari.\n*/\n\n[type='search'] {\n  -webkit-appearance: textfield; /* 1 */\n  outline-offset: -2px; /* 2 */\n}\n\n/*\nRemove the inner padding in Chrome and Safari on macOS.\n*/\n\n::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n/*\n1. Correct the inability to style clickable types in iOS and Safari.\n2. Change font properties to `inherit` in Safari.\n*/\n\n::-webkit-file-upload-button {\n  -webkit-appearance: button; /* 1 */\n  font: inherit; /* 2 */\n}\n\n/*\nAdd the correct display in Chrome and Safari.\n*/\n\nsummary {\n  display: list-item;\n}\n\n/*\nRemoves the default spacing and border for appropriate elements.\n*/\n\nblockquote,\ndl,\ndd,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\nhr,\nfigure,\np,\npre {\n  margin: 0;\n}\n\nfieldset {\n  margin: 0;\n  padding: 0;\n}\n\nlegend {\n  padding: 0;\n}\n\nol,\nul,\nmenu {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n/*\nReset default styling for dialogs.\n*/\ndialog {\n  padding: 0;\n}\n\n/*\nPrevent resizing textareas horizontally by default.\n*/\n\ntextarea {\n  resize: vertical;\n}\n\n/*\n1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)\n2. Set the default placeholder color to the user's configured gray 400 color.\n*/\n\ninput::-moz-placeholder, textarea::-moz-placeholder {\n  opacity: 1; /* 1 */\n  color: #9ca3af; /* 2 */\n}\n\ninput::placeholder,\ntextarea::placeholder {\n  opacity: 1; /* 1 */\n  color: #9ca3af; /* 2 */\n}\n\n/*\nSet the default cursor for buttons.\n*/\n\nbutton,\n[role=\"button\"] {\n  cursor: pointer;\n}\n\n/*\nMake sure disabled buttons don't get the pointer cursor.\n*/\n:disabled {\n  cursor: default;\n}\n\n/*\n1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)\n2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)\n   This can trigger a poorly considered lint error in some tools but is included by design.\n*/\n\nimg,\nsvg,\nvideo,\ncanvas,\naudio,\niframe,\nembed,\nobject {\n  display: block; /* 1 */\n  vertical-align: middle; /* 2 */\n}\n\n/*\nConstrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)\n*/\n\nimg,\nvideo {\n  max-width: 100%;\n  height: auto;\n}\n\n/* Make elements with the HTML hidden attribute stay hidden by default */\n[hidden]:where(:not([hidden=\"until-found\"])) {\n  display: none;\n}\n.mx-auto {\n  margin-left: auto;\n  margin-right: auto;\n}\n.mb-2 {\n  margin-bottom: 0.5rem;\n}\n.mb-4 {\n  margin-bottom: 1rem;\n}\n.mt-4 {\n  margin-top: 1rem;\n}\n.mt-8 {\n  margin-top: 2rem;\n}\n.flex {\n  display: flex;\n}\n.h-20 {\n  height: 5rem;\n}\n.min-h-screen {\n  min-height: 100vh;\n}\n.w-20 {\n  width: 5rem;\n}\n.max-w-7xl {\n  max-width: 80rem;\n}\n.items-center {\n  align-items: center;\n}\n.justify-center {\n  justify-content: center;\n}\n.gap-4 {\n  gap: 1rem;\n}\n.rounded {\n  border-radius: 0.25rem;\n}\n.rounded-lg {\n  border-radius: 0.5rem;\n}\n.border {\n  border-width: 1px;\n}\n.border-newBorder {\n  border-color: rgba(255, 255, 255, 0.15);\n}\n.bg-btnPrimary {\n  --tw-bg-opacity: 1;\n  background-color: rgb(255 105 0 / var(--tw-bg-opacity, 1));\n}\n.bg-newBgColor {\n  --tw-bg-opacity: 1;\n  background-color: rgb(3 3 4 / var(--tw-bg-opacity, 1));\n}\n.bg-newBgColorInner {\n  background-color: rgba(20, 23, 30, 0.4);\n}\n.bg-newBoxFocused {\n  --tw-bg-opacity: 1;\n  background-color: rgb(255 105 0 / var(--tw-bg-opacity, 1));\n}\n.bg-newSettings {\n  --tw-bg-opacity: 1;\n  background-color: rgb(20 23 30 / var(--tw-bg-opacity, 1));\n}\n.p-6 {\n  padding: 1.5rem;\n}\n.p-8 {\n  padding: 2rem;\n}\n.text-4xl {\n  font-size: 2.25rem;\n  line-height: 2.5rem;\n}\n.text-lg {\n  font-size: 1.125rem;\n  line-height: 1.75rem;\n}\n.text-xs {\n  font-size: 0.75rem;\n  line-height: 1rem;\n}\n.font-bold {\n  font-weight: 700;\n}\n.text-btnPrimary {\n  --tw-text-opacity: 1;\n  color: rgb(255 105 0 / var(--tw-text-opacity, 1));\n}\n.text-newTextColor {\n  --tw-text-opacity: 1;\n  color: rgb(249 250 251 / var(--tw-text-opacity, 1));\n}\n.text-textColor {\n  --tw-text-opacity: 1;\n  color: rgb(249 250 251 / var(--tw-text-opacity, 1));\n}\n.text-white {\n  --tw-text-opacity: 1;\n  color: rgb(255 255 255 / var(--tw-text-opacity, 1));\n}\n\n/* PostQuee WordPress Plugin - Global Styles */\n\n/* Reset WordPress admin styles within our app */\n.postquee-calendar-app {\n  all: initial;\n  * {\n    all: revert;\n  }\n}\n\n/* PostQuee Dark Theme - CSS Variables */\n.postquee-calendar-app {\n  /* Backgrounds */\n  --new-bgColor: #030304;\n  --new-bgColorInner: rgba(20, 23, 30, 0.4);\n  --new-settings: #14171E;\n  --new-back-drop: rgba(0, 0, 0, 0.7);\n\n  /* Interactive */\n  --new-box-hover: rgba(255, 105, 0, 0.1);\n  --new-boxFocused: #FF6900;\n  --new-btn-simple: rgba(255, 255, 255, 0.05);\n  --new-btn-text: #FFFFFF;\n  --new-btn-primary: #FF6900;\n  --new-btn-primary-hover: #FF8533;\n  --new-ai-btn: #FF6900;\n\n  /* Borders */\n  --new-border: rgba(255, 255, 255, 0.15);\n  --new-bgLineColor: rgba(255, 255, 255, 0.06);\n  --new-sep: rgba(255, 255, 255, 0.08);\n  --new-blockSeparator: rgba(255, 255, 255, 0.08);\n  --new-table-border: rgba(255, 255, 255, 0.06);\n\n  /* Text */\n  --new-textColor: #F9FAFB;\n  --new-textItemFocused: #FFFFFF;\n  --new-textItemBlur: #9CA3AF;\n  --color-text: #F9FAFB;\n  --color-gray: #9CA3AF;\n\n  /* Tables */\n  --new-table-header: rgba(255, 255, 255, 0.03);\n  --new-table-text: #E5E7EB;\n  --new-table-text-focused: #FF6900;\n  --new-col-color: rgba(255, 255, 255, 0.02);\n  --new-menu-dots: #9CA3AF;\n  --new-menu-hover: #FFFFFF;\n\n  /* Popups */\n  --popup-color: rgba(18, 21, 28, 0.85);\n  --popup-border: rgba(255, 255, 255, 0.1);\n\n  /* Social platforms */\n  --linkedin-bg: #1b1f23;\n  --linkedin-text: #c6c7c8;\n  --linkedin-border: #2e3438;\n  --facebook-bg: #242526;\n  --instagram-bg: #0b1014;\n  --youtube-bg: #0F0F0F;\n}\n\n/* Base font and antialiasing */\n.postquee-calendar-app {\n  font-family: 'Helvetica Neue', Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n/* Scrollbar styling */\n.postquee-calendar-app ::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-track {\n  background: rgba(255, 255, 255, 0.05);\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb {\n  background: rgba(255, 255, 255, 0.2);\n  border-radius: 4px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb:hover {\n  background: rgba(255, 255, 255, 0.3);\n}\n", "",{"version":3,"sources":["webpack://./src/styles/globals.css"],"names":[],"mappings":"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","sourcesContent":["@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n/* PostQuee WordPress Plugin - Global Styles */\n\n/* Reset WordPress admin styles within our app */\n.postquee-calendar-app {\n  all: initial;\n  * {\n    all: revert;\n  }\n}\n\n/* PostQuee Dark Theme - CSS Variables */\n.postquee-calendar-app {\n  /* Backgrounds */\n  --new-bgColor: #030304;\n  --new-bgColorInner: rgba(20, 23, 30, 0.4);\n  --new-settings: #14171E;\n  --new-back-drop: rgba(0, 0, 0, 0.7);\n\n  /* Interactive */\n  --new-box-hover: rgba(255, 105, 0, 0.1);\n  --new-boxFocused: #FF6900;\n  --new-btn-simple: rgba(255, 255, 255, 0.05);\n  --new-btn-text: #FFFFFF;\n  --new-btn-primary: #FF6900;\n  --new-btn-primary-hover: #FF8533;\n  --new-ai-btn: #FF6900;\n\n  /* Borders */\n  --new-border: rgba(255, 255, 255, 0.15);\n  --new-bgLineColor: rgba(255, 255, 255, 0.06);\n  --new-sep: rgba(255, 255, 255, 0.08);\n  --new-blockSeparator: rgba(255, 255, 255, 0.08);\n  --new-table-border: rgba(255, 255, 255, 0.06);\n\n  /* Text */\n  --new-textColor: #F9FAFB;\n  --new-textItemFocused: #FFFFFF;\n  --new-textItemBlur: #9CA3AF;\n  --color-text: #F9FAFB;\n  --color-gray: #9CA3AF;\n\n  /* Tables */\n  --new-table-header: rgba(255, 255, 255, 0.03);\n  --new-table-text: #E5E7EB;\n  --new-table-text-focused: #FF6900;\n  --new-col-color: rgba(255, 255, 255, 0.02);\n  --new-menu-dots: #9CA3AF;\n  --new-menu-hover: #FFFFFF;\n\n  /* Popups */\n  --popup-color: rgba(18, 21, 28, 0.85);\n  --popup-border: rgba(255, 255, 255, 0.1);\n\n  /* Social platforms */\n  --linkedin-bg: #1b1f23;\n  --linkedin-text: #c6c7c8;\n  --linkedin-border: #2e3438;\n  --facebook-bg: #242526;\n  --instagram-bg: #0b1014;\n  --youtube-bg: #0F0F0F;\n}\n\n/* Base font and antialiasing */\n.postquee-calendar-app {\n  font-family: 'Helvetica Neue', Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n/* Scrollbar styling */\n.postquee-calendar-app ::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-track {\n  background: rgba(255, 255, 255, 0.05);\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb {\n  background: rgba(255, 255, 255, 0.2);\n  border-radius: 4px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb:hover {\n  background: rgba(255, 255, 255, 0.3);\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "*, ::before, ::after {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x:  ;\n  --tw-pan-y:  ;\n  --tw-pinch-zoom:  ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position:  ;\n  --tw-gradient-via-position:  ;\n  --tw-gradient-to-position:  ;\n  --tw-ordinal:  ;\n  --tw-slashed-zero:  ;\n  --tw-numeric-figure:  ;\n  --tw-numeric-spacing:  ;\n  --tw-numeric-fraction:  ;\n  --tw-ring-inset:  ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur:  ;\n  --tw-brightness:  ;\n  --tw-contrast:  ;\n  --tw-grayscale:  ;\n  --tw-hue-rotate:  ;\n  --tw-invert:  ;\n  --tw-saturate:  ;\n  --tw-sepia:  ;\n  --tw-drop-shadow:  ;\n  --tw-backdrop-blur:  ;\n  --tw-backdrop-brightness:  ;\n  --tw-backdrop-contrast:  ;\n  --tw-backdrop-grayscale:  ;\n  --tw-backdrop-hue-rotate:  ;\n  --tw-backdrop-invert:  ;\n  --tw-backdrop-opacity:  ;\n  --tw-backdrop-saturate:  ;\n  --tw-backdrop-sepia:  ;\n  --tw-contain-size:  ;\n  --tw-contain-layout:  ;\n  --tw-contain-paint:  ;\n  --tw-contain-style:  ;\n}\n\n::backdrop {\n  --tw-border-spacing-x: 0;\n  --tw-border-spacing-y: 0;\n  --tw-translate-x: 0;\n  --tw-translate-y: 0;\n  --tw-rotate: 0;\n  --tw-skew-x: 0;\n  --tw-skew-y: 0;\n  --tw-scale-x: 1;\n  --tw-scale-y: 1;\n  --tw-pan-x:  ;\n  --tw-pan-y:  ;\n  --tw-pinch-zoom:  ;\n  --tw-scroll-snap-strictness: proximity;\n  --tw-gradient-from-position:  ;\n  --tw-gradient-via-position:  ;\n  --tw-gradient-to-position:  ;\n  --tw-ordinal:  ;\n  --tw-slashed-zero:  ;\n  --tw-numeric-figure:  ;\n  --tw-numeric-spacing:  ;\n  --tw-numeric-fraction:  ;\n  --tw-ring-inset:  ;\n  --tw-ring-offset-width: 0px;\n  --tw-ring-offset-color: #fff;\n  --tw-ring-color: rgb(59 130 246 / 0.5);\n  --tw-ring-offset-shadow: 0 0 #0000;\n  --tw-ring-shadow: 0 0 #0000;\n  --tw-shadow: 0 0 #0000;\n  --tw-shadow-colored: 0 0 #0000;\n  --tw-blur:  ;\n  --tw-brightness:  ;\n  --tw-contrast:  ;\n  --tw-grayscale:  ;\n  --tw-hue-rotate:  ;\n  --tw-invert:  ;\n  --tw-saturate:  ;\n  --tw-sepia:  ;\n  --tw-drop-shadow:  ;\n  --tw-backdrop-blur:  ;\n  --tw-backdrop-brightness:  ;\n  --tw-backdrop-contrast:  ;\n  --tw-backdrop-grayscale:  ;\n  --tw-backdrop-hue-rotate:  ;\n  --tw-backdrop-invert:  ;\n  --tw-backdrop-opacity:  ;\n  --tw-backdrop-saturate:  ;\n  --tw-backdrop-sepia:  ;\n  --tw-contain-size:  ;\n  --tw-contain-layout:  ;\n  --tw-contain-paint:  ;\n  --tw-contain-style:  ;\n}/*\n! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com\n*//*\n1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)\n2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)\n*/\n\n*,\n::before,\n::after {\n  box-sizing: border-box; /* 1 */\n  border-width: 0; /* 2 */\n  border-style: solid; /* 2 */\n  border-color: currentColor; /* 2 */\n}\n\n::before,\n::after {\n  --tw-content: '';\n}\n\n/*\n1. Use a consistent sensible line-height in all browsers.\n2. Prevent adjustments of font size after orientation changes in iOS.\n3. Use a more readable tab size.\n4. Use the user's configured `sans` font-family by default.\n5. Use the user's configured `sans` font-feature-settings by default.\n6. Use the user's configured `sans` font-variation-settings by default.\n7. Disable tap highlights on iOS\n*/\n\nhtml,\n:host {\n  line-height: 1.5; /* 1 */\n  -webkit-text-size-adjust: 100%; /* 2 */\n  -moz-tab-size: 4; /* 3 */\n  -o-tab-size: 4;\n     tab-size: 4; /* 3 */\n  font-family: Helvetica Neue, Arial, sans-serif; /* 4 */\n  font-feature-settings: normal; /* 5 */\n  font-variation-settings: normal; /* 6 */\n  -webkit-tap-highlight-color: transparent; /* 7 */\n}\n\n/*\n1. Remove the margin in all browsers.\n2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.\n*/\n\nbody {\n  margin: 0; /* 1 */\n  line-height: inherit; /* 2 */\n}\n\n/*\n1. Add the correct height in Firefox.\n2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)\n3. Ensure horizontal rules are visible by default.\n*/\n\nhr {\n  height: 0; /* 1 */\n  color: inherit; /* 2 */\n  border-top-width: 1px; /* 3 */\n}\n\n/*\nAdd the correct text decoration in Chrome, Edge, and Safari.\n*/\n\nabbr:where([title]) {\n  -webkit-text-decoration: underline dotted;\n          text-decoration: underline dotted;\n}\n\n/*\nRemove the default font size and weight for headings.\n*/\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-size: inherit;\n  font-weight: inherit;\n}\n\n/*\nReset links to optimize for opt-in styling instead of opt-out.\n*/\n\na {\n  color: inherit;\n  text-decoration: inherit;\n}\n\n/*\nAdd the correct font weight in Edge and Safari.\n*/\n\nb,\nstrong {\n  font-weight: bolder;\n}\n\n/*\n1. Use the user's configured `mono` font-family by default.\n2. Use the user's configured `mono` font-feature-settings by default.\n3. Use the user's configured `mono` font-variation-settings by default.\n4. Correct the odd `em` font sizing in all browsers.\n*/\n\ncode,\nkbd,\nsamp,\npre {\n  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace; /* 1 */\n  font-feature-settings: normal; /* 2 */\n  font-variation-settings: normal; /* 3 */\n  font-size: 1em; /* 4 */\n}\n\n/*\nAdd the correct font size in all browsers.\n*/\n\nsmall {\n  font-size: 80%;\n}\n\n/*\nPrevent `sub` and `sup` elements from affecting the line height in all browsers.\n*/\n\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\n\nsub {\n  bottom: -0.25em;\n}\n\nsup {\n  top: -0.5em;\n}\n\n/*\n1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)\n2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)\n3. Remove gaps between table borders by default.\n*/\n\ntable {\n  text-indent: 0; /* 1 */\n  border-color: inherit; /* 2 */\n  border-collapse: collapse; /* 3 */\n}\n\n/*\n1. Change the font styles in all browsers.\n2. Remove the margin in Firefox and Safari.\n3. Remove default padding in all browsers.\n*/\n\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  font-family: inherit; /* 1 */\n  font-feature-settings: inherit; /* 1 */\n  font-variation-settings: inherit; /* 1 */\n  font-size: 100%; /* 1 */\n  font-weight: inherit; /* 1 */\n  line-height: inherit; /* 1 */\n  letter-spacing: inherit; /* 1 */\n  color: inherit; /* 1 */\n  margin: 0; /* 2 */\n  padding: 0; /* 3 */\n}\n\n/*\nRemove the inheritance of text transform in Edge and Firefox.\n*/\n\nbutton,\nselect {\n  text-transform: none;\n}\n\n/*\n1. Correct the inability to style clickable types in iOS and Safari.\n2. Remove default button styles.\n*/\n\nbutton,\ninput:where([type='button']),\ninput:where([type='reset']),\ninput:where([type='submit']) {\n  -webkit-appearance: button; /* 1 */\n  background-color: transparent; /* 2 */\n  background-image: none; /* 2 */\n}\n\n/*\nUse the modern Firefox focus style for all focusable elements.\n*/\n\n:-moz-focusring {\n  outline: auto;\n}\n\n/*\nRemove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)\n*/\n\n:-moz-ui-invalid {\n  box-shadow: none;\n}\n\n/*\nAdd the correct vertical alignment in Chrome and Firefox.\n*/\n\nprogress {\n  vertical-align: baseline;\n}\n\n/*\nCorrect the cursor style of increment and decrement buttons in Safari.\n*/\n\n::-webkit-inner-spin-button,\n::-webkit-outer-spin-button {\n  height: auto;\n}\n\n/*\n1. Correct the odd appearance in Chrome and Safari.\n2. Correct the outline style in Safari.\n*/\n\n[type='search'] {\n  -webkit-appearance: textfield; /* 1 */\n  outline-offset: -2px; /* 2 */\n}\n\n/*\nRemove the inner padding in Chrome and Safari on macOS.\n*/\n\n::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n/*\n1. Correct the inability to style clickable types in iOS and Safari.\n2. Change font properties to `inherit` in Safari.\n*/\n\n::-webkit-file-upload-button {\n  -webkit-appearance: button; /* 1 */\n  font: inherit; /* 2 */\n}\n\n/*\nAdd the correct display in Chrome and Safari.\n*/\n\nsummary {\n  display: list-item;\n}\n\n/*\nRemoves the default spacing and border for appropriate elements.\n*/\n\nblockquote,\ndl,\ndd,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\nhr,\nfigure,\np,\npre {\n  margin: 0;\n}\n\nfieldset {\n  margin: 0;\n  padding: 0;\n}\n\nlegend {\n  padding: 0;\n}\n\nol,\nul,\nmenu {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n/*\nReset default styling for dialogs.\n*/\ndialog {\n  padding: 0;\n}\n\n/*\nPrevent resizing textareas horizontally by default.\n*/\n\ntextarea {\n  resize: vertical;\n}\n\n/*\n1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)\n2. Set the default placeholder color to the user's configured gray 400 color.\n*/\n\ninput::-moz-placeholder, textarea::-moz-placeholder {\n  opacity: 1; /* 1 */\n  color: #9ca3af; /* 2 */\n}\n\ninput::placeholder,\ntextarea::placeholder {\n  opacity: 1; /* 1 */\n  color: #9ca3af; /* 2 */\n}\n\n/*\nSet the default cursor for buttons.\n*/\n\nbutton,\n[role=\"button\"] {\n  cursor: pointer;\n}\n\n/*\nMake sure disabled buttons don't get the pointer cursor.\n*/\n:disabled {\n  cursor: default;\n}\n\n/*\n1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)\n2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)\n   This can trigger a poorly considered lint error in some tools but is included by design.\n*/\n\nimg,\nsvg,\nvideo,\ncanvas,\naudio,\niframe,\nembed,\nobject {\n  display: block; /* 1 */\n  vertical-align: middle; /* 2 */\n}\n\n/*\nConstrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)\n*/\n\nimg,\nvideo {\n  max-width: 100%;\n  height: auto;\n}\n\n/* Make elements with the HTML hidden attribute stay hidden by default */\n[hidden]:where(:not([hidden=\"until-found\"])) {\n  display: none;\n}\n.sticky {\n  position: sticky;\n}\n.top-0 {\n  top: 0px;\n}\n.mx-auto {\n  margin-left: auto;\n  margin-right: auto;\n}\n.mb-0\\.5 {\n  margin-bottom: 0.125rem;\n}\n.mb-1 {\n  margin-bottom: 0.25rem;\n}\n.mb-2 {\n  margin-bottom: 0.5rem;\n}\n.mb-6 {\n  margin-bottom: 1.5rem;\n}\n.ml-auto {\n  margin-left: auto;\n}\n.mt-1 {\n  margin-top: 0.25rem;\n}\n.mt-2 {\n  margin-top: 0.5rem;\n}\n.line-clamp-1 {\n  overflow: hidden;\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 1;\n}\n.line-clamp-2 {\n  overflow: hidden;\n  display: -webkit-box;\n  -webkit-box-orient: vertical;\n  -webkit-line-clamp: 2;\n}\n.flex {\n  display: flex;\n}\n.grid {\n  display: grid;\n}\n.hidden {\n  display: none;\n}\n.h-16 {\n  height: 4rem;\n}\n.h-3 {\n  height: 0.75rem;\n}\n.h-4 {\n  height: 1rem;\n}\n.h-5 {\n  height: 1.25rem;\n}\n.h-8 {\n  height: 2rem;\n}\n.h-full {\n  height: 100%;\n}\n.min-h-\\[60px\\] {\n  min-height: 60px;\n}\n.min-h-\\[80px\\] {\n  min-height: 80px;\n}\n.min-h-screen {\n  min-height: 100vh;\n}\n.w-16 {\n  width: 4rem;\n}\n.w-24 {\n  width: 6rem;\n}\n.w-3 {\n  width: 0.75rem;\n}\n.w-4 {\n  width: 1rem;\n}\n.w-5 {\n  width: 1.25rem;\n}\n.w-8 {\n  width: 2rem;\n}\n.min-w-\\[250px\\] {\n  min-width: 250px;\n}\n.max-w-4xl {\n  max-width: 56rem;\n}\n.max-w-7xl {\n  max-width: 80rem;\n}\n.flex-1 {\n  flex: 1 1 0%;\n}\n.flex-shrink-0 {\n  flex-shrink: 0;\n}\n.cursor-not-allowed {\n  cursor: not-allowed;\n}\n.cursor-pointer {\n  cursor: pointer;\n}\n.grid-cols-7 {\n  grid-template-columns: repeat(7, minmax(0, 1fr));\n}\n.items-center {\n  align-items: center;\n}\n.justify-center {\n  justify-content: center;\n}\n.justify-between {\n  justify-content: space-between;\n}\n.gap-0 {\n  gap: 0px;\n}\n.gap-1 {\n  gap: 0.25rem;\n}\n.gap-2 {\n  gap: 0.5rem;\n}\n.gap-3 {\n  gap: 0.75rem;\n}\n.gap-4 {\n  gap: 1rem;\n}\n.space-y-1 > :not([hidden]) ~ :not([hidden]) {\n  --tw-space-y-reverse: 0;\n  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));\n  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));\n}\n.space-y-2 > :not([hidden]) ~ :not([hidden]) {\n  --tw-space-y-reverse: 0;\n  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));\n  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));\n}\n.overflow-auto {\n  overflow: auto;\n}\n.overflow-hidden {\n  overflow: hidden;\n}\n.truncate {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.rounded {\n  border-radius: 0.25rem;\n}\n.rounded-full {\n  border-radius: 9999px;\n}\n.rounded-lg {\n  border-radius: 0.5rem;\n}\n.border {\n  border-width: 1px;\n}\n.border-b {\n  border-bottom-width: 1px;\n}\n.border-l {\n  border-left-width: 1px;\n}\n.border-l-2 {\n  border-left-width: 2px;\n}\n.border-l-4 {\n  border-left-width: 4px;\n}\n.border-r {\n  border-right-width: 1px;\n}\n.border-btnPrimary {\n  --tw-border-opacity: 1;\n  border-color: rgb(255 105 0 / var(--tw-border-opacity, 1));\n}\n.border-newBorder {\n  border-color: rgba(255, 255, 255, 0.15);\n}\n.bg-blue-500\\/20 {\n  background-color: rgb(59 130 246 / 0.2);\n}\n.bg-btnPrimary {\n  --tw-bg-opacity: 1;\n  background-color: rgb(255 105 0 / var(--tw-bg-opacity, 1));\n}\n.bg-green-500\\/20 {\n  background-color: rgb(34 197 94 / 0.2);\n}\n.bg-newBgColor {\n  --tw-bg-opacity: 1;\n  background-color: rgb(3 3 4 / var(--tw-bg-opacity, 1));\n}\n.bg-newBgColorInner {\n  background-color: rgba(20, 23, 30, 0.4);\n}\n.bg-newBgLineColor {\n  background-color: rgba(255, 255, 255, 0.06);\n}\n.bg-newColColor {\n  background-color: rgba(255, 255, 255, 0.02);\n}\n.object-cover {\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.p-1 {\n  padding: 0.25rem;\n}\n.p-1\\.5 {\n  padding: 0.375rem;\n}\n.p-2 {\n  padding: 0.5rem;\n}\n.p-3 {\n  padding: 0.75rem;\n}\n.p-4 {\n  padding: 1rem;\n}\n.p-6 {\n  padding: 1.5rem;\n}\n.px-2 {\n  padding-left: 0.5rem;\n  padding-right: 0.5rem;\n}\n.px-3 {\n  padding-left: 0.75rem;\n  padding-right: 0.75rem;\n}\n.px-4 {\n  padding-left: 1rem;\n  padding-right: 1rem;\n}\n.py-1 {\n  padding-top: 0.25rem;\n  padding-bottom: 0.25rem;\n}\n.py-1\\.5 {\n  padding-top: 0.375rem;\n  padding-bottom: 0.375rem;\n}\n.text-center {\n  text-align: center;\n}\n.text-right {\n  text-align: right;\n}\n.text-2xl {\n  font-size: 1.5rem;\n  line-height: 2rem;\n}\n.text-3xl {\n  font-size: 1.875rem;\n  line-height: 2.25rem;\n}\n.text-lg {\n  font-size: 1.125rem;\n  line-height: 1.75rem;\n}\n.text-sm {\n  font-size: 0.875rem;\n  line-height: 1.25rem;\n}\n.text-xl {\n  font-size: 1.25rem;\n  line-height: 1.75rem;\n}\n.text-xs {\n  font-size: 0.75rem;\n  line-height: 1rem;\n}\n.font-bold {\n  font-weight: 700;\n}\n.font-medium {\n  font-weight: 500;\n}\n.font-semibold {\n  font-weight: 600;\n}\n.uppercase {\n  text-transform: uppercase;\n}\n.capitalize {\n  text-transform: capitalize;\n}\n.text-blue-400 {\n  --tw-text-opacity: 1;\n  color: rgb(96 165 250 / var(--tw-text-opacity, 1));\n}\n.text-btnPrimary {\n  --tw-text-opacity: 1;\n  color: rgb(255 105 0 / var(--tw-text-opacity, 1));\n}\n.text-green-400 {\n  --tw-text-opacity: 1;\n  color: rgb(74 222 128 / var(--tw-text-opacity, 1));\n}\n.text-newTextColor {\n  --tw-text-opacity: 1;\n  color: rgb(249 250 251 / var(--tw-text-opacity, 1));\n}\n.text-red-500 {\n  --tw-text-opacity: 1;\n  color: rgb(239 68 68 / var(--tw-text-opacity, 1));\n}\n.text-textItemBlur {\n  --tw-text-opacity: 1;\n  color: rgb(156 163 175 / var(--tw-text-opacity, 1));\n}\n.text-white {\n  --tw-text-opacity: 1;\n  color: rgb(255 255 255 / var(--tw-text-opacity, 1));\n}\n.opacity-40 {\n  opacity: 0.4;\n}\n.opacity-50 {\n  opacity: 0.5;\n}\n.opacity-60 {\n  opacity: 0.6;\n}\n.filter {\n  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);\n}\n.transition-colors {\n  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;\n  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n  transition-duration: 150ms;\n}\n\n/* PostQuee WordPress Plugin - Global Styles */\n\n/* Reset WordPress admin styles within our app */\n.postquee-calendar-app {\n  all: initial;\n  * {\n    all: revert;\n  }\n}\n\n/* PostQuee Dark Theme - CSS Variables */\n.postquee-calendar-app {\n  /* Backgrounds */\n  --new-bgColor: #030304;\n  --new-bgColorInner: rgba(20, 23, 30, 0.4);\n  --new-settings: #14171E;\n  --new-back-drop: rgba(0, 0, 0, 0.7);\n\n  /* Interactive */\n  --new-box-hover: rgba(255, 105, 0, 0.1);\n  --new-boxFocused: #FF6900;\n  --new-btn-simple: rgba(255, 255, 255, 0.05);\n  --new-btn-text: #FFFFFF;\n  --new-btn-primary: #FF6900;\n  --new-btn-primary-hover: #FF8533;\n  --new-ai-btn: #FF6900;\n\n  /* Borders */\n  --new-border: rgba(255, 255, 255, 0.15);\n  --new-bgLineColor: rgba(255, 255, 255, 0.06);\n  --new-sep: rgba(255, 255, 255, 0.08);\n  --new-blockSeparator: rgba(255, 255, 255, 0.08);\n  --new-table-border: rgba(255, 255, 255, 0.06);\n\n  /* Text */\n  --new-textColor: #F9FAFB;\n  --new-textItemFocused: #FFFFFF;\n  --new-textItemBlur: #9CA3AF;\n  --color-text: #F9FAFB;\n  --color-gray: #9CA3AF;\n\n  /* Tables */\n  --new-table-header: rgba(255, 255, 255, 0.03);\n  --new-table-text: #E5E7EB;\n  --new-table-text-focused: #FF6900;\n  --new-col-color: rgba(255, 255, 255, 0.02);\n  --new-menu-dots: #9CA3AF;\n  --new-menu-hover: #FFFFFF;\n\n  /* Popups */\n  --popup-color: rgba(18, 21, 28, 0.85);\n  --popup-border: rgba(255, 255, 255, 0.1);\n\n  /* Social platforms */\n  --linkedin-bg: #1b1f23;\n  --linkedin-text: #c6c7c8;\n  --linkedin-border: #2e3438;\n  --facebook-bg: #242526;\n  --instagram-bg: #0b1014;\n  --youtube-bg: #0F0F0F;\n}\n\n/* Base font and antialiasing */\n.postquee-calendar-app {\n  font-family: 'Helvetica Neue', Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n/* Scrollbar styling */\n.postquee-calendar-app ::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-track {\n  background: rgba(255, 255, 255, 0.05);\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb {\n  background: rgba(255, 255, 255, 0.2);\n  border-radius: 4px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb:hover {\n  background: rgba(255, 255, 255, 0.3);\n}\n\n.hover\\:bg-newBoxHover:hover {\n  background-color: rgba(255, 105, 0, 0.1);\n}\n\n.hover\\:text-newTextColor:hover {\n  --tw-text-opacity: 1;\n  color: rgb(249 250 251 / var(--tw-text-opacity, 1));\n}\n\n.group:hover .group-hover\\:inline-block {\n  display: inline-block;\n}\n\n.group:hover .group-hover\\:flex {\n  display: flex;\n}\n", "",{"version":3,"sources":["webpack://./src/styles/globals.css"],"names":[],"mappings":"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","sourcesContent":["@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n/* PostQuee WordPress Plugin - Global Styles */\n\n/* Reset WordPress admin styles within our app */\n.postquee-calendar-app {\n  all: initial;\n  * {\n    all: revert;\n  }\n}\n\n/* PostQuee Dark Theme - CSS Variables */\n.postquee-calendar-app {\n  /* Backgrounds */\n  --new-bgColor: #030304;\n  --new-bgColorInner: rgba(20, 23, 30, 0.4);\n  --new-settings: #14171E;\n  --new-back-drop: rgba(0, 0, 0, 0.7);\n\n  /* Interactive */\n  --new-box-hover: rgba(255, 105, 0, 0.1);\n  --new-boxFocused: #FF6900;\n  --new-btn-simple: rgba(255, 255, 255, 0.05);\n  --new-btn-text: #FFFFFF;\n  --new-btn-primary: #FF6900;\n  --new-btn-primary-hover: #FF8533;\n  --new-ai-btn: #FF6900;\n\n  /* Borders */\n  --new-border: rgba(255, 255, 255, 0.15);\n  --new-bgLineColor: rgba(255, 255, 255, 0.06);\n  --new-sep: rgba(255, 255, 255, 0.08);\n  --new-blockSeparator: rgba(255, 255, 255, 0.08);\n  --new-table-border: rgba(255, 255, 255, 0.06);\n\n  /* Text */\n  --new-textColor: #F9FAFB;\n  --new-textItemFocused: #FFFFFF;\n  --new-textItemBlur: #9CA3AF;\n  --color-text: #F9FAFB;\n  --color-gray: #9CA3AF;\n\n  /* Tables */\n  --new-table-header: rgba(255, 255, 255, 0.03);\n  --new-table-text: #E5E7EB;\n  --new-table-text-focused: #FF6900;\n  --new-col-color: rgba(255, 255, 255, 0.02);\n  --new-menu-dots: #9CA3AF;\n  --new-menu-hover: #FFFFFF;\n\n  /* Popups */\n  --popup-color: rgba(18, 21, 28, 0.85);\n  --popup-border: rgba(255, 255, 255, 0.1);\n\n  /* Social platforms */\n  --linkedin-bg: #1b1f23;\n  --linkedin-text: #c6c7c8;\n  --linkedin-border: #2e3438;\n  --facebook-bg: #242526;\n  --instagram-bg: #0b1014;\n  --youtube-bg: #0F0F0F;\n}\n\n/* Base font and antialiasing */\n.postquee-calendar-app {\n  font-family: 'Helvetica Neue', Arial, sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n/* Scrollbar styling */\n.postquee-calendar-app ::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-track {\n  background: rgba(255, 255, 255, 0.05);\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb {\n  background: rgba(255, 255, 255, 0.2);\n  border-radius: 4px;\n}\n\n.postquee-calendar-app ::-webkit-scrollbar-thumb:hover {\n  background: rgba(255, 255, 255, 0.3);\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ __webpack_exports__.A = (___CSS_LOADER_EXPORT___);
 
@@ -290,6 +303,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, "*, ::before, ::after {\n  --tw-border-
 /***/ 338:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
+"use strict";
 var __webpack_unused_export__;
 
 
@@ -303,9 +317,17 @@ if (true) {
 
 /***/ }),
 
+/***/ 353:
+/***/ (function(module) {
+
+!function(t,e){ true?module.exports=e():0}(this,(function(){"use strict";var t=1e3,e=6e4,n=36e5,r="millisecond",i="second",s="minute",u="hour",a="day",o="week",c="month",f="quarter",h="year",d="date",l="Invalid Date",$=/^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,y=/\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,M={name:"en",weekdays:"Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),months:"January_February_March_April_May_June_July_August_September_October_November_December".split("_"),ordinal:function(t){var e=["th","st","nd","rd"],n=t%100;return"["+t+(e[(n-20)%10]||e[n]||e[0])+"]"}},m=function(t,e,n){var r=String(t);return!r||r.length>=e?t:""+Array(e+1-r.length).join(n)+t},v={s:m,z:function(t){var e=-t.utcOffset(),n=Math.abs(e),r=Math.floor(n/60),i=n%60;return(e<=0?"+":"-")+m(r,2,"0")+":"+m(i,2,"0")},m:function t(e,n){if(e.date()<n.date())return-t(n,e);var r=12*(n.year()-e.year())+(n.month()-e.month()),i=e.clone().add(r,c),s=n-i<0,u=e.clone().add(r+(s?-1:1),c);return+(-(r+(n-i)/(s?i-u:u-i))||0)},a:function(t){return t<0?Math.ceil(t)||0:Math.floor(t)},p:function(t){return{M:c,y:h,w:o,d:a,D:d,h:u,m:s,s:i,ms:r,Q:f}[t]||String(t||"").toLowerCase().replace(/s$/,"")},u:function(t){return void 0===t}},g="en",D={};D[g]=M;var p="$isDayjsObject",S=function(t){return t instanceof _||!(!t||!t[p])},w=function t(e,n,r){var i;if(!e)return g;if("string"==typeof e){var s=e.toLowerCase();D[s]&&(i=s),n&&(D[s]=n,i=s);var u=e.split("-");if(!i&&u.length>1)return t(u[0])}else{var a=e.name;D[a]=e,i=a}return!r&&i&&(g=i),i||!r&&g},O=function(t,e){if(S(t))return t.clone();var n="object"==typeof e?e:{};return n.date=t,n.args=arguments,new _(n)},b=v;b.l=w,b.i=S,b.w=function(t,e){return O(t,{locale:e.$L,utc:e.$u,x:e.$x,$offset:e.$offset})};var _=function(){function M(t){this.$L=w(t.locale,null,!0),this.parse(t),this.$x=this.$x||t.x||{},this[p]=!0}var m=M.prototype;return m.parse=function(t){this.$d=function(t){var e=t.date,n=t.utc;if(null===e)return new Date(NaN);if(b.u(e))return new Date;if(e instanceof Date)return new Date(e);if("string"==typeof e&&!/Z$/i.test(e)){var r=e.match($);if(r){var i=r[2]-1||0,s=(r[7]||"0").substring(0,3);return n?new Date(Date.UTC(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)):new Date(r[1],i,r[3]||1,r[4]||0,r[5]||0,r[6]||0,s)}}return new Date(e)}(t),this.init()},m.init=function(){var t=this.$d;this.$y=t.getFullYear(),this.$M=t.getMonth(),this.$D=t.getDate(),this.$W=t.getDay(),this.$H=t.getHours(),this.$m=t.getMinutes(),this.$s=t.getSeconds(),this.$ms=t.getMilliseconds()},m.$utils=function(){return b},m.isValid=function(){return!(this.$d.toString()===l)},m.isSame=function(t,e){var n=O(t);return this.startOf(e)<=n&&n<=this.endOf(e)},m.isAfter=function(t,e){return O(t)<this.startOf(e)},m.isBefore=function(t,e){return this.endOf(e)<O(t)},m.$g=function(t,e,n){return b.u(t)?this[e]:this.set(n,t)},m.unix=function(){return Math.floor(this.valueOf()/1e3)},m.valueOf=function(){return this.$d.getTime()},m.startOf=function(t,e){var n=this,r=!!b.u(e)||e,f=b.p(t),l=function(t,e){var i=b.w(n.$u?Date.UTC(n.$y,e,t):new Date(n.$y,e,t),n);return r?i:i.endOf(a)},$=function(t,e){return b.w(n.toDate()[t].apply(n.toDate("s"),(r?[0,0,0,0]:[23,59,59,999]).slice(e)),n)},y=this.$W,M=this.$M,m=this.$D,v="set"+(this.$u?"UTC":"");switch(f){case h:return r?l(1,0):l(31,11);case c:return r?l(1,M):l(0,M+1);case o:var g=this.$locale().weekStart||0,D=(y<g?y+7:y)-g;return l(r?m-D:m+(6-D),M);case a:case d:return $(v+"Hours",0);case u:return $(v+"Minutes",1);case s:return $(v+"Seconds",2);case i:return $(v+"Milliseconds",3);default:return this.clone()}},m.endOf=function(t){return this.startOf(t,!1)},m.$set=function(t,e){var n,o=b.p(t),f="set"+(this.$u?"UTC":""),l=(n={},n[a]=f+"Date",n[d]=f+"Date",n[c]=f+"Month",n[h]=f+"FullYear",n[u]=f+"Hours",n[s]=f+"Minutes",n[i]=f+"Seconds",n[r]=f+"Milliseconds",n)[o],$=o===a?this.$D+(e-this.$W):e;if(o===c||o===h){var y=this.clone().set(d,1);y.$d[l]($),y.init(),this.$d=y.set(d,Math.min(this.$D,y.daysInMonth())).$d}else l&&this.$d[l]($);return this.init(),this},m.set=function(t,e){return this.clone().$set(t,e)},m.get=function(t){return this[b.p(t)]()},m.add=function(r,f){var d,l=this;r=Number(r);var $=b.p(f),y=function(t){var e=O(l);return b.w(e.date(e.date()+Math.round(t*r)),l)};if($===c)return this.set(c,this.$M+r);if($===h)return this.set(h,this.$y+r);if($===a)return y(1);if($===o)return y(7);var M=(d={},d[s]=e,d[u]=n,d[i]=t,d)[$]||1,m=this.$d.getTime()+r*M;return b.w(m,this)},m.subtract=function(t,e){return this.add(-1*t,e)},m.format=function(t){var e=this,n=this.$locale();if(!this.isValid())return n.invalidDate||l;var r=t||"YYYY-MM-DDTHH:mm:ssZ",i=b.z(this),s=this.$H,u=this.$m,a=this.$M,o=n.weekdays,c=n.months,f=n.meridiem,h=function(t,n,i,s){return t&&(t[n]||t(e,r))||i[n].slice(0,s)},d=function(t){return b.s(s%12||12,t,"0")},$=f||function(t,e,n){var r=t<12?"AM":"PM";return n?r.toLowerCase():r};return r.replace(y,(function(t,r){return r||function(t){switch(t){case"YY":return String(e.$y).slice(-2);case"YYYY":return b.s(e.$y,4,"0");case"M":return a+1;case"MM":return b.s(a+1,2,"0");case"MMM":return h(n.monthsShort,a,c,3);case"MMMM":return h(c,a);case"D":return e.$D;case"DD":return b.s(e.$D,2,"0");case"d":return String(e.$W);case"dd":return h(n.weekdaysMin,e.$W,o,2);case"ddd":return h(n.weekdaysShort,e.$W,o,3);case"dddd":return o[e.$W];case"H":return String(s);case"HH":return b.s(s,2,"0");case"h":return d(1);case"hh":return d(2);case"a":return $(s,u,!0);case"A":return $(s,u,!1);case"m":return String(u);case"mm":return b.s(u,2,"0");case"s":return String(e.$s);case"ss":return b.s(e.$s,2,"0");case"SSS":return b.s(e.$ms,3,"0");case"Z":return i}return null}(t)||i.replace(":","")}))},m.utcOffset=function(){return 15*-Math.round(this.$d.getTimezoneOffset()/15)},m.diff=function(r,d,l){var $,y=this,M=b.p(d),m=O(r),v=(m.utcOffset()-this.utcOffset())*e,g=this-m,D=function(){return b.m(y,m)};switch(M){case h:$=D()/12;break;case c:$=D();break;case f:$=D()/3;break;case o:$=(g-v)/6048e5;break;case a:$=(g-v)/864e5;break;case u:$=g/n;break;case s:$=g/e;break;case i:$=g/t;break;default:$=g}return l?$:b.a($)},m.daysInMonth=function(){return this.endOf(c).$D},m.$locale=function(){return D[this.$L]},m.locale=function(t,e){if(!t)return this.$L;var n=this.clone(),r=w(t,e,!0);return r&&(n.$L=r),n},m.clone=function(){return b.w(this.$d,this)},m.toDate=function(){return new Date(this.valueOf())},m.toJSON=function(){return this.isValid()?this.toISOString():null},m.toISOString=function(){return this.$d.toISOString()},m.toString=function(){return this.$d.toUTCString()},M}(),k=_.prototype;return O.prototype=k,[["$ms",r],["$s",i],["$m",s],["$H",u],["$W",a],["$M",c],["$y",h],["$D",d]].forEach((function(t){k[t[1]]=function(e){return this.$g(e,t[0],t[1])}})),O.extend=function(t,e){return t.$i||(t(e,_,O),t.$i=!0),O},O.locale=w,O.isDayjs=S,O.unix=function(t){return O(1e3*t)},O.en=D[g],O.Ls=D,O.p={},O}));
+
+/***/ }),
+
 /***/ 354:
 /***/ (function(module) {
 
+"use strict";
 
 
 module.exports = function (item) {
@@ -328,6 +350,7 @@ module.exports = function (item) {
 /***/ 463:
 /***/ (function(__unused_webpack_module, exports) {
 
+"use strict";
 /**
  * @license React
  * scheduler.production.min.js
@@ -351,9 +374,84 @@ exports.unstable_shouldYield=M;exports.unstable_wrapCallback=function(a){var b=y
 
 /***/ }),
 
+/***/ 493:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * @license React
+ * use-sync-external-store-shim.production.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+var React = __webpack_require__(540);
+function is(x, y) {
+  return (x === y && (0 !== x || 1 / x === 1 / y)) || (x !== x && y !== y);
+}
+var objectIs = "function" === typeof Object.is ? Object.is : is,
+  useState = React.useState,
+  useEffect = React.useEffect,
+  useLayoutEffect = React.useLayoutEffect,
+  useDebugValue = React.useDebugValue;
+function useSyncExternalStore$2(subscribe, getSnapshot) {
+  var value = getSnapshot(),
+    _useState = useState({ inst: { value: value, getSnapshot: getSnapshot } }),
+    inst = _useState[0].inst,
+    forceUpdate = _useState[1];
+  useLayoutEffect(
+    function () {
+      inst.value = value;
+      inst.getSnapshot = getSnapshot;
+      checkIfSnapshotChanged(inst) && forceUpdate({ inst: inst });
+    },
+    [subscribe, value, getSnapshot]
+  );
+  useEffect(
+    function () {
+      checkIfSnapshotChanged(inst) && forceUpdate({ inst: inst });
+      return subscribe(function () {
+        checkIfSnapshotChanged(inst) && forceUpdate({ inst: inst });
+      });
+    },
+    [subscribe]
+  );
+  useDebugValue(value);
+  return value;
+}
+function checkIfSnapshotChanged(inst) {
+  var latestGetSnapshot = inst.getSnapshot;
+  inst = inst.value;
+  try {
+    var nextValue = latestGetSnapshot();
+    return !objectIs(inst, nextValue);
+  } catch (error) {
+    return !0;
+  }
+}
+function useSyncExternalStore$1(subscribe, getSnapshot) {
+  return getSnapshot();
+}
+var shim =
+  "undefined" === typeof window ||
+  "undefined" === typeof window.document ||
+  "undefined" === typeof window.document.createElement
+    ? useSyncExternalStore$1
+    : useSyncExternalStore$2;
+exports.useSyncExternalStore =
+  void 0 !== React.useSyncExternalStore ? React.useSyncExternalStore : shim;
+
+
+/***/ }),
+
 /***/ 540:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+"use strict";
 
 
 if (true) {
@@ -367,6 +465,7 @@ if (true) {
 /***/ 551:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
+"use strict";
 /**
  * @license React
  * react-dom.production.min.js
@@ -696,6 +795,7 @@ exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!ol(c))throw Er
 /***/ 659:
 /***/ (function(module) {
 
+"use strict";
 
 
 var memo = {};
@@ -736,6 +836,7 @@ module.exports = insertBySelector;
 /***/ 825:
 /***/ (function(module) {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -800,9 +901,24 @@ module.exports = domAPI;
 
 /***/ }),
 
+/***/ 888:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+
+if (true) {
+  module.exports = __webpack_require__(493);
+} else // removed by dead control flow
+{}
+
+
+/***/ }),
+
 /***/ 961:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+"use strict";
 
 
 function checkDCE() {
@@ -839,6 +955,7 @@ if (true) {
 /***/ 982:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
+"use strict";
 
 
 if (true) {
@@ -869,7 +986,7 @@ if (true) {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
@@ -912,6 +1029,9 @@ if (true) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
+!function() {
+"use strict";
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(540);
@@ -966,28 +1086,1922 @@ var update = injectStylesIntoStyleTag_default()(globals/* default */.A, options)
 
        /* harmony default export */ var styles_globals = (globals/* default */.A && globals/* default */.A.locals ? globals/* default */.A.locals : undefined);
 
+// EXTERNAL MODULE: ./node_modules/dayjs/dayjs.min.js
+var dayjs_min = __webpack_require__(353);
+var dayjs_min_default = /*#__PURE__*/__webpack_require__.n(dayjs_min);
+;// ./node_modules/zustand/esm/vanilla.mjs
+const createStoreImpl = (createState) => {
+  let state;
+  const listeners = /* @__PURE__ */ new Set();
+  const setState = (partial, replace) => {
+    const nextState = typeof partial === "function" ? partial(state) : partial;
+    if (!Object.is(nextState, state)) {
+      const previousState = state;
+      state = (replace != null ? replace : typeof nextState !== "object" || nextState === null) ? nextState : Object.assign({}, state, nextState);
+      listeners.forEach((listener) => listener(state, previousState));
+    }
+  };
+  const getState = () => state;
+  const getInitialState = () => initialState;
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  };
+  const api = { setState, getState, getInitialState, subscribe };
+  const initialState = state = createState(setState, getState, api);
+  return api;
+};
+const createStore = ((createState) => createState ? createStoreImpl(createState) : createStoreImpl);
+
+
+
+;// ./node_modules/zustand/esm/react.mjs
+
+
+
+const identity = (arg) => arg;
+function useStore(api, selector = identity) {
+  const slice = react.useSyncExternalStore(
+    api.subscribe,
+    react.useCallback(() => selector(api.getState()), [api, selector]),
+    react.useCallback(() => selector(api.getInitialState()), [api, selector])
+  );
+  react.useDebugValue(slice);
+  return slice;
+}
+const createImpl = (createState) => {
+  const api = createStore(createState);
+  const useBoundStore = (selector) => useStore(api, selector);
+  Object.assign(useBoundStore, api);
+  return useBoundStore;
+};
+const create = ((createState) => createState ? createImpl(createState) : createImpl);
+
+
+
+// EXTERNAL MODULE: ./node_modules/use-sync-external-store/shim/index.js
+var shim = __webpack_require__(888);
+;// ./node_modules/swr/dist/_internal/events.mjs
+const FOCUS_EVENT = 0;
+const RECONNECT_EVENT = 1;
+const MUTATE_EVENT = 2;
+const ERROR_REVALIDATE_EVENT = 3;
+
+
+
+;// ./node_modules/dequal/lite/index.mjs
+var has = Object.prototype.hasOwnProperty;
+
+function dequal(foo, bar) {
+	var ctor, len;
+	if (foo === bar) return true;
+
+	if (foo && bar && (ctor=foo.constructor) === bar.constructor) {
+		if (ctor === Date) return foo.getTime() === bar.getTime();
+		if (ctor === RegExp) return foo.toString() === bar.toString();
+
+		if (ctor === Array) {
+			if ((len=foo.length) === bar.length) {
+				while (len-- && dequal(foo[len], bar[len]));
+			}
+			return len === -1;
+		}
+
+		if (!ctor || typeof foo === 'object') {
+			len = 0;
+			for (ctor in foo) {
+				if (has.call(foo, ctor) && ++len && !has.call(bar, ctor)) return false;
+				if (!(ctor in bar) || !dequal(foo[ctor], bar[ctor])) return false;
+			}
+			return Object.keys(bar).length === len;
+		}
+	}
+
+	return foo !== foo && bar !== bar;
+}
+
+;// ./node_modules/swr/dist/_internal/config-context-12s-Dh3trQsc.mjs
+'use client';
+
+
+
+
+// Global state used to deduplicate requests and store listeners
+const config_context_12s_Dh3trQsc_SWRGlobalState = new WeakMap();
+
+// Shared state between server components and client components
+const noop = ()=>{};
+// Using noop() as the undefined value as undefined can be replaced
+// by something else. Prettier ignore and extra parentheses are necessary here
+// to ensure that tsc doesn't remove the __NOINLINE__ comment.
+// prettier-ignore
+const UNDEFINED = /*#__NOINLINE__*/ noop();
+const OBJECT = Object;
+const isUndefined = (v)=>v === UNDEFINED;
+const isFunction = (v)=>typeof v == 'function';
+const mergeObjects = (a, b)=>({
+        ...a,
+        ...b
+    });
+const isPromiseLike = (x)=>isFunction(x.then);
+
+const EMPTY_CACHE = {};
+const INITIAL_CACHE = {};
+const STR_UNDEFINED = 'undefined';
+// NOTE: Use the function to guarantee it's re-evaluated between jsdom and node runtime for tests.
+const isWindowDefined = typeof window != STR_UNDEFINED;
+const isDocumentDefined = typeof document != STR_UNDEFINED;
+const isLegacyDeno = isWindowDefined && 'Deno' in window;
+const hasRequestAnimationFrame = ()=>isWindowDefined && typeof window['requestAnimationFrame'] != STR_UNDEFINED;
+const createCacheHelper = (cache, key)=>{
+    const state = config_context_12s_Dh3trQsc_SWRGlobalState.get(cache);
+    return [
+        // Getter
+        ()=>!isUndefined(key) && cache.get(key) || EMPTY_CACHE,
+        // Setter
+        (info)=>{
+            if (!isUndefined(key)) {
+                const prev = cache.get(key);
+                // Before writing to the store, we keep the value in the initial cache
+                // if it's not there yet.
+                if (!(key in INITIAL_CACHE)) {
+                    INITIAL_CACHE[key] = prev;
+                }
+                state[5](key, mergeObjects(prev, info), prev || EMPTY_CACHE);
+            }
+        },
+        // Subscriber
+        state[6],
+        // Get server cache snapshot
+        ()=>{
+            if (!isUndefined(key)) {
+                // If the cache was updated on the client, we return the stored initial value.
+                if (key in INITIAL_CACHE) return INITIAL_CACHE[key];
+            }
+            // If we haven't done any client-side updates, we return the current value.
+            return !isUndefined(key) && cache.get(key) || EMPTY_CACHE;
+        }
+    ];
+} // export { UNDEFINED, OBJECT, isUndefined, isFunction, mergeObjects, isPromiseLike }
+;
+
+/**
+ * Due to the bug https://bugs.chromium.org/p/chromium/issues/detail?id=678075,
+ * it's not reliable to detect if the browser is currently online or offline
+ * based on `navigator.onLine`.
+ * As a workaround, we always assume it's online on the first load, and change
+ * the status upon `online` or `offline` events.
+ */ let online = true;
+const isOnline = ()=>online;
+// For node and React Native, `add/removeEventListener` doesn't exist on window.
+const [onWindowEvent, offWindowEvent] = isWindowDefined && window.addEventListener ? [
+    window.addEventListener.bind(window),
+    window.removeEventListener.bind(window)
+] : [
+    noop,
+    noop
+];
+const isVisible = ()=>{
+    const visibilityState = isDocumentDefined && document.visibilityState;
+    return isUndefined(visibilityState) || visibilityState !== 'hidden';
+};
+const initFocus = (callback)=>{
+    // focus revalidate
+    if (isDocumentDefined) {
+        document.addEventListener('visibilitychange', callback);
+    }
+    onWindowEvent('focus', callback);
+    return ()=>{
+        if (isDocumentDefined) {
+            document.removeEventListener('visibilitychange', callback);
+        }
+        offWindowEvent('focus', callback);
+    };
+};
+const initReconnect = (callback)=>{
+    // revalidate on reconnected
+    const onOnline = ()=>{
+        online = true;
+        callback();
+    };
+    // nothing to revalidate, just update the status
+    const onOffline = ()=>{
+        online = false;
+    };
+    onWindowEvent('online', onOnline);
+    onWindowEvent('offline', onOffline);
+    return ()=>{
+        offWindowEvent('online', onOnline);
+        offWindowEvent('offline', onOffline);
+    };
+};
+const preset = {
+    isOnline,
+    isVisible
+};
+const defaultConfigOptions = {
+    initFocus,
+    initReconnect
+};
+
+const IS_REACT_LEGACY = !react.useId;
+const IS_SERVER = !isWindowDefined || isLegacyDeno;
+// Polyfill requestAnimationFrame
+const rAF = (f)=>hasRequestAnimationFrame() ? window['requestAnimationFrame'](f) : setTimeout(f, 1);
+// React currently throws a warning when using useLayoutEffect on the server.
+// To get around it, we can conditionally useEffect on the server (no-op) and
+// useLayoutEffect in the browser.
+const useIsomorphicLayoutEffect = IS_SERVER ? react.useEffect : react.useLayoutEffect;
+// This assignment is to extend the Navigator type to use effectiveType.
+const navigatorConnection = typeof navigator !== 'undefined' && navigator.connection;
+// Adjust the config based on slow connection status (<= 70Kbps).
+const slowConnection = !IS_SERVER && navigatorConnection && ([
+    'slow-2g',
+    '2g'
+].includes(navigatorConnection.effectiveType) || navigatorConnection.saveData);
+
+// use WeakMap to store the object->key mapping
+// so the objects can be garbage collected.
+// WeakMap uses a hashtable under the hood, so the lookup
+// complexity is almost O(1).
+const table = new WeakMap();
+const getTypeName = (value)=>OBJECT.prototype.toString.call(value);
+const isObjectTypeName = (typeName, type)=>typeName === `[object ${type}]`;
+// counter of the key
+let counter = 0;
+// A stable hash implementation that supports:
+// - Fast and ensures unique hash properties
+// - Handles unserializable values
+// - Handles object key ordering
+// - Generates short results
+//
+// This is not a serialization function, and the result is not guaranteed to be
+// parsable.
+const stableHash = (arg)=>{
+    const type = typeof arg;
+    const typeName = getTypeName(arg);
+    const isDate = isObjectTypeName(typeName, 'Date');
+    const isRegex = isObjectTypeName(typeName, 'RegExp');
+    const isPlainObject = isObjectTypeName(typeName, 'Object');
+    let result;
+    let index;
+    if (OBJECT(arg) === arg && !isDate && !isRegex) {
+        // Object/function, not null/date/regexp. Use WeakMap to store the id first.
+        // If it's already hashed, directly return the result.
+        result = table.get(arg);
+        if (result) return result;
+        // Store the hash first for circular reference detection before entering the
+        // recursive `stableHash` calls.
+        // For other objects like set and map, we use this id directly as the hash.
+        result = ++counter + '~';
+        table.set(arg, result);
+        if (Array.isArray(arg)) {
+            // Array.
+            result = '@';
+            for(index = 0; index < arg.length; index++){
+                result += stableHash(arg[index]) + ',';
+            }
+            table.set(arg, result);
+        }
+        if (isPlainObject) {
+            // Object, sort keys.
+            result = '#';
+            const keys = OBJECT.keys(arg).sort();
+            while(!isUndefined(index = keys.pop())){
+                if (!isUndefined(arg[index])) {
+                    result += index + ':' + stableHash(arg[index]) + ',';
+                }
+            }
+            table.set(arg, result);
+        }
+    } else {
+        result = isDate ? arg.toJSON() : type == 'symbol' ? arg.toString() : type == 'string' ? JSON.stringify(arg) : '' + arg;
+    }
+    return result;
+};
+
+const config_context_12s_Dh3trQsc_serialize = (key)=>{
+    if (isFunction(key)) {
+        try {
+            key = key();
+        } catch (err) {
+            // dependencies not ready
+            key = '';
+        }
+    }
+    // Use the original key as the argument of fetcher. This can be a string or an
+    // array of values.
+    const args = key;
+    // If key is not falsy, or not an empty array, hash it.
+    key = typeof key == 'string' ? key : (Array.isArray(key) ? key.length : key) ? stableHash(key) : '';
+    return [
+        key,
+        args
+    ];
+};
+
+// Global timestamp.
+let __timestamp = 0;
+const getTimestamp = ()=>++__timestamp;
+
+async function internalMutate(...args) {
+    const [cache, _key, _data, _opts] = args;
+    // When passing as a boolean, it's explicitly used to disable/enable
+    // revalidation.
+    const options = mergeObjects({
+        populateCache: true,
+        throwOnError: true
+    }, typeof _opts === 'boolean' ? {
+        revalidate: _opts
+    } : _opts || {});
+    let populateCache = options.populateCache;
+    const rollbackOnErrorOption = options.rollbackOnError;
+    let optimisticData = options.optimisticData;
+    const rollbackOnError = (error)=>{
+        return typeof rollbackOnErrorOption === 'function' ? rollbackOnErrorOption(error) : rollbackOnErrorOption !== false;
+    };
+    const throwOnError = options.throwOnError;
+    // If the second argument is a key filter, return the mutation results for all
+    // filtered keys.
+    if (isFunction(_key)) {
+        const keyFilter = _key;
+        const matchedKeys = [];
+        const it = cache.keys();
+        for (const key of it){
+            if (// Skip the special useSWRInfinite and useSWRSubscription keys.
+            !/^\$(inf|sub)\$/.test(key) && keyFilter(cache.get(key)._k)) {
+                matchedKeys.push(key);
+            }
+        }
+        return Promise.all(matchedKeys.map(mutateByKey));
+    }
+    return mutateByKey(_key);
+    async function mutateByKey(_k) {
+        // Serialize key
+        const [key] = config_context_12s_Dh3trQsc_serialize(_k);
+        if (!key) return;
+        const [get, set] = createCacheHelper(cache, key);
+        const [EVENT_REVALIDATORS, MUTATION, FETCH, PRELOAD] = config_context_12s_Dh3trQsc_SWRGlobalState.get(cache);
+        const startRevalidate = ()=>{
+            const revalidators = EVENT_REVALIDATORS[key];
+            const revalidate = isFunction(options.revalidate) ? options.revalidate(get().data, _k) : options.revalidate !== false;
+            if (revalidate) {
+                // Invalidate the key by deleting the concurrent request markers so new
+                // requests will not be deduped.
+                delete FETCH[key];
+                delete PRELOAD[key];
+                if (revalidators && revalidators[0]) {
+                    return revalidators[0](MUTATE_EVENT).then(()=>get().data);
+                }
+            }
+            return get().data;
+        };
+        // If there is no new data provided, revalidate the key with current state.
+        if (args.length < 3) {
+            // Revalidate and broadcast state.
+            return startRevalidate();
+        }
+        let data = _data;
+        let error;
+        let isError = false;
+        // Update global timestamps.
+        const beforeMutationTs = getTimestamp();
+        MUTATION[key] = [
+            beforeMutationTs,
+            0
+        ];
+        const hasOptimisticData = !isUndefined(optimisticData);
+        const state = get();
+        // `displayedData` is the current value on screen. It could be the optimistic value
+        // that is going to be overridden by a `committedData`, or get reverted back.
+        // `committedData` is the validated value that comes from a fetch or mutation.
+        const displayedData = state.data;
+        const currentData = state._c;
+        const committedData = isUndefined(currentData) ? displayedData : currentData;
+        // Do optimistic data update.
+        if (hasOptimisticData) {
+            optimisticData = isFunction(optimisticData) ? optimisticData(committedData, displayedData) : optimisticData;
+            // When we set optimistic data, backup the current committedData data in `_c`.
+            set({
+                data: optimisticData,
+                _c: committedData
+            });
+        }
+        if (isFunction(data)) {
+            // `data` is a function, call it passing current cache value.
+            try {
+                data = data(committedData);
+            } catch (err) {
+                // If it throws an error synchronously, we shouldn't update the cache.
+                error = err;
+                isError = true;
+            }
+        }
+        // `data` is a promise/thenable, resolve the final data first.
+        if (data && isPromiseLike(data)) {
+            // This means that the mutation is async, we need to check timestamps to
+            // avoid race conditions.
+            data = await data.catch((err)=>{
+                error = err;
+                isError = true;
+            });
+            // Check if other mutations have occurred since we've started this mutation.
+            // If there's a race we don't update cache or broadcast the change,
+            // just return the data.
+            if (beforeMutationTs !== MUTATION[key][0]) {
+                if (isError) throw error;
+                return data;
+            } else if (isError && hasOptimisticData && rollbackOnError(error)) {
+                // Rollback. Always populate the cache in this case but without
+                // transforming the data.
+                populateCache = true;
+                // Reset data to be the latest committed data, and clear the `_c` value.
+                set({
+                    data: committedData,
+                    _c: UNDEFINED
+                });
+            }
+        }
+        // If we should write back the cache after request.
+        if (populateCache) {
+            if (!isError) {
+                // Transform the result into data.
+                if (isFunction(populateCache)) {
+                    const populateCachedData = populateCache(data, committedData);
+                    set({
+                        data: populateCachedData,
+                        error: UNDEFINED,
+                        _c: UNDEFINED
+                    });
+                } else {
+                    // Only update cached data and reset the error if there's no error. Data can be `undefined` here.
+                    set({
+                        data,
+                        error: UNDEFINED,
+                        _c: UNDEFINED
+                    });
+                }
+            }
+        }
+        // Reset the timestamp to mark the mutation has ended.
+        MUTATION[key][1] = getTimestamp();
+        // Update existing SWR Hooks' internal states:
+        Promise.resolve(startRevalidate()).then(()=>{
+            // The mutation and revalidation are ended, we can clear it since the data is
+            // not an optimistic value anymore.
+            set({
+                _c: UNDEFINED
+            });
+        });
+        // Throw error or return data
+        if (isError) {
+            if (throwOnError) throw error;
+            return;
+        }
+        return data;
+    }
+}
+
+const revalidateAllKeys = (revalidators, type)=>{
+    for(const key in revalidators){
+        if (revalidators[key][0]) revalidators[key][0](type);
+    }
+};
+const initCache = (provider, options)=>{
+    // The global state for a specific provider will be used to deduplicate
+    // requests and store listeners. As well as a mutate function that is bound to
+    // the cache.
+    // The provider's global state might be already initialized. Let's try to get the
+    // global state associated with the provider first.
+    if (!config_context_12s_Dh3trQsc_SWRGlobalState.has(provider)) {
+        const opts = mergeObjects(defaultConfigOptions, options);
+        // If there's no global state bound to the provider, create a new one with the
+        // new mutate function.
+        const EVENT_REVALIDATORS = Object.create(null);
+        const mutate = internalMutate.bind(UNDEFINED, provider);
+        let unmount = noop;
+        const subscriptions = Object.create(null);
+        const subscribe = (key, callback)=>{
+            const subs = subscriptions[key] || [];
+            subscriptions[key] = subs;
+            subs.push(callback);
+            return ()=>subs.splice(subs.indexOf(callback), 1);
+        };
+        const setter = (key, value, prev)=>{
+            provider.set(key, value);
+            const subs = subscriptions[key];
+            if (subs) {
+                for (const fn of subs){
+                    fn(value, prev);
+                }
+            }
+        };
+        const initProvider = ()=>{
+            if (!config_context_12s_Dh3trQsc_SWRGlobalState.has(provider)) {
+                // Update the state if it's new, or if the provider has been extended.
+                config_context_12s_Dh3trQsc_SWRGlobalState.set(provider, [
+                    EVENT_REVALIDATORS,
+                    Object.create(null),
+                    Object.create(null),
+                    Object.create(null),
+                    mutate,
+                    setter,
+                    subscribe
+                ]);
+                if (!IS_SERVER) {
+                    // When listening to the native events for auto revalidations,
+                    // we intentionally put a delay (setTimeout) here to make sure they are
+                    // fired after immediate JavaScript executions, which can be
+                    // React's state updates.
+                    // This avoids some unnecessary revalidations such as
+                    // https://github.com/vercel/swr/issues/1680.
+                    const releaseFocus = opts.initFocus(setTimeout.bind(UNDEFINED, revalidateAllKeys.bind(UNDEFINED, EVENT_REVALIDATORS, FOCUS_EVENT)));
+                    const releaseReconnect = opts.initReconnect(setTimeout.bind(UNDEFINED, revalidateAllKeys.bind(UNDEFINED, EVENT_REVALIDATORS, RECONNECT_EVENT)));
+                    unmount = ()=>{
+                        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                        releaseFocus && releaseFocus();
+                        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                        releaseReconnect && releaseReconnect();
+                        // When un-mounting, we need to remove the cache provider from the state
+                        // storage too because it's a side-effect. Otherwise, when re-mounting we
+                        // will not re-register those event listeners.
+                        config_context_12s_Dh3trQsc_SWRGlobalState.delete(provider);
+                    };
+                }
+            }
+        };
+        initProvider();
+        // This is a new provider, we need to initialize it and setup DOM events
+        // listeners for `focus` and `reconnect` actions.
+        // We might want to inject an extra layer on top of `provider` in the future,
+        // such as key serialization, auto GC, etc.
+        // For now, it's just a `Map` interface without any modifications.
+        return [
+            provider,
+            mutate,
+            initProvider,
+            unmount
+        ];
+    }
+    return [
+        provider,
+        config_context_12s_Dh3trQsc_SWRGlobalState.get(provider)[4]
+    ];
+};
+
+// error retry
+const onErrorRetry = (_, __, config, revalidate, opts)=>{
+    const maxRetryCount = config.errorRetryCount;
+    const currentRetryCount = opts.retryCount;
+    // Exponential backoff
+    const timeout = ~~((Math.random() + 0.5) * (1 << (currentRetryCount < 8 ? currentRetryCount : 8))) * config.errorRetryInterval;
+    if (!isUndefined(maxRetryCount) && currentRetryCount > maxRetryCount) {
+        return;
+    }
+    setTimeout(revalidate, timeout, opts);
+};
+const compare = dequal;
+// Default cache provider
+const [config_context_12s_Dh3trQsc_cache, mutate] = initCache(new Map());
+// Default config
+const defaultConfig = mergeObjects({
+    // events
+    onLoadingSlow: noop,
+    onSuccess: noop,
+    onError: noop,
+    onErrorRetry,
+    onDiscarded: noop,
+    // switches
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    revalidateIfStale: true,
+    shouldRetryOnError: true,
+    // timeouts
+    errorRetryInterval: slowConnection ? 10000 : 5000,
+    focusThrottleInterval: 5 * 1000,
+    dedupingInterval: 2 * 1000,
+    loadingTimeout: slowConnection ? 5000 : 3000,
+    // providers
+    compare,
+    isPaused: ()=>false,
+    cache: config_context_12s_Dh3trQsc_cache,
+    mutate,
+    fallback: {}
+}, // use web preset by default
+preset);
+
+const mergeConfigs = (a, b)=>{
+    // Need to create a new object to avoid mutating the original here.
+    const v = mergeObjects(a, b);
+    // If two configs are provided, merge their `use` and `fallback` options.
+    if (b) {
+        const { use: u1, fallback: f1 } = a;
+        const { use: u2, fallback: f2 } = b;
+        if (u1 && u2) {
+            v.use = u1.concat(u2);
+        }
+        if (f1 && f2) {
+            v.fallback = mergeObjects(f1, f2);
+        }
+    }
+    return v;
+};
+
+const SWRConfigContext = (0,react.createContext)({});
+const SWRConfig = (props)=>{
+    const { value } = props;
+    const parentConfig = (0,react.useContext)(SWRConfigContext);
+    const isFunctionalConfig = isFunction(value);
+    const config = (0,react.useMemo)(()=>isFunctionalConfig ? value(parentConfig) : value, [
+        isFunctionalConfig,
+        parentConfig,
+        value
+    ]);
+    // Extend parent context values and middleware.
+    const extendedConfig = (0,react.useMemo)(()=>isFunctionalConfig ? config : mergeConfigs(parentConfig, config), [
+        isFunctionalConfig,
+        parentConfig,
+        config
+    ]);
+    // Should not use the inherited provider.
+    const provider = config && config.provider;
+    // initialize the cache only on first access.
+    const cacheContextRef = (0,react.useRef)(UNDEFINED);
+    if (provider && !cacheContextRef.current) {
+        cacheContextRef.current = initCache(provider(extendedConfig.cache || config_context_12s_Dh3trQsc_cache), config);
+    }
+    const cacheContext = cacheContextRef.current;
+    // Override the cache if a new provider is given.
+    if (cacheContext) {
+        extendedConfig.cache = cacheContext[0];
+        extendedConfig.mutate = cacheContext[1];
+    }
+    // Unsubscribe events.
+    useIsomorphicLayoutEffect(()=>{
+        if (cacheContext) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            cacheContext[2] && cacheContext[2]();
+            return cacheContext[3];
+        }
+    }, []);
+    return (0,react.createElement)(SWRConfigContext.Provider, mergeObjects(props, {
+        value: extendedConfig
+    }));
+};
+
+
+
+;// ./node_modules/swr/dist/_internal/constants.mjs
+const INFINITE_PREFIX = '$inf$';
+
+
+
+;// ./node_modules/swr/dist/_internal/index.mjs
+
+
+
+
+
+
+
+
+
+// @ts-expect-error
+const enableDevtools = isWindowDefined && window.__SWR_DEVTOOLS_USE__;
+const use = enableDevtools ? window.__SWR_DEVTOOLS_USE__ : [];
+const setupDevTools = ()=>{
+    if (enableDevtools) {
+        // @ts-expect-error
+        window.__SWR_DEVTOOLS_REACT__ = react;
+    }
+};
+
+const normalize = (args)=>{
+    return isFunction(args[1]) ? [
+        args[0],
+        args[1],
+        args[2] || {}
+    ] : [
+        args[0],
+        null,
+        (args[1] === null ? args[2] : args[1]) || {}
+    ];
+};
+
+const useSWRConfig = ()=>{
+    const parentConfig = (0,react.useContext)(SWRConfigContext);
+    const mergedConfig = (0,react.useMemo)(()=>mergeObjects(defaultConfig, parentConfig), [
+        parentConfig
+    ]);
+    return mergedConfig;
+};
+
+const preload = (key_, fetcher)=>{
+    const [key, fnArg] = serialize(key_);
+    const [, , , PRELOAD] = SWRGlobalState.get(cache);
+    // Prevent preload to be called multiple times before used.
+    if (PRELOAD[key]) return PRELOAD[key];
+    const req = fetcher(fnArg);
+    PRELOAD[key] = req;
+    return req;
+};
+const middleware = (useSWRNext)=>(key_, fetcher_, config)=>{
+        // fetcher might be a sync function, so this should not be an async function
+        const fetcher = fetcher_ && ((...args)=>{
+            const [key] = config_context_12s_Dh3trQsc_serialize(key_);
+            const [, , , PRELOAD] = config_context_12s_Dh3trQsc_SWRGlobalState.get(config_context_12s_Dh3trQsc_cache);
+            if (key.startsWith(INFINITE_PREFIX)) {
+                // we want the infinite fetcher to be called.
+                // handling of the PRELOAD cache happens there.
+                return fetcher_(...args);
+            }
+            const req = PRELOAD[key];
+            if (isUndefined(req)) return fetcher_(...args);
+            delete PRELOAD[key];
+            return req;
+        });
+        return useSWRNext(key_, fetcher, config);
+    };
+
+const BUILT_IN_MIDDLEWARE = use.concat(middleware);
+
+// It's tricky to pass generic types as parameters, so we just directly override
+// the types here.
+const withArgs = (hook)=>{
+    return function useSWRArgs(...args) {
+        // Get the default and inherited configuration.
+        const fallbackConfig = useSWRConfig();
+        // Normalize arguments.
+        const [key, fn, _config] = normalize(args);
+        // Merge configurations.
+        const config = mergeConfigs(fallbackConfig, _config);
+        // Apply middleware
+        let next = hook;
+        const { use } = config;
+        const middleware = (use || []).concat(BUILT_IN_MIDDLEWARE);
+        for(let i = middleware.length; i--;){
+            next = middleware[i](next);
+        }
+        return next(key, fn || config.fetcher || null, config);
+    };
+};
+
+// Add a callback function to a list of keyed callback functions and return
+// the unsubscribe function.
+const subscribeCallback = (key, callbacks, callback)=>{
+    const keyedRevalidators = callbacks[key] || (callbacks[key] = []);
+    keyedRevalidators.push(callback);
+    return ()=>{
+        const index = keyedRevalidators.indexOf(callback);
+        if (index >= 0) {
+            // O(1): faster than splice
+            keyedRevalidators[index] = keyedRevalidators[keyedRevalidators.length - 1];
+            keyedRevalidators.pop();
+        }
+    };
+};
+
+// Create a custom hook with a middleware
+const withMiddleware = (useSWR, middleware)=>{
+    return (...args)=>{
+        const [key, fn, config] = normalize(args);
+        const uses = (config.use || []).concat(middleware);
+        return useSWR(key, fn, {
+            ...config,
+            use: uses
+        });
+    };
+};
+
+setupDevTools();
+
+
+
+;// ./node_modules/swr/dist/index/index.mjs
+
+
+
+
+
+// Shared state between server components and client components
+const index_noop = ()=>{};
+// Using noop() as the undefined value as undefined can be replaced
+// by something else. Prettier ignore and extra parentheses are necessary here
+// to ensure that tsc doesn't remove the __NOINLINE__ comment.
+// prettier-ignore
+const index_UNDEFINED = /*#__NOINLINE__*/ index_noop();
+const index_OBJECT = (/* unused pure expression or super */ null && (Object));
+const index_isUndefined = (v)=>v === index_UNDEFINED;
+const index_isFunction = (v)=>typeof v == 'function';
+
+// use WeakMap to store the object->key mapping
+// so the objects can be garbage collected.
+// WeakMap uses a hashtable under the hood, so the lookup
+// complexity is almost O(1).
+const index_table = new WeakMap();
+const index_getTypeName = (value)=>index_OBJECT.prototype.toString.call(value);
+const index_isObjectTypeName = (typeName, type)=>typeName === `[object ${type}]`;
+// counter of the key
+let index_counter = 0;
+// A stable hash implementation that supports:
+// - Fast and ensures unique hash properties
+// - Handles unserializable values
+// - Handles object key ordering
+// - Generates short results
+//
+// This is not a serialization function, and the result is not guaranteed to be
+// parsable.
+const index_stableHash = (arg)=>{
+    const type = typeof arg;
+    const typeName = index_getTypeName(arg);
+    const isDate = index_isObjectTypeName(typeName, 'Date');
+    const isRegex = index_isObjectTypeName(typeName, 'RegExp');
+    const isPlainObject = index_isObjectTypeName(typeName, 'Object');
+    let result;
+    let index;
+    if (index_OBJECT(arg) === arg && !isDate && !isRegex) {
+        // Object/function, not null/date/regexp. Use WeakMap to store the id first.
+        // If it's already hashed, directly return the result.
+        result = index_table.get(arg);
+        if (result) return result;
+        // Store the hash first for circular reference detection before entering the
+        // recursive `stableHash` calls.
+        // For other objects like set and map, we use this id directly as the hash.
+        result = ++index_counter + '~';
+        index_table.set(arg, result);
+        if (Array.isArray(arg)) {
+            // Array.
+            result = '@';
+            for(index = 0; index < arg.length; index++){
+                result += index_stableHash(arg[index]) + ',';
+            }
+            index_table.set(arg, result);
+        }
+        if (isPlainObject) {
+            // Object, sort keys.
+            result = '#';
+            const keys = index_OBJECT.keys(arg).sort();
+            while(!index_isUndefined(index = keys.pop())){
+                if (!index_isUndefined(arg[index])) {
+                    result += index + ':' + index_stableHash(arg[index]) + ',';
+                }
+            }
+            index_table.set(arg, result);
+        }
+    } else {
+        result = isDate ? arg.toJSON() : type == 'symbol' ? arg.toString() : type == 'string' ? JSON.stringify(arg) : '' + arg;
+    }
+    return result;
+};
+
+const index_serialize = (key)=>{
+    if (index_isFunction(key)) {
+        try {
+            key = key();
+        } catch (err) {
+            // dependencies not ready
+            key = '';
+        }
+    }
+    // Use the original key as the argument of fetcher. This can be a string or an
+    // array of values.
+    const args = key;
+    // If key is not falsy, or not an empty array, hash it.
+    key = typeof key == 'string' ? key : (Array.isArray(key) ? key.length : key) ? index_stableHash(key) : '';
+    return [
+        key,
+        args
+    ];
+};
+
+const unstable_serialize = (key)=>index_serialize(key)[0];
+
+/// <reference types="react/experimental" />
+const index_use = react.use || // This extra generic is to avoid TypeScript mixing up the generic and JSX sytax
+// and emitting an error.
+// We assume that this is only for the `use(thenable)` case, not `use(context)`.
+// https://github.com/facebook/react/blob/aed00dacfb79d17c53218404c52b1c7aa59c4a89/packages/react-server/src/ReactFizzThenable.js#L45
+((thenable)=>{
+    switch(thenable.status){
+        case 'pending':
+            throw thenable;
+        case 'fulfilled':
+            return thenable.value;
+        case 'rejected':
+            throw thenable.reason;
+        default:
+            thenable.status = 'pending';
+            thenable.then((v)=>{
+                thenable.status = 'fulfilled';
+                thenable.value = v;
+            }, (e)=>{
+                thenable.status = 'rejected';
+                thenable.reason = e;
+            });
+            throw thenable;
+    }
+});
+const WITH_DEDUPE = {
+    dedupe: true
+};
+const resolvedUndef = Promise.resolve(UNDEFINED);
+/**
+ * The core implementation of the useSWR hook.
+ *
+ * This is the main handler function that implements all SWR functionality including
+ * data fetching, caching, revalidation, error handling, and state management.
+ * It manages the complete lifecycle of SWR requests from initialization through
+ * cleanup.
+ *
+ * Key responsibilities:
+ * - Key serialization and normalization
+ * - Cache state management and synchronization
+ * - Automatic and manual revalidation
+ * - Error handling and retry logic
+ * - Suspense integration
+ * - Loading state management
+ * - Effect cleanup and memory management
+ *
+ * @template Data - The type of data returned by the fetcher
+ * @template Error - The type of error that can be thrown
+ *
+ * @param _key - The SWR key (string, array, object, function, or falsy)
+ * @param fetcher - The fetcher function to retrieve data, or null to disable fetching
+ * @param config - Complete SWR configuration object with both public and internal options
+ *
+ * @returns SWRResponse object containing data, error, mutate function, and loading states
+ *
+ * @internal This is the internal implementation. Use `useSWR` instead.
+ */ const useSWRHandler = (_key, fetcher, config)=>{
+    const { cache, compare, suspense, fallbackData, revalidateOnMount, revalidateIfStale, refreshInterval, refreshWhenHidden, refreshWhenOffline, keepPreviousData, strictServerPrefetchWarning } = config;
+    const [EVENT_REVALIDATORS, MUTATION, FETCH, PRELOAD] = config_context_12s_Dh3trQsc_SWRGlobalState.get(cache);
+    // `key` is the identifier of the SWR internal state,
+    // `fnArg` is the argument/arguments parsed from the key, which will be passed
+    // to the fetcher.
+    // All of them are derived from `_key`.
+    const [key, fnArg] = config_context_12s_Dh3trQsc_serialize(_key);
+    // If it's the initial render of this hook.
+    const initialMountedRef = (0,react.useRef)(false);
+    // If the hook is unmounted already. This will be used to prevent some effects
+    // to be called after unmounting.
+    const unmountedRef = (0,react.useRef)(false);
+    // Refs to keep the key and config.
+    const keyRef = (0,react.useRef)(key);
+    const fetcherRef = (0,react.useRef)(fetcher);
+    const configRef = (0,react.useRef)(config);
+    const getConfig = ()=>configRef.current;
+    const isActive = ()=>getConfig().isVisible() && getConfig().isOnline();
+    const [getCache, setCache, subscribeCache, getInitialCache] = createCacheHelper(cache, key);
+    const stateDependencies = (0,react.useRef)({}).current;
+    // Resolve the fallback data from either the inline option, or the global provider.
+    // If it's a promise, we simply let React suspend and resolve it for us.
+    const fallback = isUndefined(fallbackData) ? isUndefined(config.fallback) ? UNDEFINED : config.fallback[key] : fallbackData;
+    const isEqual = (prev, current)=>{
+        for(const _ in stateDependencies){
+            const t = _;
+            if (t === 'data') {
+                if (!compare(prev[t], current[t])) {
+                    if (!isUndefined(prev[t])) {
+                        return false;
+                    }
+                    if (!compare(returnedData, current[t])) {
+                        return false;
+                    }
+                }
+            } else {
+                if (current[t] !== prev[t]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+    const getSnapshot = (0,react.useMemo)(()=>{
+        const shouldStartRequest = (()=>{
+            if (!key) return false;
+            if (!fetcher) return false;
+            // If `revalidateOnMount` is set, we take the value directly.
+            if (!isUndefined(revalidateOnMount)) return revalidateOnMount;
+            // If it's paused, we skip revalidation.
+            if (getConfig().isPaused()) return false;
+            if (suspense) return false;
+            return revalidateIfStale !== false;
+        })();
+        // Get the cache and merge it with expected states.
+        const getSelectedCache = (state)=>{
+            // We only select the needed fields from the state.
+            const snapshot = mergeObjects(state);
+            delete snapshot._k;
+            if (!shouldStartRequest) {
+                return snapshot;
+            }
+            return {
+                isValidating: true,
+                isLoading: true,
+                ...snapshot
+            };
+        };
+        const cachedData = getCache();
+        const initialData = getInitialCache();
+        const clientSnapshot = getSelectedCache(cachedData);
+        const serverSnapshot = cachedData === initialData ? clientSnapshot : getSelectedCache(initialData);
+        // To make sure that we are returning the same object reference to avoid
+        // unnecessary re-renders, we keep the previous snapshot and use deep
+        // comparison to check if we need to return a new one.
+        let memorizedSnapshot = clientSnapshot;
+        return [
+            ()=>{
+                const newSnapshot = getSelectedCache(getCache());
+                const compareResult = isEqual(newSnapshot, memorizedSnapshot);
+                if (compareResult) {
+                    // Mentally, we should always return the `memorizedSnapshot` here
+                    // as there's no change between the new and old snapshots.
+                    // However, since the `isEqual` function only compares selected fields,
+                    // the values of the unselected fields might be changed. That's
+                    // simply because we didn't track them.
+                    // To support the case in https://github.com/vercel/swr/pull/2576,
+                    // we need to update these fields in the `memorizedSnapshot` too
+                    // with direct mutations to ensure the snapshot is always up-to-date
+                    // even for the unselected fields, but only trigger re-renders when
+                    // the selected fields are changed.
+                    memorizedSnapshot.data = newSnapshot.data;
+                    memorizedSnapshot.isLoading = newSnapshot.isLoading;
+                    memorizedSnapshot.isValidating = newSnapshot.isValidating;
+                    memorizedSnapshot.error = newSnapshot.error;
+                    return memorizedSnapshot;
+                } else {
+                    memorizedSnapshot = newSnapshot;
+                    return newSnapshot;
+                }
+            },
+            ()=>serverSnapshot
+        ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        cache,
+        key
+    ]);
+    // Get the current state that SWR should return.
+    const cached = (0,shim.useSyncExternalStore)((0,react.useCallback)((callback)=>subscribeCache(key, (current, prev)=>{
+            if (!isEqual(prev, current)) callback();
+        }), // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+        cache,
+        key
+    ]), getSnapshot[0], getSnapshot[1]);
+    const isInitialMount = !initialMountedRef.current;
+    const hasRevalidator = EVENT_REVALIDATORS[key] && EVENT_REVALIDATORS[key].length > 0;
+    const cachedData = cached.data;
+    const data = isUndefined(cachedData) ? fallback && isPromiseLike(fallback) ? index_use(fallback) : fallback : cachedData;
+    const error = cached.error;
+    // Use a ref to store previously returned data. Use the initial data as its initial value.
+    const laggyDataRef = (0,react.useRef)(data);
+    const returnedData = keepPreviousData ? isUndefined(cachedData) ? isUndefined(laggyDataRef.current) ? data : laggyDataRef.current : cachedData : data;
+    const hasKeyButNoData = key && isUndefined(data);
+    // Note: the conditionally hook call is fine because the environment
+    // `IS_SERVER` never changes.
+    const isHydration = !IS_SERVER && // eslint-disable-next-line react-hooks/rules-of-hooks
+    (0,shim.useSyncExternalStore)(()=>noop, ()=>false, ()=>true);
+    // During the initial SSR render, warn if the key has no data pre-fetched via:
+    // - fallback data
+    // - preload calls
+    // - initial data from the cache provider
+    // We only warn once for each key during SSR.
+    if (strictServerPrefetchWarning && isHydration && !suspense && hasKeyButNoData) {
+        console.warn(`Missing pre-initiated data for serialized key "${key}" during server-side rendering. Data fethcing should be initiated on the server and provided to SWR via fallback data. You can set "strictServerPrefetchWarning: false" to disable this warning.`);
+    }
+    // - Suspense mode and there's stale data for the initial render.
+    // - Not suspense mode and there is no fallback data and `revalidateIfStale` is enabled.
+    // - `revalidateIfStale` is enabled but `data` is not defined.
+    const shouldDoInitialRevalidation = (()=>{
+        // if a key already has revalidators and also has error, we should not trigger revalidation
+        if (hasRevalidator && !isUndefined(error)) return false;
+        // If `revalidateOnMount` is set, we take the value directly.
+        if (isInitialMount && !isUndefined(revalidateOnMount)) return revalidateOnMount;
+        // If it's paused, we skip revalidation.
+        if (getConfig().isPaused()) return false;
+        // Under suspense mode, it will always fetch on render if there is no
+        // stale data so no need to revalidate immediately mount it again.
+        // If data exists, only revalidate if `revalidateIfStale` is true.
+        if (suspense) return isUndefined(data) ? false : revalidateIfStale;
+        // If there is no stale data, we need to revalidate when mount;
+        // If `revalidateIfStale` is set to true, we will always revalidate.
+        return isUndefined(data) || revalidateIfStale;
+    })();
+    // Resolve the default validating state:
+    // If it's able to validate, and it should revalidate when mount, this will be true.
+    const defaultValidatingState = !!(key && fetcher && isInitialMount && shouldDoInitialRevalidation);
+    const isValidating = isUndefined(cached.isValidating) ? defaultValidatingState : cached.isValidating;
+    const isLoading = isUndefined(cached.isLoading) ? defaultValidatingState : cached.isLoading;
+    // The revalidation function is a carefully crafted wrapper of the original
+    // `fetcher`, to correctly handle the many edge cases.
+    const revalidate = (0,react.useCallback)(async (revalidateOpts)=>{
+        const currentFetcher = fetcherRef.current;
+        if (!key || !currentFetcher || unmountedRef.current || getConfig().isPaused()) {
+            return false;
+        }
+        let newData;
+        let startAt;
+        let loading = true;
+        const opts = revalidateOpts || {};
+        // If there is no ongoing concurrent request, or `dedupe` is not set, a
+        // new request should be initiated.
+        const shouldStartNewRequest = !FETCH[key] || !opts.dedupe;
+        /*
+         For React 17
+         Do unmount check for calls:
+         If key has changed during the revalidation, or the component has been
+         unmounted, old dispatch and old event callbacks should not take any
+         effect
+
+        For React 18
+        only check if key has changed
+        https://github.com/reactwg/react-18/discussions/82
+      */ const callbackSafeguard = ()=>{
+            if (IS_REACT_LEGACY) {
+                return !unmountedRef.current && key === keyRef.current && initialMountedRef.current;
+            }
+            return key === keyRef.current;
+        };
+        // The final state object when the request finishes.
+        const finalState = {
+            isValidating: false,
+            isLoading: false
+        };
+        const finishRequestAndUpdateState = ()=>{
+            setCache(finalState);
+        };
+        const cleanupState = ()=>{
+            // Check if it's still the same request before deleting it.
+            const requestInfo = FETCH[key];
+            if (requestInfo && requestInfo[1] === startAt) {
+                delete FETCH[key];
+            }
+        };
+        // Start fetching. Change the `isValidating` state, update the cache.
+        const initialState = {
+            isValidating: true
+        };
+        // It is in the `isLoading` state, if and only if there is no cached data.
+        // This bypasses fallback data and laggy data.
+        if (isUndefined(getCache().data)) {
+            initialState.isLoading = true;
+        }
+        try {
+            if (shouldStartNewRequest) {
+                setCache(initialState);
+                // If no cache is being rendered currently (it shows a blank page),
+                // we trigger the loading slow event.
+                if (config.loadingTimeout && isUndefined(getCache().data)) {
+                    setTimeout(()=>{
+                        if (loading && callbackSafeguard()) {
+                            getConfig().onLoadingSlow(key, config);
+                        }
+                    }, config.loadingTimeout);
+                }
+                // Start the request and save the timestamp.
+                // Key must be truthy if entering here.
+                FETCH[key] = [
+                    currentFetcher(fnArg),
+                    getTimestamp()
+                ];
+            }
+            // Wait until the ongoing request is done. Deduplication is also
+            // considered here.
+            ;
+            [newData, startAt] = FETCH[key];
+            newData = await newData;
+            if (shouldStartNewRequest) {
+                // If the request isn't interrupted, clean it up after the
+                // deduplication interval.
+                setTimeout(cleanupState, config.dedupingInterval);
+            }
+            // If there're other ongoing request(s), started after the current one,
+            // we need to ignore the current one to avoid possible race conditions:
+            //   req1------------------>res1        (current one)
+            //        req2---------------->res2
+            // the request that fired later will always be kept.
+            // The timestamp maybe be `undefined` or a number
+            if (!FETCH[key] || FETCH[key][1] !== startAt) {
+                if (shouldStartNewRequest) {
+                    if (callbackSafeguard()) {
+                        getConfig().onDiscarded(key);
+                    }
+                }
+                return false;
+            }
+            // Clear error.
+            finalState.error = UNDEFINED;
+            // If there're other mutations(s), that overlapped with the current revalidation:
+            // case 1:
+            //   req------------------>res
+            //       mutate------>end
+            // case 2:
+            //         req------------>res
+            //   mutate------>end
+            // case 3:
+            //   req------------------>res
+            //       mutate-------...---------->
+            // we have to ignore the revalidation result (res) because it's no longer fresh.
+            // meanwhile, a new revalidation should be triggered when the mutation ends.
+            const mutationInfo = MUTATION[key];
+            if (!isUndefined(mutationInfo) && // case 1
+            (startAt <= mutationInfo[0] || // case 2
+            startAt <= mutationInfo[1] || // case 3
+            mutationInfo[1] === 0)) {
+                finishRequestAndUpdateState();
+                if (shouldStartNewRequest) {
+                    if (callbackSafeguard()) {
+                        getConfig().onDiscarded(key);
+                    }
+                }
+                return false;
+            }
+            // Deep compare with the latest state to avoid extra re-renders.
+            // For local state, compare and assign.
+            const cacheData = getCache().data;
+            // Since the compare fn could be custom fn
+            // cacheData might be different from newData even when compare fn returns True
+            finalState.data = compare(cacheData, newData) ? cacheData : newData;
+            // Trigger the successful callback if it's the original request.
+            if (shouldStartNewRequest) {
+                if (callbackSafeguard()) {
+                    getConfig().onSuccess(newData, key, config);
+                }
+            }
+        } catch (err) {
+            cleanupState();
+            const currentConfig = getConfig();
+            const { shouldRetryOnError } = currentConfig;
+            // Not paused, we continue handling the error. Otherwise, discard it.
+            if (!currentConfig.isPaused()) {
+                // Get a new error, don't use deep comparison for errors.
+                finalState.error = err;
+                // Error event and retry logic. Only for the actual request, not
+                // deduped ones.
+                if (shouldStartNewRequest && callbackSafeguard()) {
+                    currentConfig.onError(err, key, currentConfig);
+                    if (shouldRetryOnError === true || isFunction(shouldRetryOnError) && shouldRetryOnError(err)) {
+                        if (!getConfig().revalidateOnFocus || !getConfig().revalidateOnReconnect || isActive()) {
+                            // If it's inactive, stop. It will auto-revalidate when
+                            // refocusing or reconnecting.
+                            // When retrying, deduplication is always enabled.
+                            currentConfig.onErrorRetry(err, key, currentConfig, (_opts)=>{
+                                const revalidators = EVENT_REVALIDATORS[key];
+                                if (revalidators && revalidators[0]) {
+                                    revalidators[0](ERROR_REVALIDATE_EVENT, _opts);
+                                }
+                            }, {
+                                retryCount: (opts.retryCount || 0) + 1,
+                                dedupe: true
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        // Mark loading as stopped.
+        loading = false;
+        // Update the current hook's state.
+        finishRequestAndUpdateState();
+        return true;
+    }, // `setState` is immutable, and `eventsCallback`, `fnArg`, and
+    // `keyValidating` are depending on `key`, so we can exclude them from
+    // the deps array.
+    //
+    // FIXME:
+    // `fn` and `config` might be changed during the lifecycle,
+    // but they might be changed every render like this.
+    // `useSWR('key', () => fetch('/api/'), { suspense: true })`
+    // So we omit the values from the deps array
+    // even though it might cause unexpected behaviors.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+        key,
+        cache
+    ]);
+    // Similar to the global mutate but bound to the current cache and key.
+    // `cache` isn't allowed to change during the lifecycle.
+    const boundMutate = (0,react.useCallback)(// Use callback to make sure `keyRef.current` returns latest result every time
+    (...args)=>{
+        return internalMutate(cache, keyRef.current, ...args);
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    []);
+    // The logic for updating refs.
+    useIsomorphicLayoutEffect(()=>{
+        fetcherRef.current = fetcher;
+        configRef.current = config;
+        // Handle laggy data updates. If there's cached data of the current key,
+        // it'll be the correct reference.
+        if (!isUndefined(cachedData)) {
+            laggyDataRef.current = cachedData;
+        }
+    });
+    // After mounted or key changed.
+    useIsomorphicLayoutEffect(()=>{
+        if (!key) return;
+        const softRevalidate = revalidate.bind(UNDEFINED, WITH_DEDUPE);
+        let nextFocusRevalidatedAt = 0;
+        if (getConfig().revalidateOnFocus) {
+            const initNow = Date.now();
+            nextFocusRevalidatedAt = initNow + getConfig().focusThrottleInterval;
+        }
+        // Expose revalidators to global event listeners. So we can trigger
+        // revalidation from the outside.
+        const onRevalidate = (type, opts = {})=>{
+            if (type == FOCUS_EVENT) {
+                const now = Date.now();
+                if (getConfig().revalidateOnFocus && now > nextFocusRevalidatedAt && isActive()) {
+                    nextFocusRevalidatedAt = now + getConfig().focusThrottleInterval;
+                    softRevalidate();
+                }
+            } else if (type == RECONNECT_EVENT) {
+                if (getConfig().revalidateOnReconnect && isActive()) {
+                    softRevalidate();
+                }
+            } else if (type == MUTATE_EVENT) {
+                return revalidate();
+            } else if (type == ERROR_REVALIDATE_EVENT) {
+                return revalidate(opts);
+            }
+            return;
+        };
+        const unsubEvents = subscribeCallback(key, EVENT_REVALIDATORS, onRevalidate);
+        // Mark the component as mounted and update corresponding refs.
+        unmountedRef.current = false;
+        keyRef.current = key;
+        initialMountedRef.current = true;
+        // Keep the original key in the cache.
+        setCache({
+            _k: fnArg
+        });
+        // Trigger a revalidation
+        if (shouldDoInitialRevalidation) {
+            // Performance optimization: if a request is already in progress for this key,
+            // skip the revalidation to avoid redundant work
+            if (!FETCH[key]) {
+                if (isUndefined(data) || IS_SERVER) {
+                    // Revalidate immediately.
+                    softRevalidate();
+                } else {
+                    // Delay the revalidate if we have data to return so we won't block
+                    // rendering.
+                    rAF(softRevalidate);
+                }
+            }
+        }
+        return ()=>{
+            // Mark it as unmounted.
+            unmountedRef.current = true;
+            unsubEvents();
+        };
+    }, [
+        key
+    ]);
+    // Polling
+    useIsomorphicLayoutEffect(()=>{
+        let timer;
+        function next() {
+            // Use the passed interval
+            // ...or invoke the function with the updated data to get the interval
+            const interval = isFunction(refreshInterval) ? refreshInterval(getCache().data) : refreshInterval;
+            // We only start the next interval if `refreshInterval` is not 0, and:
+            // - `force` is true, which is the start of polling
+            // - or `timer` is not 0, which means the effect wasn't canceled
+            if (interval && timer !== -1) {
+                timer = setTimeout(execute, interval);
+            }
+        }
+        function execute() {
+            // Check if it's OK to execute:
+            // Only revalidate when the page is visible, online, and not errored.
+            if (!getCache().error && (refreshWhenHidden || getConfig().isVisible()) && (refreshWhenOffline || getConfig().isOnline())) {
+                revalidate(WITH_DEDUPE).then(next);
+            } else {
+                // Schedule the next interval to check again.
+                next();
+            }
+        }
+        next();
+        return ()=>{
+            if (timer) {
+                clearTimeout(timer);
+                timer = -1;
+            }
+        };
+    }, [
+        refreshInterval,
+        refreshWhenHidden,
+        refreshWhenOffline,
+        key
+    ]);
+    // Display debug info in React DevTools.
+    (0,react.useDebugValue)(returnedData);
+    // In Suspense mode, we can't return the empty `data` state.
+    // If there is an `error`, the `error` needs to be thrown to the error boundary.
+    // If there is no `error`, the `revalidation` promise needs to be thrown to
+    // the suspense boundary.
+    if (suspense) {
+        // SWR should throw when trying to use Suspense on the server with React 18,
+        // without providing any fallback data. This causes hydration errors. See:
+        // https://github.com/vercel/swr/issues/1832
+        if (!IS_REACT_LEGACY && IS_SERVER && hasKeyButNoData) {
+            throw new Error('Fallback data is required when using Suspense in SSR.');
+        }
+        // Always update fetcher and config refs even with the Suspense mode.
+        if (hasKeyButNoData) {
+            fetcherRef.current = fetcher;
+            configRef.current = config;
+            unmountedRef.current = false;
+        }
+        const req = PRELOAD[key];
+        const mutateReq = !isUndefined(req) && hasKeyButNoData ? boundMutate(req) : resolvedUndef;
+        index_use(mutateReq);
+        if (!isUndefined(error) && hasKeyButNoData) {
+            throw error;
+        }
+        const revalidation = hasKeyButNoData ? revalidate(WITH_DEDUPE) : resolvedUndef;
+        if (!isUndefined(returnedData) && hasKeyButNoData) {
+            // @ts-ignore modify react promise status
+            revalidation.status = 'fulfilled';
+            // @ts-ignore modify react promise value
+            revalidation.value = true;
+        }
+        index_use(revalidation);
+    }
+    const swrResponse = {
+        mutate: boundMutate,
+        get data () {
+            stateDependencies.data = true;
+            return returnedData;
+        },
+        get error () {
+            stateDependencies.error = true;
+            return error;
+        },
+        get isValidating () {
+            stateDependencies.isValidating = true;
+            return isValidating;
+        },
+        get isLoading () {
+            stateDependencies.isLoading = true;
+            return isLoading;
+        }
+    };
+    return swrResponse;
+};
+const index_SWRConfig = OBJECT.defineProperty(SWRConfig, 'defaultValue', {
+    value: defaultConfig
+});
+/**
+ * A hook to fetch data.
+ *
+ * @see {@link https://swr.vercel.app}
+ *
+ * @example
+ * ```jsx
+ * import useSWR from 'swr'
+ * function Profile() {
+ *   const { data, error, isLoading } = useSWR('/api/user', fetcher)
+ *   if (error) return <div>failed to load</div>
+ *   if (isLoading) return <div>loading...</div>
+ *   return <div>hello {data.name}!</div>
+ * }
+ * ```
+ */ const useSWR = withArgs(useSWRHandler);
+
+// useSWR
+
+
+
+// EXTERNAL MODULE: ./node_modules/dayjs/plugin/isoWeek.js
+var isoWeek = __webpack_require__(313);
+var isoWeek_default = /*#__PURE__*/__webpack_require__.n(isoWeek);
+;// ./src/shared/api/client.ts
+/**
+ * WordPress REST API Client
+ * Handles communication between React and WordPress REST endpoints
+ */
+/**
+ * Fetch wrapper for WordPress REST API
+ * Includes nonce authentication for security
+ */
+const wpApiFetch = async ({ path, method = 'GET', data }) => {
+    const { restUrl, nonce } = window.postqueeWP;
+    const url = `${restUrl}${path}`;
+    const response = await fetch(url, {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': nonce,
+        },
+        body: data ? JSON.stringify(data) : undefined,
+    });
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+    }
+    return response.json();
+};
+/**
+ * API Client for PostQuee Calendar
+ */
+class CalendarAPI {
+    /**
+     * Fetch posts for calendar view
+     */
+    async getPosts(params) {
+        const queryParams = new URLSearchParams(params).toString();
+        return wpApiFetch({
+            path: `postquee-connector/v1/posts?${queryParams}`,
+            method: 'GET',
+        });
+    }
+    /**
+     * Create a new post
+     */
+    async createPost(data) {
+        return wpApiFetch({
+            path: 'postquee-connector/v1/posts',
+            method: 'POST',
+            data,
+        });
+    }
+    /**
+     * Update post date (for drag & drop)
+     */
+    async updatePostDate(postId, date) {
+        return wpApiFetch({
+            path: `postquee-connector/v1/posts/${postId}/date`,
+            method: 'PUT',
+            data: { date },
+        });
+    }
+    /**
+     * Delete a post
+     */
+    async deletePost(postId) {
+        return wpApiFetch({
+            path: `postquee-connector/v1/posts/${postId}`,
+            method: 'DELETE',
+        });
+    }
+    /**
+     * Get connected integrations/channels
+     */
+    getIntegrations() {
+        // Already passed from PHP, return from window
+        return window.postqueeWP.integrations || [];
+    }
+}
+const calendarAPI = new CalendarAPI();
+
+;// ./src/calendar/context.tsx
+
+
+
+
+
+
+dayjs_min_default().extend((isoWeek_default()));
+/**
+ * Calendar state store (Zustand)
+ */
+const useCalendarStore = create((set, get) => ({
+    currentDate: new Date(),
+    view: 'week',
+    setCurrentDate: (date) => set({ currentDate: date }),
+    setView: (view) => set({ view }),
+    goToToday: () => set({ currentDate: new Date() }),
+    goToPrevious: () => {
+        const { currentDate, view } = get();
+        const current = dayjs_min_default()(currentDate);
+        let newDate;
+        switch (view) {
+            case 'day':
+                newDate = current.subtract(1, 'day');
+                break;
+            case 'week':
+                newDate = current.subtract(1, 'week');
+                break;
+            case 'month':
+                newDate = current.subtract(1, 'month');
+                break;
+            default:
+                newDate = current;
+        }
+        set({ currentDate: newDate.toDate() });
+    },
+    goToNext: () => {
+        const { currentDate, view } = get();
+        const current = dayjs_min_default()(currentDate);
+        let newDate;
+        switch (view) {
+            case 'day':
+                newDate = current.add(1, 'day');
+                break;
+            case 'week':
+                newDate = current.add(1, 'week');
+                break;
+            case 'month':
+                newDate = current.add(1, 'month');
+                break;
+            default:
+                newDate = current;
+        }
+        set({ currentDate: newDate.toDate() });
+    },
+}));
+/**
+ * Calculate date range based on current view
+ */
+function getDateRange(currentDate, view) {
+    const current = dayjs_min_default()(currentDate);
+    switch (view) {
+        case 'day':
+            return {
+                start: current.startOf('day').format('YYYY-MM-DD'),
+                end: current.endOf('day').format('YYYY-MM-DD'),
+            };
+        case 'week':
+            // ISO week starts on Monday
+            return {
+                start: current.startOf('isoWeek').format('YYYY-MM-DD'),
+                end: current.endOf('isoWeek').format('YYYY-MM-DD'),
+            };
+        case 'month':
+            // Include full weeks at start/end of month
+            const monthStart = current.startOf('month');
+            const monthEnd = current.endOf('month');
+            return {
+                start: monthStart.startOf('isoWeek').format('YYYY-MM-DD'),
+                end: monthEnd.endOf('isoWeek').format('YYYY-MM-DD'),
+            };
+        default:
+            return {
+                start: current.startOf('week').format('YYYY-MM-DD'),
+                end: current.endOf('week').format('YYYY-MM-DD'),
+            };
+    }
+}
+/**
+ * Custom hook to fetch posts with SWR
+ */
+function useCalendarPosts() {
+    const { currentDate, view } = useCalendarStore();
+    const { start, end } = getDateRange(currentDate, view);
+    const { data, error, isLoading, mutate } = useSWR(`posts-${view}-${start}-${end}`, () => calendarAPI.getPosts({ startDate: start, endDate: end }), {
+        refreshInterval: 60000, // Refresh every minute
+        revalidateOnFocus: true,
+    });
+    return {
+        posts: data?.data || [],
+        isLoading,
+        error,
+        refresh: mutate,
+    };
+}
+/**
+ * Custom hook to get integrations
+ */
+function useIntegrations() {
+    return window.postqueeWP?.integrations || [];
+}
+const CalendarContext = (0,react.createContext)(null);
+const CalendarProvider = ({ children }) => {
+    const { posts, isLoading, error, refresh } = useCalendarPosts();
+    const integrations = useIntegrations();
+    return (react.createElement(CalendarContext.Provider, { value: { posts, integrations, isLoading, error, refresh } }, children));
+};
+const useCalendarContext = () => {
+    const context = (0,react.useContext)(CalendarContext);
+    if (!context) {
+        throw new Error('useCalendarContext must be used within CalendarProvider');
+    }
+    return context;
+};
+
+;// ./src/calendar/views/WeekView.tsx
+
+
+
+
+dayjs_min_default().extend((isoWeek_default()));
+const HOURS = Array.from({ length: 24 }, (_, i) => i);
+const WeekView = () => {
+    const { currentDate } = useCalendarStore();
+    const { posts } = useCalendarContext();
+    // Get week days (Monday - Sunday)
+    const weekStart = dayjs_min_default()(currentDate).startOf('isoWeek');
+    const weekDays = Array.from({ length: 7 }, (_, i) => weekStart.add(i, 'day'));
+    // Group posts by day and hour
+    const getPostsForSlot = (day, hour) => {
+        const slotStart = day.hour(hour).minute(0);
+        const slotEnd = day.hour(hour).minute(59);
+        return posts.filter((post) => {
+            const postDate = dayjs_min_default()(post.publishDate);
+            return (postDate.isSame(day, 'day') &&
+                postDate.hour() === hour);
+        });
+    };
+    return (react.createElement("div", { className: "h-full overflow-auto" },
+        react.createElement("div", { className: "grid gap-0", style: { gridTemplateColumns: '80px repeat(7, minmax(0, 1fr))' } },
+            react.createElement("div", { className: "sticky top-0 bg-newBgColor border-b border-newBorder p-2" }),
+            weekDays.map((day) => (react.createElement("div", { key: day.format('YYYY-MM-DD'), className: "sticky top-0 bg-newBgColor border-b border-l border-newBorder p-3 text-center" },
+                react.createElement("div", { className: "text-textItemBlur text-xs uppercase" }, day.format('ddd')),
+                react.createElement("div", { className: `text-lg font-semibold mt-1 ${day.isSame(dayjs_min_default()(), 'day') ? 'text-btnPrimary' : 'text-newTextColor'}` }, day.format('D'))))),
+            HOURS.map((hour) => (react.createElement(react.Fragment, { key: hour },
+                react.createElement("div", { className: "border-r border-newBorder p-2 text-right text-textItemBlur text-sm" }, dayjs_min_default()().hour(hour).format('HH:00')),
+                weekDays.map((day) => {
+                    const slotPosts = getPostsForSlot(day, hour);
+                    const isPast = day.hour(hour).isBefore(dayjs_min_default()());
+                    return (react.createElement("div", { key: `${day.format('YYYY-MM-DD')}-${hour}`, className: `border-l border-b border-newBorder p-1 min-h-[60px] group hover:bg-newBoxHover transition-colors ${isPast ? 'bg-newBgLineColor cursor-not-allowed opacity-50' : 'cursor-pointer'}` },
+                        !isPast && slotPosts.length === 0 && (react.createElement("div", { className: "hidden group-hover:flex items-center justify-center h-full text-btnPrimary text-2xl font-bold" }, "+")),
+                        slotPosts.map((post) => (react.createElement("div", { key: post.id, className: "mb-1 p-2 rounded text-xs bg-newColColor border-l-2 border-btnPrimary hover:bg-newBoxHover cursor-pointer" },
+                            react.createElement("div", { className: "flex items-center gap-2 mb-1" },
+                                post.integration.picture && (react.createElement("img", { src: post.integration.picture, alt: post.integration.name, className: "w-4 h-4 rounded-full" })),
+                                react.createElement("span", { className: "text-newTextColor font-medium truncate" }, dayjs_min_default()(post.publishDate).format('HH:mm'))),
+                            react.createElement("div", { className: "text-textItemBlur line-clamp-2" }, post.value[0]?.content.replace(/<[^>]*>/g, '') || 'No content'))))));
+                })))))));
+};
+
+;// ./src/calendar/views/MonthView.tsx
+
+
+
+
+dayjs_min_default().extend((isoWeek_default()));
+const MonthView = () => {
+    const { currentDate } = useCalendarStore();
+    const { posts } = useCalendarContext();
+    const monthStart = dayjs_min_default()(currentDate).startOf('month');
+    const calendarStart = monthStart.startOf('isoWeek'); // Start from Monday
+    // 6 weeks × 7 days = 42 days
+    const calendarDays = Array.from({ length: 42 }, (_, i) => calendarStart.add(i, 'day'));
+    // Get posts for a specific day
+    const getPostsForDay = (day) => {
+        return posts.filter((post) => dayjs_min_default()(post.publishDate).isSame(day, 'day'));
+    };
+    return (react.createElement("div", { className: "h-full overflow-auto p-4" },
+        react.createElement("div", { className: "grid grid-cols-7 gap-1 mb-2" }, ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (react.createElement("div", { key: day, className: "text-center text-textItemBlur text-sm font-medium p-2" }, day)))),
+        react.createElement("div", { className: "grid grid-cols-7 gap-1", style: { gridAutoRows: 'minmax(100px, 1fr)' } }, calendarDays.map((day) => {
+            const dayPosts = getPostsForDay(day);
+            const isToday = day.isSame(dayjs_min_default()(), 'day');
+            const isCurrentMonth = day.month() === monthStart.month();
+            const isPast = day.isBefore(dayjs_min_default()(), 'day');
+            return (react.createElement("div", { key: day.format('YYYY-MM-DD'), className: `border border-newBorder rounded-lg p-2 group hover:bg-newBoxHover transition-colors ${!isCurrentMonth ? 'opacity-40' : ''} ${isPast ? 'bg-newBgLineColor cursor-not-allowed' : 'cursor-pointer'}` },
+                react.createElement("div", { className: "flex items-center justify-between mb-2" },
+                    react.createElement("span", { className: `text-sm font-semibold ${isToday
+                            ? 'bg-btnPrimary text-white px-2 py-1 rounded-full'
+                            : isCurrentMonth
+                                ? 'text-newTextColor'
+                                : 'text-textItemBlur'}` }, day.format('D')),
+                    !isPast && dayPosts.length === 0 && (react.createElement("span", { className: "hidden group-hover:inline-block text-btnPrimary text-xl font-bold" }, "+"))),
+                react.createElement("div", { className: "space-y-1" },
+                    dayPosts.slice(0, 3).map((post) => (react.createElement("div", { key: post.id, className: "text-xs p-1.5 rounded bg-newColColor border-l-2 border-btnPrimary hover:bg-newBoxHover cursor-pointer" },
+                        react.createElement("div", { className: "flex items-center gap-1 mb-0.5" },
+                            post.integration.picture && (react.createElement("img", { src: post.integration.picture, alt: post.integration.name, className: "w-3 h-3 rounded-full" })),
+                            react.createElement("span", { className: "text-newTextColor font-medium" }, dayjs_min_default()(post.publishDate).format('HH:mm'))),
+                        react.createElement("div", { className: "text-textItemBlur line-clamp-1" }, post.value[0]?.content.replace(/<[^>]*>/g, '') || 'No content')))),
+                    dayPosts.length > 3 && (react.createElement("div", { className: "text-xs text-btnPrimary font-medium text-center" },
+                        "+",
+                        dayPosts.length - 3,
+                        " more")))));
+        }))));
+};
+
+;// ./src/calendar/views/DayView.tsx
+
+
+
+const DayView_HOURS = Array.from({ length: 24 }, (_, i) => i);
+const DayView = () => {
+    const { currentDate } = useCalendarStore();
+    const { posts } = useCalendarContext();
+    const day = dayjs_min_default()(currentDate);
+    // Get posts for a specific hour
+    const getPostsForHour = (hour) => {
+        return posts.filter((post) => {
+            const postDate = dayjs_min_default()(post.publishDate);
+            return postDate.isSame(day, 'day') && postDate.hour() === hour;
+        });
+    };
+    return (react.createElement("div", { className: "h-full overflow-auto" },
+        react.createElement("div", { className: "max-w-4xl mx-auto p-4" }, DayView_HOURS.map((hour) => {
+            const hourPosts = getPostsForHour(hour);
+            const isPast = day.hour(hour).isBefore(dayjs_min_default()());
+            return (react.createElement("div", { key: hour, className: `flex border-b border-newBorder group ${isPast ? 'bg-newBgLineColor cursor-not-allowed opacity-60' : ''}` },
+                react.createElement("div", { className: "w-24 flex-shrink-0 p-4 text-right text-textItemBlur" }, dayjs_min_default()().hour(hour).format('HH:00')),
+                react.createElement("div", { className: `flex-1 p-4 min-h-[80px] ${!isPast ? 'hover:bg-newBoxHover cursor-pointer' : ''}` },
+                    !isPast && hourPosts.length === 0 && (react.createElement("div", { className: "hidden group-hover:flex items-center justify-center h-full text-btnPrimary text-3xl font-bold" }, "+")),
+                    react.createElement("div", { className: "space-y-2" }, hourPosts.map((post) => (react.createElement("div", { key: post.id, className: "p-3 rounded-lg bg-newColColor border-l-4 border-btnPrimary hover:bg-newBoxHover cursor-pointer" },
+                        react.createElement("div", { className: "flex items-center gap-3 mb-2" },
+                            post.integration.picture && (react.createElement("img", { src: post.integration.picture, alt: post.integration.name, className: "w-8 h-8 rounded-full" })),
+                            react.createElement("div", null,
+                                react.createElement("div", { className: "text-newTextColor font-semibold" }, dayjs_min_default()(post.publishDate).format('HH:mm')),
+                                react.createElement("div", { className: "text-textItemBlur text-xs" }, post.integration.name)),
+                            post.state && (react.createElement("span", { className: `ml-auto text-xs px-2 py-1 rounded ${post.state === 'published' ? 'bg-green-500/20 text-green-400' :
+                                    post.state === 'schedule' ? 'bg-blue-500/20 text-blue-400' :
+                                        'bg-gray-500/20 text-gray-400'}` }, post.state))),
+                        react.createElement("div", { className: "text-textItemBlur" }, post.value[0]?.content.replace(/<[^>]*>/g, '') || 'No content'),
+                        post.value[0]?.image && post.value[0].image.length > 0 && (react.createElement("div", { className: "mt-2 flex gap-2" }, post.value[0].image.slice(0, 4).map((img, idx) => (react.createElement("img", { key: idx, src: img.path, alt: img.alt || '', className: "w-16 h-16 object-cover rounded" }))))))))))));
+        }))));
+};
+
+;// ./src/calendar/CalendarApp.tsx
+
+
+
+
+
+
+/**
+ * Navigation and view switcher component
+ */
+const CalendarHeader = () => {
+    const { currentDate, view, setView, goToToday, goToPrevious, goToNext } = useCalendarStore();
+    const { isLoading } = useCalendarContext();
+    const formatDateRange = () => {
+        const current = dayjs_min_default()(currentDate);
+        switch (view) {
+            case 'day':
+                return current.format('MMMM D, YYYY');
+            case 'week':
+                const weekStart = current.startOf('isoWeek');
+                const weekEnd = current.endOf('isoWeek');
+                return `${weekStart.format('MMM D')} - ${weekEnd.format('MMM D, YYYY')}`;
+            case 'month':
+                return current.format('MMMM YYYY');
+            default:
+                return '';
+        }
+    };
+    return (react.createElement("div", { className: "flex items-center justify-between mb-6 px-4" },
+        react.createElement("div", { className: "flex items-center gap-4" },
+            react.createElement("button", { onClick: goToPrevious, className: "p-2 rounded hover:bg-newBoxHover transition-colors", disabled: isLoading },
+                react.createElement("svg", { className: "w-5 h-5 text-newTextColor", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
+                    react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15 19l-7-7 7-7" }))),
+            react.createElement("div", { className: "text-lg font-semibold text-newTextColor min-w-[250px] text-center" }, formatDateRange()),
+            react.createElement("button", { onClick: goToNext, className: "p-2 rounded hover:bg-newBoxHover transition-colors", disabled: isLoading },
+                react.createElement("svg", { className: "w-5 h-5 text-newTextColor", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
+                    react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 5l7 7-7 7" }))),
+            react.createElement("button", { onClick: goToToday, className: "px-3 py-1.5 rounded border border-newBorder hover:bg-newBoxHover text-newTextColor text-sm transition-colors", disabled: isLoading }, "Today")),
+        react.createElement("div", { className: "flex items-center gap-1 bg-newBgColorInner rounded-lg p-1" }, ['day', 'week', 'month'].map((viewType) => (react.createElement("button", { key: viewType, onClick: () => setView(viewType), className: `px-4 py-1.5 rounded capitalize text-sm transition-colors ${view === viewType
+                ? 'bg-btnPrimary text-white'
+                : 'text-textItemBlur hover:text-newTextColor'}` }, viewType))))));
+};
+/**
+ * Calendar view renderer
+ */
+const CalendarContent = () => {
+    const { view } = useCalendarStore();
+    const { isLoading, error } = useCalendarContext();
+    if (error) {
+        return (react.createElement("div", { className: "flex items-center justify-center h-full" },
+            react.createElement("div", { className: "text-center" },
+                react.createElement("div", { className: "text-red-500 text-lg mb-2" }, "Error loading calendar"),
+                react.createElement("div", { className: "text-textItemBlur text-sm" }, error.message || 'Failed to load posts'))));
+    }
+    if (isLoading) {
+        return (react.createElement("div", { className: "flex items-center justify-center h-full" },
+            react.createElement("div", { className: "text-textItemBlur" }, "Loading calendar...")));
+    }
+    switch (view) {
+        case 'day':
+            return react.createElement(DayView, null);
+        case 'week':
+            return react.createElement(WeekView, null);
+        case 'month':
+            return react.createElement(MonthView, null);
+        default:
+            return null;
+    }
+};
+/**
+ * Main Calendar Application
+ */
+const CalendarApp = () => {
+    return (react.createElement(CalendarProvider, null,
+        react.createElement("div", { className: "postquee-calendar-app bg-newBgColor min-h-screen p-6" },
+            react.createElement("div", { className: "max-w-7xl mx-auto" },
+                react.createElement("h1", { className: "text-2xl font-bold text-newTextColor mb-6" }, "PostQuee Calendar"),
+                react.createElement(CalendarHeader, null),
+                react.createElement("div", { className: "bg-newBgColorInner rounded-lg border border-newBorder overflow-hidden", style: { height: 'calc(100vh - 250px)' } },
+                    react.createElement(CalendarContent, null))))));
+};
+/* harmony default export */ var calendar_CalendarApp = (CalendarApp);
+
 ;// ./src/calendar/index.tsx
 
 
 
-const CalendarApp = () => {
-    return (react.createElement("div", { className: "postquee-calendar-app bg-newBgColor min-h-screen p-8" },
-        react.createElement("div", { className: "max-w-7xl mx-auto" },
-            react.createElement("h1", { className: "text-4xl font-bold text-btnPrimary mb-4" }, "PostQuee Calendar"),
-            react.createElement("p", { className: "text-newTextColor text-lg" }, "Hello World! React + TypeScript + Tailwind is working! \uD83C\uDF89"),
-            react.createElement("div", { className: "mt-8 p-6 bg-newBgColorInner rounded-lg border border-newBorder" },
-                react.createElement("p", { className: "text-textColor mb-2" }, "Testing PostQuee color scheme:"),
-                react.createElement("div", { className: "flex gap-4 mt-4" },
-                    react.createElement("div", { className: "w-20 h-20 bg-btnPrimary rounded flex items-center justify-center text-white text-xs" }, "Primary"),
-                    react.createElement("div", { className: "w-20 h-20 bg-newSettings rounded flex items-center justify-center text-white text-xs" }, "Settings"),
-                    react.createElement("div", { className: "w-20 h-20 bg-newBoxFocused rounded flex items-center justify-center text-white text-xs" }, "Focused"))))));
-};
+
 // WordPress integration: Mount React app when DOM is ready
 const mountApp = () => {
     const rootElement = document.getElementById('postquee-calendar-root');
     if (rootElement) {
         const root = (0,client/* createRoot */.H)(rootElement);
-        root.render(react.createElement(CalendarApp, null));
+        root.render(react.createElement(calendar_CalendarApp, null));
     }
     else {
         console.error('PostQuee: Could not find #postquee-calendar-root element');
@@ -1001,6 +3015,7 @@ else {
     mountApp();
 }
 
+}();
 /******/ })()
 ;
 //# sourceMappingURL=calendar.bundle.js.map
