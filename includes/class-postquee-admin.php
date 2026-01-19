@@ -97,7 +97,7 @@ class PostQuee_Admin
 				'postquee-calendar',
 				'postqueeWP',
 				array(
-					'restUrl' => rest_url('postquee/v1/'),
+					'restUrl' => rest_url('postquee-connector/v1/'),
 					'nonce' => wp_create_nonce('wp_rest'),
 					'apiKey' => get_option('postquee_api_key'),
 					'integrations' => $channels,

@@ -2840,7 +2840,7 @@ class CalendarAPI {
     async getPosts(params) {
         const queryParams = new URLSearchParams(params).toString();
         return wpApiFetch({
-            path: `postquee-connector/v1/posts?${queryParams}`,
+            path: `posts?${queryParams}`,
             method: 'GET',
         });
     }
@@ -2849,7 +2849,7 @@ class CalendarAPI {
      */
     async createPost(data) {
         return wpApiFetch({
-            path: 'postquee-connector/v1/posts',
+            path: 'posts',
             method: 'POST',
             data,
         });
@@ -2859,7 +2859,7 @@ class CalendarAPI {
      */
     async updatePostDate(postId, date) {
         return wpApiFetch({
-            path: `postquee-connector/v1/posts/${postId}/date`,
+            path: `posts/${postId}/date`,
             method: 'PUT',
             data: { date },
         });
@@ -2869,7 +2869,7 @@ class CalendarAPI {
      */
     async deletePost(postId) {
         return wpApiFetch({
-            path: `postquee-connector/v1/posts/${postId}`,
+            path: `posts/${postId}`,
             method: 'DELETE',
         });
     }
