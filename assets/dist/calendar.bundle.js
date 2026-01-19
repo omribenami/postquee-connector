@@ -36791,7 +36791,7 @@ const PlatformSettings = ({ integration, onChange }) => {
  * Full Post Creator Modal
  * TipTap editor + channel selection + media + preview
  */
-const PostCreatorModal = ({ date, post, integrations, onClose, onSuccess, }) => {
+const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose, onSuccess, }) => {
     const [content, setContent] = (0,react.useState)('');
     const [selectedChannels, setSelectedChannels] = (0,react.useState)([]);
     const [media, setMedia] = (0,react.useState)([]);
@@ -36806,7 +36806,28 @@ const PostCreatorModal = ({ date, post, integrations, onClose, onSuccess, }) => 
         if (date) {
             setScheduledDate(date.toDate());
         }
-        if (post) {
+        // Load WordPress content if provided (Phase 7)
+        if (wordPressContent) {
+            // Pre-fill with WordPress post content
+            let contentHtml = wordPressContent.content;
+            // Add title as heading if provided
+            if (wordPressContent.title) {
+                contentHtml = `<h2>${wordPressContent.title}</h2>${contentHtml}`;
+            }
+            setContent(contentHtml);
+            // Add featured image if provided
+            if (wordPressContent.featuredImage) {
+                setMedia([
+                    {
+                        id: 'wp-featured-' + Date.now(),
+                        path: wordPressContent.featuredImage,
+                        type: 'image',
+                    },
+                ]);
+            }
+        }
+        else if (post) {
+            // Load existing post for editing
             setContent(post.value[0]?.content || '');
             setSelectedChannels([post.integration.id]);
             // Load media if exists
@@ -36822,7 +36843,7 @@ const PostCreatorModal = ({ date, post, integrations, onClose, onSuccess, }) => 
                 setTags(post.tags);
             }
         }
-    }, [date, post]);
+    }, [date, post, wordPressContent]);
     const handleSubmit = async (type = 'schedule') => {
         setError(null);
         // Validation
@@ -36992,6 +37013,7 @@ const CalendarContent = ({ onCreatePost, onEditPost }) => {
 const CalendarAppInner = () => {
     const [modalDate, setModalDate] = (0,react.useState)(null);
     const [editingPost, setEditingPost] = (0,react.useState)(null);
+    const [wordPressContent, setWordPressContent] = (0,react.useState)(null);
     const { integrations, refresh } = useCalendarContext();
     const handleCreatePost = (date) => {
         setModalDate(date);
@@ -37008,6 +37030,53 @@ const CalendarAppInner = () => {
     const handleSuccess = () => {
         refresh(); // Refresh calendar after post creation
     };
+    // Listen for "Send to PostQuee" messages from WordPress editor (Phase 7)
+    (0,react.useEffect)(() => {
+        const handleMessage = (event) => {
+            if (event.data?.type === 'POSTQUEE_OPEN_CREATOR') {
+                const payload = event.data.payload;
+                // Set WordPress content for pre-filling
+                setWordPressContent({
+                    title: payload.title || '',
+                    content: payload.content || '',
+                    featuredImage: payload.featuredImage || '',
+                });
+                // Open modal with current date
+                setModalDate(dayjs_min_default()());
+                setEditingPost(null);
+            }
+        };
+        // Add event listener
+        window.addEventListener('message', handleMessage);
+        // Check sessionStorage for pending message (from page navigation)
+        const pendingMessage = sessionStorage.getItem('postquee_pending_message');
+        if (pendingMessage) {
+            try {
+                const payload = JSON.parse(pendingMessage);
+                setWordPressContent({
+                    title: payload.title || '',
+                    content: payload.content || '',
+                    featuredImage: payload.featuredImage || '',
+                });
+                setModalDate(dayjs_min_default()());
+                setEditingPost(null);
+                // Clear the pending message
+                sessionStorage.removeItem('postquee_pending_message');
+            }
+            catch (e) {
+                console.error('Failed to parse pending message:', e);
+            }
+        }
+        return () => {
+            window.removeEventListener('message', handleMessage);
+        };
+    }, []);
+    // Clear WordPress content when modal closes
+    (0,react.useEffect)(() => {
+        if (!modalDate) {
+            setWordPressContent(null);
+        }
+    }, [modalDate]);
     return (react.createElement(react.Fragment, null,
         react.createElement("div", { className: "postquee-calendar-app bg-newBgColor min-h-screen p-6" },
             react.createElement("div", { className: "max-w-7xl mx-auto" },
@@ -37015,7 +37084,7 @@ const CalendarAppInner = () => {
                 react.createElement(CalendarHeader, null),
                 react.createElement("div", { className: "bg-newBgColorInner rounded-lg border border-newBorder overflow-hidden", style: { height: 'calc(100vh - 250px)' } },
                     react.createElement(CalendarContent, { onCreatePost: handleCreatePost, onEditPost: handleEditPost })))),
-        modalDate && (react.createElement(PostCreatorModal, { date: modalDate, post: editingPost, integrations: integrations, onClose: handleCloseModal, onSuccess: handleSuccess }))));
+        modalDate && (react.createElement(PostCreatorModal, { date: modalDate, post: editingPost, integrations: integrations, wordPressContent: wordPressContent, onClose: handleCloseModal, onSuccess: handleSuccess }))));
 };
 /**
  * Main Calendar Application

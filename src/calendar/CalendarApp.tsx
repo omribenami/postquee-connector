@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { useCalendarStore, CalendarProvider, useCalendarContext } from './context';
 import { DndProvider } from './components/DndProvider';
@@ -138,6 +138,7 @@ const CalendarContent: React.FC<CalendarContentProps> = ({ onCreatePost, onEditP
 const CalendarAppInner: React.FC = () => {
   const [modalDate, setModalDate] = useState<dayjs.Dayjs | null>(null);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [wordPressContent, setWordPressContent] = useState<{ title: string; content: string; featuredImage?: string } | null>(null);
   const { integrations, refresh } = useCalendarContext();
 
   const handleCreatePost = (date: dayjs.Dayjs) => {
@@ -158,6 +159,60 @@ const CalendarAppInner: React.FC = () => {
   const handleSuccess = () => {
     refresh(); // Refresh calendar after post creation
   };
+
+  // Listen for "Send to PostQuee" messages from WordPress editor (Phase 7)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'POSTQUEE_OPEN_CREATOR') {
+        const payload = event.data.payload;
+
+        // Set WordPress content for pre-filling
+        setWordPressContent({
+          title: payload.title || '',
+          content: payload.content || '',
+          featuredImage: payload.featuredImage || '',
+        });
+
+        // Open modal with current date
+        setModalDate(dayjs());
+        setEditingPost(null);
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('message', handleMessage);
+
+    // Check sessionStorage for pending message (from page navigation)
+    const pendingMessage = sessionStorage.getItem('postquee_pending_message');
+    if (pendingMessage) {
+      try {
+        const payload = JSON.parse(pendingMessage);
+        setWordPressContent({
+          title: payload.title || '',
+          content: payload.content || '',
+          featuredImage: payload.featuredImage || '',
+        });
+        setModalDate(dayjs());
+        setEditingPost(null);
+
+        // Clear the pending message
+        sessionStorage.removeItem('postquee_pending_message');
+      } catch (e) {
+        console.error('Failed to parse pending message:', e);
+      }
+    }
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
+  // Clear WordPress content when modal closes
+  useEffect(() => {
+    if (!modalDate) {
+      setWordPressContent(null);
+    }
+  }, [modalDate]);
 
   return (
     <>
@@ -180,6 +235,7 @@ const CalendarAppInner: React.FC = () => {
           date={modalDate}
           post={editingPost}
           integrations={integrations}
+          wordPressContent={wordPressContent}
           onClose={handleCloseModal}
           onSuccess={handleSuccess}
         />

@@ -97,6 +97,50 @@
             });
         };
 
+        var handleSendToPostQuee = function () {
+            // Get post content from Gutenberg editor
+            var content = wp.data.select('core/editor').getEditedPostContent();
+            var title = wp.data.select('core/editor').getEditedPostAttribute('title');
+            var featuredImageId = wp.data.select('core/editor').getEditedPostAttribute('featured_media');
+            var permalink = wp.data.select('core/editor').getPermalink();
+
+            // Get featured image URL if exists
+            var featuredImage = '';
+            if (featuredImageId) {
+                var media = wp.data.select('core').getMedia(featuredImageId);
+                if (media && media.source_url) {
+                    featuredImage = media.source_url;
+                }
+            }
+
+            // Send postMessage to PostQuee calendar
+            var message = {
+                type: 'POSTQUEE_OPEN_CREATOR',
+                payload: {
+                    title: title,
+                    content: content,
+                    featuredImage: featuredImage,
+                    postId: postId,
+                    postUrl: permalink,
+                }
+            };
+
+            // Try to send to parent window first (if in iframe)
+            if (window.parent !== window) {
+                window.parent.postMessage(message, '*');
+            }
+
+            // Also broadcast to same window
+            window.postMessage(message, '*');
+
+            // Navigate to calendar page if not already there
+            var calendarUrl = postqueeData && postqueeData.calendarUrl ? postqueeData.calendarUrl : '/wp-admin/admin.php?page=postquee-calendar';
+            if (!window.location.href.includes('page=postquee-calendar')) {
+                sessionStorage.setItem('postquee_pending_message', JSON.stringify(message.payload));
+                window.location.href = calendarUrl;
+            }
+        };
+
         var headerStyle = { display: 'flex', alignItems: 'center', marginBottom: '15px' };
         var statusStyle = { padding: '10px', background: state.synced ? '#e6fffa' : '#f7fafc', borderRadius: '4px', marginBottom: '15px', border: '1px solid #cbd5e0' };
 
@@ -120,14 +164,32 @@
                             el('strong', {}, state.synced ? '✅ Synced' : '⚪ Not Synced'),
                             state.syncedId ? el('div', { style: { fontSize: '11px', marginTop: '5px', color: '#718096' } }, 'ID: ' + state.syncedId) : null
                         ),
-                        // Action Button
+                        // Send to PostQuee Calendar Button (Phase 7)
                         el(Button, {
                             isPrimary: true,
+                            onClick: handleSendToPostQuee,
+                            style: {
+                                width: '100%',
+                                justifyContent: 'center',
+                                marginBottom: '10px',
+                                background: 'linear-gradient(135deg, #FF6900 0%, #FF8C00 100%)',
+                                border: 'none',
+                                boxShadow: '0 2px 4px rgba(255, 105, 0, 0.3)'
+                            }
+                        }, '📅 Open in Calendar'),
+
+                        el('p', { style: { fontSize: '11px', color: '#718096', textAlign: 'center', marginBottom: '15px' } },
+                            'Open post creator with this content pre-filled'
+                        ),
+
+                        // Legacy Sync Button
+                        el(Button, {
+                            isSecondary: true,
                             isBusy: state.syncing,
                             disabled: state.syncing,
                             onClick: handleSync,
                             style: { width: '100%', justifyContent: 'center', marginBottom: '10px' }
-                        }, state.synced ? 'Sync Again' : 'Send to PostQuee'),
+                        }, state.synced ? 'Sync Again' : 'Quick Sync'),
 
                         el('p', { style: { fontSize: '11px', color: '#718096', textAlign: 'center', margin: 0 } },
                             'Channel: ' + (state.currentChannel ? state.currentChannel : 'None')

@@ -22,6 +22,7 @@ interface PostCreatorModalProps {
   date: dayjs.Dayjs | null;
   post?: Post | null;
   integrations: Integration[];
+  wordPressContent?: { title: string; content: string; featuredImage?: string } | null;
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -34,6 +35,7 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
   date,
   post,
   integrations,
+  wordPressContent,
   onClose,
   onSuccess,
 }) => {
@@ -52,7 +54,31 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
     if (date) {
       setScheduledDate(date.toDate());
     }
-    if (post) {
+
+    // Load WordPress content if provided (Phase 7)
+    if (wordPressContent) {
+      // Pre-fill with WordPress post content
+      let contentHtml = wordPressContent.content;
+
+      // Add title as heading if provided
+      if (wordPressContent.title) {
+        contentHtml = `<h2>${wordPressContent.title}</h2>${contentHtml}`;
+      }
+
+      setContent(contentHtml);
+
+      // Add featured image if provided
+      if (wordPressContent.featuredImage) {
+        setMedia([
+          {
+            id: 'wp-featured-' + Date.now(),
+            path: wordPressContent.featuredImage,
+            type: 'image' as const,
+          },
+        ]);
+      }
+    } else if (post) {
+      // Load existing post for editing
       setContent(post.value[0]?.content || '');
       setSelectedChannels([post.integration.id]);
       // Load media if exists
@@ -70,7 +96,7 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
         setTags(post.tags);
       }
     }
-  }, [date, post]);
+  }, [date, post, wordPressContent]);
 
   const handleSubmit = async (type: 'schedule' | 'draft' = 'schedule') => {
     setError(null);
