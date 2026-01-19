@@ -82,7 +82,7 @@ class PostQuee_Admin
 				'postquee-calendar',
 				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.bundle.js',
 				array(), // React is bundled, no dependencies
-				$this->version,
+				time(), // Cache busting - use timestamp for development
 				true
 			);
 
