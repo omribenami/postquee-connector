@@ -9,6 +9,7 @@ interface TipTapEditorProps {
   content: string;
   onChange: (html: string) => void;
   placeholder?: string;
+  onAIRefine?: () => void; // Optional callback for AI refinement
 }
 
 /**
@@ -18,6 +19,7 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
   content,
   onChange,
   placeholder = 'Write your post...',
+  onAIRefine,
 }) => {
   const editor = useEditor({
     extensions: [
@@ -129,6 +131,23 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
         </button>
 
         <div className="ml-auto flex items-center gap-2">
+          {/* AI Refine Button */}
+          {onAIRefine && (
+            <>
+              <button
+                onClick={onAIRefine}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-sm font-medium transition-all"
+                title="AI Refine Content"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3l14 9-14 9V3z" />
+                </svg>
+                AI Refine
+              </button>
+              <div className="w-px h-6 bg-newBorder mx-1" />
+            </>
+          )}
+
           {/* Character count */}
           <span className="text-xs text-textItemBlur">
             {editor.storage.characterCount?.characters() || editor.getText().length} characters

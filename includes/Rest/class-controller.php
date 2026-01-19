@@ -117,6 +117,25 @@ class Controller
             'callback' => array($this, 'check_connection'),
             'permission_callback' => array($this, 'check_permission'),
         ));
+
+        // AI Refine Content (Phase 6)
+        register_rest_route('postquee/v1', '/ai/refine', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'ai_refine'),
+            'permission_callback' => array($this, 'check_permission'),
+            'args' => array(
+                'content' => array(
+                    'required' => true,
+                    'type' => 'string',
+                    'sanitize_callback' => 'sanitize_textarea_field',
+                ),
+                'prompt' => array(
+                    'required' => true,
+                    'type' => 'string',
+                    'sanitize_callback' => 'sanitize_text_field',
+                ),
+            ),
+        ));
     }
 
     /**
@@ -417,5 +436,50 @@ class Controller
         }
 
         return rest_ensure_response($result);
+    }
+
+    /**
+     * AI Refine Content (Phase 6).
+     * Note: This is a placeholder. Full OpenAI/CopilotKit integration requires API key configuration.
+     */
+    public function ai_refine($request)
+    {
+        $content = $request->get_param('content');
+        $prompt = $request->get_param('prompt');
+
+        // TODO: Implement OpenAI/CopilotKit integration
+        // For now, return a simple refined version with basic rules
+
+        $refined = $content;
+
+        switch ($prompt) {
+            case 'improve':
+                $refined = $content . ' 🚀';
+                break;
+            case 'shorten':
+                $words = explode(' ', $content);
+                $refined = implode(' ', array_slice($words, 0, min(count($words), 20)));
+                break;
+            case 'expand':
+                $refined = $content . ' This is an exciting opportunity to engage with your audience!';
+                break;
+            case 'casual':
+                $refined = str_replace('.', '!', $content);
+                break;
+            case 'professional':
+                $refined = ucfirst($content);
+                break;
+            case 'emojis':
+                $refined = $content . ' ✨💡📈';
+                break;
+            default:
+                $refined = $content;
+        }
+
+        return rest_ensure_response(array(
+            'success' => true,
+            'refined' => $refined,
+            'note' => 'AI refinement is a demo. Configure CopilotKit API key in Settings for full AI features.',
+        ));
     }
 }

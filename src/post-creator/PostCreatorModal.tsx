@@ -5,6 +5,8 @@ import { ChannelSelector } from './components/ChannelSelector';
 import { MediaUpload } from './components/MediaUpload';
 import { PostPreview } from './components/PostPreview';
 import { DateTimePicker } from './components/DateTimePicker';
+import { TagsInput, type Tag } from './components/TagsInput';
+import { AIRefineModal } from './components/AIRefineModal';
 import { PlatformSettings } from './platform-settings/PlatformSettings';
 import type { PlatformSettings as PlatformSettingsType } from './platform-settings/types';
 import { calendarAPI } from '../shared/api/client';
@@ -40,6 +42,8 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
   const [media, setMedia] = useState<MediaItem[]>([]);
   const [scheduledDate, setScheduledDate] = useState<Date>(new Date());
   const [platformSettings, setPlatformSettings] = useState<PlatformSettingsType | null>(null);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [showAIRefine, setShowAIRefine] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -60,6 +64,10 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
             type: 'image' as const,
           }))
         );
+      }
+      // Load tags if exists
+      if (post.tags) {
+        setTags(post.tags);
       }
     }
   }, [date, post]);
@@ -87,6 +95,7 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
         type,
         date: dayjs(scheduledDate).toISOString(),
         shortLink: false,
+        tags: tags.length > 0 ? tags : undefined, // Include tags if present
         posts: selectedChannels.map((channelId) => ({
           integration: { id: channelId },
           value: [
@@ -175,7 +184,11 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
               {/* Content Editor */}
               <div>
                 <label className="block text-sm font-medium text-newTextColor mb-3">Content</label>
-                <TipTapEditor content={content} onChange={setContent} />
+                <TipTapEditor
+                  content={content}
+                  onChange={setContent}
+                  onAIRefine={() => setShowAIRefine(true)}
+                />
               </div>
 
               {/* Media Upload */}
@@ -183,6 +196,9 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
 
               {/* Date/Time Picker */}
               <DateTimePicker value={scheduledDate} onChange={setScheduledDate} />
+
+              {/* Tags */}
+              <TagsInput selectedTags={tags} onChange={setTags} />
             </div>
 
             {/* Right column - Preview */}
@@ -233,6 +249,15 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* AI Refine Modal */}
+      {showAIRefine && (
+        <AIRefineModal
+          currentContent={content}
+          onApply={setContent}
+          onClose={() => setShowAIRefine(false)}
+        />
+      )}
     </div>
   );
 };
