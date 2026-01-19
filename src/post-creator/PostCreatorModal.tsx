@@ -5,6 +5,8 @@ import { ChannelSelector } from './components/ChannelSelector';
 import { MediaUpload } from './components/MediaUpload';
 import { PostPreview } from './components/PostPreview';
 import { DateTimePicker } from './components/DateTimePicker';
+import { PlatformSettings } from './platform-settings/PlatformSettings';
+import type { PlatformSettings as PlatformSettingsType } from './platform-settings/types';
 import { calendarAPI } from '../shared/api/client';
 import type { Integration, Post } from '../calendar/types';
 
@@ -37,6 +39,7 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
   const [media, setMedia] = useState<MediaItem[]>([]);
   const [scheduledDate, setScheduledDate] = useState<Date>(new Date());
+  const [platformSettings, setPlatformSettings] = useState<PlatformSettingsType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -95,9 +98,7 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
               })),
             },
           ],
-          settings: {
-            __type: 'generic', // Platform-specific settings would go here
-          },
+          settings: platformSettings || { __type: 'x' }, // Use platform settings if available
         })),
       };
 
@@ -159,6 +160,17 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
                 selectedIds={selectedChannels}
                 onChange={setSelectedChannels}
               />
+
+              {/* Platform-specific Settings (show only when one channel selected) */}
+              {selectedChannels.length === 1 && (() => {
+                const selectedIntegration = integrations.find((i) => i.id === selectedChannels[0]);
+                return selectedIntegration ? (
+                  <PlatformSettings
+                    integration={selectedIntegration}
+                    onChange={setPlatformSettings}
+                  />
+                ) : null;
+              })()}
 
               {/* Content Editor */}
               <div>
