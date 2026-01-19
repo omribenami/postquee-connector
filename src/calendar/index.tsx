@@ -5,6 +5,8 @@ import CalendarApp from './CalendarApp';
 
 // WordPress integration: Mount React app when DOM is ready
 const mountApp = () => {
+  console.log('[PostQuee Debug] WordPress Config:', window.postqueeWP);
+
   const rootElement = document.getElementById('postquee-calendar-root');
 
   if (rootElement) {

@@ -2816,6 +2816,12 @@ var isoWeek_default = /*#__PURE__*/__webpack_require__.n(isoWeek);
 const wpApiFetch = async ({ path, method = 'GET', data }) => {
     const { restUrl, nonce } = window.postqueeWP;
     const url = `${restUrl}${path}`;
+    console.log('[PostQuee Debug] API Call:', {
+        restUrl,
+        path,
+        fullUrl: url,
+        method
+    });
     const response = await fetch(url, {
         method,
         headers: {
@@ -37103,6 +37109,7 @@ const CalendarApp = () => {
 
 // WordPress integration: Mount React app when DOM is ready
 const mountApp = () => {
+    console.log('[PostQuee Debug] WordPress Config:', window.postqueeWP);
     const rootElement = document.getElementById('postquee-calendar-root');
     if (rootElement) {
         const root = (0,client/* createRoot */.H)(rootElement);

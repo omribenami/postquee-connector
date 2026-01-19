@@ -33,6 +33,13 @@ export const wpApiFetch = async <T = any>({ path, method = 'GET', data }: WPFetc
 
   const url = `${restUrl}${path}`;
 
+  console.log('[PostQuee Debug] API Call:', {
+    restUrl,
+    path,
+    fullUrl: url,
+    method
+  });
+
   const response = await fetch(url, {
     method,
     headers: {
