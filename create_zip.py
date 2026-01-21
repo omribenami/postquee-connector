@@ -98,5 +98,8 @@ def zip_plugin(output_filename, source_dir):
         print("  ✗ .bak and .map files\n")
 
 if __name__ == "__main__":
-    zip_plugin('postquee-connector.zip', '/root/WP_PostQuee')
-    print("Zip created successfully.")
+    VERSION = "2.0.9"
+    output_file = f'postquee-connector-{VERSION}.zip'
+    zip_plugin(output_file, '/root/WP_PostQuee')
+    print(f"\n✨ PostQuee Connector v{VERSION} - Ready for distribution!")
+    print(f"📍 Location: /root/{output_file}")

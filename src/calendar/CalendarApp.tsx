@@ -191,8 +191,20 @@ const CalendarAppInner: React.FC = () => {
       }
     };
 
-    // Add event listener
+    // Listen for sidebar "Create Post" button clicks
+    const handleCreatePostEvent = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const date = customEvent.detail?.date ? dayjs(customEvent.detail.date) : dayjs();
+
+      // Open modal with the provided date
+      setModalDate(date);
+      setEditingPost(null);
+      setWordPressContent(null); // Clear any WordPress content
+    };
+
+    // Add event listeners
     window.addEventListener('message', handleMessage);
+    window.addEventListener('pq-open-create-modal', handleCreatePostEvent);
 
     // Check sessionStorage for pending message (from page navigation)
     const pendingMessage = sessionStorage.getItem('postquee_pending_message');
@@ -216,6 +228,7 @@ const CalendarAppInner: React.FC = () => {
 
     return () => {
       window.removeEventListener('message', handleMessage);
+      window.removeEventListener('pq-open-create-modal', handleCreatePostEvent);
     };
   }, []);
 

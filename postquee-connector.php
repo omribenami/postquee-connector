@@ -15,6 +15,29 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// ========================================
+// LEGACY FILE - DO NOT USE
+// ========================================
+// This file is kept for backwards compatibility only.
+// The active plugin file is: postquee-bridge.php
+//
+// If postquee-bridge.php is loaded, exit early to prevent conflicts.
+if (defined('POSTQUEE_BRIDGE_VERSION')) {
+    return; // Bridge is active, don't load old connector
+}
+
+// If we get here, show admin notice that this file is deprecated
+add_action('admin_notices', function() {
+    ?>
+    <div class="notice notice-warning is-dismissible">
+        <p><strong>PostQuee Connector:</strong> You are using the legacy plugin file. Please deactivate this plugin and activate "PostQuee Connector" (postquee-bridge.php) instead.</p>
+    </div>
+    <?php
+});
+
+// Exit early - don't load any of the old code
+return;
+
 // Constants
 define('POSTQUEE_CONNECTOR_VERSION', '2.0.3');
 define('POSTQUEE_CONNECTOR_PATH', plugin_dir_path(__FILE__));

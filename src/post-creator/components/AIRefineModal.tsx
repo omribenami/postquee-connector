@@ -39,7 +39,8 @@ export const AIRefineModal: React.FC<AIRefineModalProps> = ({
 
       // Call WordPress REST endpoint for AI refinement
       const { restUrl, nonce } = window.postqueeWP;
-      const response = await fetch(`${restUrl}ai/refine`, {
+      // Use new endpoint to avoid 404 caching issues
+      const response = await fetch(`${restUrl}ai-refine`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,6 +48,7 @@ export const AIRefineModal: React.FC<AIRefineModalProps> = ({
         },
         body: JSON.stringify({
           content: textContent,
+          // Prompt is now optional in backend, passing it anyway
           prompt: selectedPrompt,
         }),
       });
@@ -114,11 +116,10 @@ export const AIRefineModal: React.FC<AIRefineModalProps> = ({
                 <button
                   key={prompt.value}
                   onClick={() => setSelectedPrompt(prompt.value)}
-                  className={`p-3 rounded-lg border text-left transition-all ${
-                    selectedPrompt === prompt.value
+                  className={`p-3 rounded-lg border text-left transition-all ${selectedPrompt === prompt.value
                       ? 'border-btnPrimary bg-btnPrimary/10'
                       : 'border-newBorder hover:border-btnPrimary/50'
-                  }`}
+                    }`}
                 >
                   <div className="font-medium text-newTextColor">{prompt.label}</div>
                   <div className="text-xs text-textItemBlur mt-1">{prompt.description}</div>

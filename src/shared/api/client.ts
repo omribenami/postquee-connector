@@ -44,7 +44,10 @@ export const wpApiFetch = async <T = any>({ path, method = 'GET', data }: WPFetc
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+    const message = errorData.message || `HTTP ${response.status}: ${response.statusText}`;
+    const error = new Error(message);
+    (error as any).status = response.status;
+    throw error;
   }
 
   return response.json();

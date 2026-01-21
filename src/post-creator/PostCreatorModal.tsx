@@ -7,7 +7,7 @@ import { PostPreview } from './components/PostPreview';
 import { DateTimePicker } from './components/DateTimePicker';
 import { TagsInput, type Tag } from './components/TagsInput';
 import { AIRefineModal } from './components/AIRefineModal';
-import { PlatformSettings } from './platform-settings/PlatformSettings';
+import { PlatformSettings, getPlatformType } from './platform-settings/PlatformSettings';
 import type { PlatformSettings as PlatformSettingsType } from './platform-settings/types';
 import { calendarAPI } from '../shared/api/client';
 import type { Integration, Post } from '../calendar/types';
@@ -43,11 +43,15 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
   const [media, setMedia] = useState<MediaItem[]>([]);
   const [scheduledDate, setScheduledDate] = useState<Date>(new Date());
-  const [platformSettings, setPlatformSettings] = useState<PlatformSettingsType | null>(null);
+  // Changed: Store settings Map<ChannelID, Settings>
+  const [platformSettingsMap, setPlatformSettingsMap] = useState<Record<string, PlatformSettingsType>>({});
   const [tags, setTags] = useState<Tag[]>([]);
   const [showAIRefine, setShowAIRefine] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // State for accordion: which channel settings are open?
+  const [openSettingsId, setOpenSettingsId] = useState<string | null>(null);
 
   // Initialize form when date or post changes
   useEffect(() => {
@@ -55,19 +59,13 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
       setScheduledDate(date.toDate());
     }
 
-    // Load WordPress content if provided (Phase 7)
+    // Load WordPress content if provided
     if (wordPressContent) {
-      // Pre-fill with WordPress post content
       let contentHtml = wordPressContent.content;
-
-      // Add title as heading if provided
       if (wordPressContent.title) {
         contentHtml = `<h2>${wordPressContent.title}</h2>${contentHtml}`;
       }
-
       setContent(contentHtml);
-
-      // Add featured image if provided
       if (wordPressContent.featuredImage) {
         setMedia([
           {
@@ -78,10 +76,8 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
         ]);
       }
     } else if (post) {
-      // Load existing post for editing
       setContent(post.value[0]?.content || '');
       setSelectedChannels([post.integration.id]);
-      // Load media if exists
       if (post.value[0]?.image) {
         setMedia(
           post.value[0].image.map((img) => ({
@@ -91,9 +87,16 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
           }))
         );
       }
-      // Load tags if exists
-      if (post.tags) {
-        setTags(post.tags);
+      if (post.tags && post.tags.length > 0) {
+        // Map from API format {tag: {id, name, color}} to UI format {label, value}
+        setTags(post.tags.map(t => ({
+          label: t.tag.name,
+          value: t.tag.id
+        })));
+      }
+      // Load existing settings if any
+      if (post.settings) {
+        setPlatformSettingsMap({ [post.integration.id]: post.settings });
       }
     }
   }, [date, post, wordPressContent]);
@@ -101,7 +104,6 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
   const handleSubmit = async (type: 'schedule' | 'draft' = 'schedule') => {
     setError(null);
 
-    // Validation
     if (selectedChannels.length === 0) {
       setError('Please select at least one channel');
       return;
@@ -113,33 +115,84 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
       return;
     }
 
+    // Check if Pinterest is selected and media is required
+    const hasPinterest = selectedChannels.some((channelId) => {
+      const integration = integrations.find((i) => i.id === channelId);
+      return integration && getPlatformType(integration.identifier) === 'pinterest';
+    });
+
+    if (hasPinterest && media.length === 0) {
+      setError('Pinterest posts require at least one image or video. Please upload media.');
+      return;
+    }
+
+    // Warn about Discord/Slack channels
+    const hasDiscord = selectedChannels.some((channelId) => {
+      const integration = integrations.find((i) => i.id === channelId);
+      return integration && getPlatformType(integration.identifier) === 'discord';
+    });
+
+    if (hasDiscord) {
+      console.warn('Discord/Slack channels will be skipped - not fully supported in WordPress plugin yet');
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Build payload matching PostQuee API structure
       const payload = {
         type,
         date: dayjs(scheduledDate).toISOString(),
         shortLink: false,
-        tags: tags.length > 0 ? tags : undefined, // Include tags if present
-        posts: selectedChannels.map((channelId) => ({
-          integration: { id: channelId },
-          value: [
-            {
-              content,
-              image: media.map((m) => ({
-                id: m.id,
-                path: m.path,
-              })),
-            },
-          ],
-          settings: platformSettings || { __type: 'x' }, // Use platform settings if available
-        })),
+        tags: tags.length > 0 ? tags : [],
+        posts: selectedChannels.map((channelId) => {
+          // Get specific settings for this channel or default
+          let settings = platformSettingsMap[channelId];
+
+          if (!settings) {
+            const integration = integrations.find((i) => i.id === channelId);
+            const type = integration ? getPlatformType(integration.identifier) : 'x';
+
+            // Smart defaults
+            if (type === 'discord') {
+              // Discord/Slack require a specific channel ID within the integration
+              // WordPress plugin doesn't have channel selection UI yet
+              // Skip Discord channels for now to avoid validation errors
+              console.warn(`Discord/Slack posting not fully supported in WordPress plugin yet. Skipping channel: ${integration?.name || channelId}`);
+              return null; // Will be filtered out
+            } else if (type === 'tiktok') {
+              // TikTok requires all these fields
+              settings = {
+                __type: 'tiktok',
+                privacy_level: 'PUBLIC_TO_EVERYONE',
+                duet: true,
+                stitch: true,
+                comment: true,
+                autoAddMusic: false,
+                brand_organic_toggle: false,
+                content_posting_method: 'DIRECT_POST',
+              } as any;
+            } else {
+              settings = { __type: type || 'x' } as any;
+            }
+          }
+
+          return {
+            integration: { id: channelId },
+            value: [
+              {
+                content,
+                image: media.map((m) => ({
+                  id: m.id,
+                  path: m.path,
+                })),
+              },
+            ],
+            settings,
+          };
+        }).filter((post) => post !== null), // Remove Discord/unsupported channels
       };
 
-      // Create or update post
       if (post?.id) {
-        // Update existing post (not implemented in API yet)
         throw new Error('Post editing not yet available via API');
       } else {
         await calendarAPI.createPost(payload);
@@ -157,8 +210,16 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
 
   if (!date) return null;
 
-  // Get first selected integration for preview
   const previewIntegration = integrations.find((i) => i.id === selectedChannels[0]) || null;
+
+  // Helper to toggle accordion
+  const toggleSettings = (id: string) => {
+    if (openSettingsId === id) {
+      setOpenSettingsId(null);
+    } else {
+      setOpenSettingsId(id);
+    }
+  };
 
   return (
     <div
@@ -196,16 +257,70 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
                 onChange={setSelectedChannels}
               />
 
-              {/* Platform-specific Settings (show only when one channel selected) */}
-              {selectedChannels.length === 1 && (() => {
-                const selectedIntegration = integrations.find((i) => i.id === selectedChannels[0]);
-                return selectedIntegration ? (
-                  <PlatformSettings
-                    integration={selectedIntegration}
-                    onChange={setPlatformSettings}
-                  />
-                ) : null;
-              })()}
+              {/* Multi-Channel Settings Accordion */}
+              {selectedChannels.length > 0 && (
+                <div className="space-y-2">
+                  {selectedChannels.map((channelId) => {
+                    const integration = integrations.find((i) => i.id === channelId);
+                    if (!integration) return null;
+
+                    const isOpen = openSettingsId === channelId || selectedChannels.length === 1;
+
+                    return (
+                      <div key={channelId} className="border border-newBorder rounded overflow-hidden">
+                        {/* Accordion Header */}
+                        {selectedChannels.length > 1 && (
+                          <button
+                            onClick={() => toggleSettings(channelId)}
+                            className="w-full flex items-center justify-between px-4 py-3 bg-[#FF6900] text-white hover:bg-[#E65E00] transition-colors"
+                          >
+                            <div className="flex items-center gap-2">
+                              {/* Provider Icon */}
+                              {integration.picture ? (
+                                <img
+                                  src={integration.picture}
+                                  alt=""
+                                  className="w-5 h-5 rounded-full bg-white/10"
+                                />
+                              ) : (
+                                <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">
+                                  {integration.identifier?.[0]?.toUpperCase()}
+                                </div>
+                              )}
+                              <span className="font-medium text-sm">
+                                {integration.name} Settings
+                              </span>
+                            </div>
+                            <svg
+                              className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                        )}
+
+                        {/* Settings Body */}
+                        {isOpen && (
+                          <div className={selectedChannels.length > 1 ? 'p-4 bg-newBgColorInner' : ''}>
+                            <PlatformSettings
+                              integration={integration}
+                              onChange={(newSettings) => {
+                                setPlatformSettingsMap((prev) => ({
+                                  ...prev,
+                                  [channelId]: newSettings,
+                                }));
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Content Editor */}
               <div>
@@ -218,7 +333,15 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
               </div>
 
               {/* Media Upload */}
-              <MediaUpload media={media} onChange={setMedia} />
+              <MediaUpload
+                media={media}
+                onChange={setMedia}
+                required={selectedChannels.some((channelId) => {
+                  const integration = integrations.find((i) => i.id === channelId);
+                  return integration && getPlatformType(integration.identifier) === 'pinterest';
+                })}
+                requirementMessage="Pinterest posts require at least one image or video."
+              />
 
               {/* Date/Time Picker */}
               <DateTimePicker value={scheduledDate} onChange={setScheduledDate} />

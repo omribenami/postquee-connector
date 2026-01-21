@@ -237,9 +237,16 @@ class Endpoints
     {
         $payload = [
             'content' => $content,
-            'prompt' => $prompt,
+            'prompt' => $prompt ?: 'improve', // Default to 'improve' if empty
         ];
 
-        return $this->client->request('/ai/refine', 'POST', $payload);
+        $response = $this->client->request('/ai/refine', 'POST', $payload);
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        // PostQuee API returns: { "success": true, "refined": "AI-refined content here" }
+        return $response;
     }
 }

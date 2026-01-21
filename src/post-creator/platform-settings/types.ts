@@ -36,16 +36,24 @@ export interface ThreadsSettings {
 
 export interface TikTokSettings {
   __type: 'tiktok';
-  privacy?: 'public' | 'friends' | 'private';
-  allow_comments?: boolean;
-  allow_duet?: boolean;
-  allow_stitch?: boolean;
-  ai_disclosure?: boolean;
+  privacy_level?: 'PUBLIC_TO_EVERYONE' | 'MUTUAL_FOLLOW_FRIENDS' | 'FOLLOWER_OF_CREATOR' | 'SELF_ONLY';
+  duet?: boolean;
+  stitch?: boolean;
+  comment?: boolean;
+  autoAddMusic?: boolean;
+  brand_organic_toggle?: boolean;
+  content_posting_method?: 'DIRECT_POST' | 'UPLOAD';
 }
 
 export interface PinterestSettings {
   __type: 'pinterest';
-  board_id?: string;
+  // API expects 'Board' with capital B sometimes, or 'board' depending on validation.
+  // Based on error: "posts.0.settings.Board is required"
+  // So likely the API wants 'Board' or maybe 'board'. Let's ensure we send something.
+  // Actually, standard practice is lowercase in TS interfaces, mapping happens later if needed.
+  // But wait! The error clearly says "Board". Let's use 'Board' in the payload.
+  // We'll keep the interface cleaner and map it before sending if possible, or just use 'Board' here.
+  Board?: string; // Changed from board_id to match likely API requirement seen in error
   title?: string;
   link?: string;
 }
@@ -58,6 +66,11 @@ export interface YouTubeSettings {
   made_for_kids?: boolean;
 }
 
+export interface DiscordSettings {
+  __type: 'discord';
+  channel?: string; // Channel ID
+}
+
 export type PlatformSettings =
   | XTwitterSettings
   | FacebookSettings
@@ -66,7 +79,8 @@ export type PlatformSettings =
   | ThreadsSettings
   | TikTokSettings
   | PinterestSettings
-  | YouTubeSettings;
+  | YouTubeSettings
+  | DiscordSettings;
 
 export interface PlatformSettingsProps<T extends PlatformSettings> {
   settings: T;

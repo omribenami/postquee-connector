@@ -33,6 +33,7 @@ class PostQuee_Admin
 		// settings
 		add_action('admin_init', array($this, 'register_settings'));
 		add_action('admin_init', array($this, 'add_privacy_policy_content'));
+		add_action('admin_init', array($this, 'redirect_legacy_pages'));
 
 		// assets
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_styles'));
@@ -46,6 +47,24 @@ class PostQuee_Admin
 		// AJAX
 		add_action('wp_ajax_postquee_delete_post', array($this, 'ajax_delete_post'));
 		add_action('wp_ajax_postquee_send_post', array($this, 'ajax_send_post_manual'));
+	}
+
+	/**
+	 * Redirect legacy page URLs to new pages
+	 */
+	public function redirect_legacy_pages()
+	{
+		// Redirect old postquee-dashboard to new postquee page
+		if (isset($_GET['page']) && $_GET['page'] === 'postquee-dashboard') {
+			wp_safe_redirect(admin_url('admin.php?page=postquee'));
+			exit;
+		}
+
+		// Redirect old postquee-settings to new settings tab
+		if (isset($_GET['page']) && $_GET['page'] === 'postquee-settings') {
+			wp_safe_redirect(admin_url('admin.php?page=postquee&tab=settings'));
+			exit;
+		}
 	}
 
 	public function add_plugin_admin_menu()
@@ -218,30 +237,61 @@ class PostQuee_Admin
 		?>
 		<div class="postquee-app-wrapper">
 			<!-- Sidebar -->
-			<div class="pq-sidebar">
+			<div class="pq-sidebar" id="pq-sidebar">
 				<div class="pq-sidebar-header">
 					<span>Channels</span>
-					<!-- Back to WP Dashboard if needed -->
-					<a href="<?php echo admin_url(); ?>" class="pq-nav-btn"><span
-							class="dashicons dashicons-arrow-left-alt2"></span></a>
+					<!-- Collapse Sidebar Button -->
+					<button type="button" class="pq-nav-btn" id="pq-collapse-sidebar-btn" onclick="toggleSidebar()"><span
+							class="dashicons dashicons-arrow-left-alt2"></span></button>
 				</div>
 
 				<!-- Add Channel removed as per request -->
 
-				<a href="<?php echo esc_url(admin_url('admin.php?page=postquee')); ?>" class="pq-btn-create-post"
-					id="pq-create-post-btn">
+				<button type="button" class="pq-btn-create-post"
+					id="pq-create-post-btn" onclick="openCreatePostModal()">
 					+ <?php esc_html_e('Create Post', 'postquee-connector'); ?>
-				</a>
+				</button>
 
 				<div class="pq-channel-list">
 					<?php if (!empty($channels) && !is_wp_error($channels)): ?>
 						<?php foreach ($channels as $ch):
-							$icon = substr(isset($ch['provider']) ? $ch['provider'] : 'G', 0, 1);
+							$channel_id = isset($ch['id']) ? $ch['id'] : '';
+							$identifier = isset($ch['identifier']) ? $ch['identifier'] : 'unknown';
+							$picture = isset($ch['picture']) && !empty($ch['picture']) ? $ch['picture'] : '';
+							$name = isset($ch['name']) ? $ch['name'] : 'Unknown Channel';
 							?>
-							<div class="pq-channel-item">
-								<div class="pq-channel-icon"><?php echo esc_html(strtoupper($icon)); ?></div>
-								<div class="pq-channel-name"><?php echo esc_html($ch['name']); ?></div>
-								<div style="margin-left:auto;"><span class="dashicons dashicons-ellipsis"></span></div>
+							<div class="pq-channel-item" style="position: relative;">
+								<?php if ($picture): ?>
+									<img src="<?php echo esc_url($picture); ?>"
+										 alt="<?php echo esc_attr($name); ?>"
+										 class="pq-channel-icon"
+										 style="width:32px; height:32px; border-radius:50%; object-fit:cover;" />
+								<?php else: ?>
+									<div class="pq-channel-icon pq-channel-icon-fallback"
+										 data-identifier="<?php echo esc_attr($identifier); ?>"
+										 style="width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#555; color:#fff; font-weight:bold; font-size:14px;">
+										<?php echo esc_html(strtoupper(substr($name, 0, 1))); ?>
+									</div>
+								<?php endif; ?>
+								<div class="pq-channel-name"><?php echo esc_html($name); ?></div>
+								<button type="button"
+									class="pq-channel-menu-btn"
+									onclick="toggleChannelMenu(event, '<?php echo esc_js($channel_id); ?>')"
+									style="margin-left:auto; background:none; border:none; cursor:pointer; color:inherit; padding:4px; display:flex; align-items:center;">
+									<span class="dashicons dashicons-ellipsis"></span>
+								</button>
+								<!-- Dropdown menu (hidden by default) -->
+								<div class="pq-channel-dropdown" id="pq-channel-dropdown-<?php echo esc_attr($channel_id); ?>" style="display:none;">
+									<a href="<?php echo esc_url('https://app.postquee.com/launches'); ?>" target="_blank" class="pq-dropdown-item">
+										<span class="dashicons dashicons-admin-settings"></span> Manage in PostQuee App
+									</a>
+									<button type="button" onclick="filterByChannel('<?php echo esc_js($channel_id); ?>')" class="pq-dropdown-item">
+										<span class="dashicons dashicons-filter"></span> Show Only This Channel
+									</button>
+									<button type="button" onclick="clearChannelFilter()" class="pq-dropdown-item">
+										<span class="dashicons dashicons-visibility"></span> Show All Channels
+									</button>
+								</div>
 							</div>
 						<?php endforeach; ?>
 					<?php else: ?>
@@ -356,7 +406,148 @@ class PostQuee_Admin
 					border-radius: 50%;
 				}
 			}
+
+			/* Sidebar collapsed state */
+			.pq-sidebar.collapsed {
+				width: 60px;
+			}
+			.pq-sidebar.collapsed .pq-sidebar-header span,
+			.pq-sidebar.collapsed .pq-btn-create-post span,
+			.pq-sidebar.collapsed .pq-channel-name,
+			.pq-sidebar.collapsed .pq-sidebar-footer {
+				display: none;
+			}
+			.pq-sidebar.collapsed #pq-collapse-sidebar-btn .dashicons {
+				transform: rotate(180deg);
+			}
+
+			/* Channel dropdown menu */
+			.pq-channel-dropdown {
+				position: absolute;
+				top: 100%;
+				right: 0;
+				margin-top: 4px;
+				background: #2a2a2a;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 8px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+				min-width: 160px;
+				z-index: 1000;
+				overflow: hidden;
+			}
+
+			.pq-dropdown-item {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				width: 100%;
+				padding: 10px 14px;
+				background: none;
+				border: none;
+				color: #e0e0e0;
+				text-decoration: none;
+				font-size: 13px;
+				cursor: pointer;
+				transition: background 0.2s;
+				text-align: left;
+			}
+
+			.pq-dropdown-item:hover {
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			.pq-dropdown-item .dashicons {
+				font-size: 16px;
+				width: 16px;
+				height: 16px;
+			}
+
+			.pq-dropdown-danger {
+				color: #ff6b6b;
+			}
+
+			.pq-dropdown-danger:hover {
+				background: rgba(255, 107, 107, 0.1);
+			}
+
+			/* Hide dropdown in collapsed sidebar */
+			.pq-sidebar.collapsed .pq-channel-menu-btn {
+				display: none;
+			}
 		</style>
+
+		<script>
+		// Toggle sidebar collapse
+		function toggleSidebar() {
+			const sidebar = document.getElementById('pq-sidebar');
+			if (sidebar) {
+				sidebar.classList.toggle('collapsed');
+			}
+		}
+
+		// Open Create Post Modal (trigger same as calendar cell click)
+		function openCreatePostModal() {
+			// Trigger the same logic as clicking a calendar cell
+			// The calendar is rendered by React, so we need to dispatch a custom event
+			const event = new CustomEvent('pq-open-create-modal', {
+				detail: { date: new Date() }
+			});
+			window.dispatchEvent(event);
+		}
+
+		// Channel menu dropdown
+		function toggleChannelMenu(event, channelId) {
+			event.stopPropagation();
+
+			// Close all other dropdowns first
+			document.querySelectorAll('.pq-channel-dropdown').forEach(dropdown => {
+				if (dropdown.id !== 'pq-channel-dropdown-' + channelId) {
+					dropdown.style.display = 'none';
+				}
+			});
+
+			// Toggle this dropdown
+			const dropdown = document.getElementById('pq-channel-dropdown-' + channelId);
+			if (dropdown) {
+				dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+			}
+		}
+
+		// Filter calendar by channel
+		function filterByChannel(channelId) {
+			// Dispatch custom event to React calendar
+			const event = new CustomEvent('pq-filter-channel', {
+				detail: { channelId }
+			});
+			window.dispatchEvent(event);
+
+			// Close dropdown
+			document.querySelectorAll('.pq-channel-dropdown').forEach(dropdown => {
+				dropdown.style.display = 'none';
+			});
+		}
+
+		// Clear channel filter
+		function clearChannelFilter() {
+			// Dispatch custom event to React calendar
+			const event = new CustomEvent('pq-clear-filter');
+			window.dispatchEvent(event);
+
+			// Close dropdown
+			document.querySelectorAll('.pq-channel-dropdown').forEach(dropdown => {
+				dropdown.style.display = 'none';
+			});
+		}
+
+		// Close dropdowns when clicking outside
+		document.addEventListener('click', function(event) {
+			if (!event.target.closest('.pq-channel-menu-btn') && !event.target.closest('.pq-channel-dropdown')) {
+				document.querySelectorAll('.pq-channel-dropdown').forEach(dropdown => {
+					dropdown.style.display = 'none';
+				});
+			}
+		});
+		</script>
 		<?php
 	}
 

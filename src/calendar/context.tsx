@@ -112,6 +112,16 @@ export function useCalendarPosts() {
     {
       refreshInterval: 60000, // Refresh every minute
       revalidateOnFocus: true,
+      onErrorRetry: (error: any, key, config, revalidate, { retryCount }) => {
+        // Never retry on 404 or 429
+        if (error.status === 404 || error.status === 429) return;
+
+        // Only retry up to 3 times
+        if (retryCount >= 3) return;
+
+        // Retry after 5 seconds
+        setTimeout(() => revalidate({ retryCount }), 5000);
+      },
     }
   );
 

@@ -104,6 +104,7 @@ class Client
             $full_msg = sprintf('API Error [%s]: %s (Request: %s)', $code, $msg, $url);
 
             return new \WP_Error('postquee_api_error', $full_msg, array(
+                'status' => $code,
                 'code' => $code,
                 'body' => $response_body,
                 'url' => $url

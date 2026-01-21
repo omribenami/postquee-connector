@@ -2382,7 +2382,10 @@ const wpApiFetch = async ({ path, method = 'GET', data }) => {
     });
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+        const message = errorData.message || `HTTP ${response.status}: ${response.statusText}`;
+        const error = new Error(message);
+        error.status = response.status;
+        throw error;
     }
     return response.json();
 };
@@ -2536,6 +2539,16 @@ function useCalendarPosts() {
     const { data, error, isLoading, mutate } = useSWR(`posts-${view}-${start}-${end}`, () => calendarAPI.getPosts({ startDate: start, endDate: end }), {
         refreshInterval: 60000, // Refresh every minute
         revalidateOnFocus: true,
+        onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+            // Never retry on 404 or 429
+            if (error.status === 404 || error.status === 429)
+                return;
+            // Only retry up to 3 times
+            if (retryCount >= 3)
+                return;
+            // Retry after 5 seconds
+            setTimeout(() => revalidate({ retryCount }), 5000);
+        },
     });
     return {
         posts: data?.data || [],
@@ -6971,11 +6984,13 @@ const PostCard = ({ post, variant = 'week', onDelete, onEdit }) => {
         react.createElement("div", { className: `text-textItemBlur ${variant === 'month' ? 'line-clamp-1' : 'line-clamp-2'}` }, post.value[0]?.content.replace(/<[^>]*>/g, '') || 'No content'),
         variant === 'day' && post.value[0]?.image && post.value[0].image.length > 0 && (react.createElement("div", { className: "mt-2 flex gap-2" }, post.value[0].image.slice(0, 4).map((img, idx) => (react.createElement("img", { key: idx, src: img.path, alt: img.alt || '', className: "w-12 h-12 object-cover rounded" }))))),
         variant === 'day' && post.state && (react.createElement("div", { className: "mt-2" },
-            react.createElement("span", { className: `text-xs px-2 py-1 rounded ${post.state === 'published'
+            react.createElement("span", { className: `text-xs px-2 py-1 rounded ${post.state === 'PUBLISHED'
                     ? 'bg-green-500/20 text-green-400'
-                    : post.state === 'schedule'
+                    : post.state === 'QUEUE'
                         ? 'bg-blue-500/20 text-blue-400'
-                        : 'bg-gray-500/20 text-gray-400'}` }, post.state)))));
+                        : post.state === 'ERROR'
+                            ? 'bg-red-500/20 text-red-400'
+                            : 'bg-gray-500/20 text-gray-400'}` }, post.state)))));
 };
 
 ;// ./src/calendar/components/CalendarSlot.tsx
@@ -35840,7 +35855,7 @@ const ChannelSelector = ({ integrations, selectedIds, onChange, }) => {
  * Media Upload Component
  * Simple file upload with preview (can be enhanced with Uppy in Phase 5)
  */
-const MediaUpload = ({ media, onChange, maxFiles = 4, }) => {
+const MediaUpload = ({ media, onChange, maxFiles = 4, required = false, requirementMessage = '', }) => {
     const fileInputRef = (0,react.useRef)(null);
     const handleFileSelect = async (e) => {
         const files = e.target.files;
@@ -35868,7 +35883,12 @@ const MediaUpload = ({ media, onChange, maxFiles = 4, }) => {
             media.length,
             "/",
             maxFiles,
-            ")"),
+            ")",
+            required && react.createElement("span", { className: "text-red-400 ml-1" }, "*")),
+        required && media.length === 0 && requirementMessage && (react.createElement("div", { className: "mb-3 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded text-yellow-400 text-sm flex items-start gap-2" },
+            react.createElement("svg", { className: "w-5 h-5 flex-shrink-0 mt-0.5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
+                react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" })),
+            react.createElement("span", null, requirementMessage))),
         media.length > 0 && (react.createElement("div", { className: "grid grid-cols-4 gap-2 mb-3" }, media.map((item) => (react.createElement("div", { key: item.id, className: "relative group aspect-square" },
             item.type === 'image' ? (react.createElement("img", { src: item.path, alt: "", className: "w-full h-full object-cover rounded border border-newBorder" })) : (react.createElement("video", { src: item.path, className: "w-full h-full object-cover rounded border border-newBorder" })),
             react.createElement("button", { onClick: () => removeMedia(item.id), className: "absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" },
@@ -36057,7 +36077,8 @@ const AIRefineModal = ({ currentContent, onApply, onClose, }) => {
             const textContent = currentContent.replace(/<[^>]*>/g, '');
             // Call WordPress REST endpoint for AI refinement
             const { restUrl, nonce } = window.postqueeWP;
-            const response = await fetch(`${restUrl}ai/refine`, {
+            // Use new endpoint to avoid 404 caching issues
+            const response = await fetch(`${restUrl}ai-refine`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36065,6 +36086,7 @@ const AIRefineModal = ({ currentContent, onApply, onClose, }) => {
                 },
                 body: JSON.stringify({
                     content: textContent,
+                    // Prompt is now optional in backend, passing it anyway
                     prompt: selectedPrompt,
                 }),
             });
@@ -36243,7 +36265,36 @@ const InstagramSettingsComponent = ({ settings, onChange, }) => {
             react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Tag collaborators for this post"))));
 };
 
+;// ./src/post-creator/platform-settings/PinterestSettings.tsx
+
+const PinterestSettingsComponent = ({ settings, onChange, }) => {
+    const [board, setBoard] = (0,react.useState)(settings.Board || '');
+    const [title, setTitle] = (0,react.useState)(settings.title || '');
+    const [link, setLink] = (0,react.useState)(settings.link || '');
+    (0,react.useEffect)(() => {
+        onChange({
+            ...settings,
+            Board: board, // Map local state to Uppercase 'Board' per API error
+            title,
+            link,
+        });
+    }, [board, title, link]);
+    return (react.createElement("div", { className: "space-y-4" },
+        react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Pinterest Settings"),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-1" }, "Board *"),
+            react.createElement("input", { type: "text", value: board, onChange: (e) => setBoard(e.target.value), placeholder: "Enter Board Name or ID (e.g. My Board)", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" }),
+            react.createElement("p", { className: "text-xs text-textItemBlur mt-1" }, "Required for Pinterest")),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-1" }, "Title"),
+            react.createElement("input", { type: "text", value: title, onChange: (e) => setTitle(e.target.value), placeholder: "Pin Title", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" })),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-1" }, "Link"),
+            react.createElement("input", { type: "text", value: link, onChange: (e) => setLink(e.target.value), placeholder: "Destination URL (optional)", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" }))));
+};
+
 ;// ./src/post-creator/platform-settings/PlatformSettings.tsx
+
 
 
 
@@ -36256,6 +36307,9 @@ const getPlatformType = (provider) => {
     const providerLower = provider.toLowerCase();
     if (providerLower.includes('twitter') || providerLower === 'x') {
         return 'x';
+    }
+    if (providerLower.includes('discord') || providerLower.includes('slack')) {
+        return 'discord';
     }
     if (providerLower.includes('facebook')) {
         return 'facebook';
@@ -36300,7 +36354,16 @@ const PlatformSettings = ({ integration, onChange }) => {
             case 'threads':
                 return { __type: 'threads', who_can_reply: 'everyone' };
             case 'tiktok':
-                return { __type: 'tiktok', privacy: 'public' };
+                return {
+                    __type: 'tiktok',
+                    privacy_level: 'PUBLIC_TO_EVERYONE',
+                    duet: true,
+                    stitch: true,
+                    comment: true,
+                    autoAddMusic: false,
+                    brand_organic_toggle: false,
+                    content_posting_method: 'DIRECT_POST',
+                };
             case 'pinterest':
                 return { __type: 'pinterest' };
             case 'youtube':
@@ -36325,7 +36388,8 @@ const PlatformSettings = ({ integration, onChange }) => {
         platformType === 'facebook' && settings.__type === 'facebook' && (react.createElement(FacebookSettingsComponent, { settings: settings, onChange: handleSettingsChange })),
         platformType === 'linkedin' && settings.__type === 'linkedin' && (react.createElement(LinkedInSettingsComponent, { settings: settings, onChange: handleSettingsChange })),
         platformType === 'instagram' && settings.__type === 'instagram' && (react.createElement(InstagramSettingsComponent, { settings: settings, onChange: handleSettingsChange })),
-        (platformType === 'threads' || platformType === 'tiktok' || platformType === 'pinterest' || platformType === 'youtube') && (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" },
+        platformType === 'pinterest' && settings.__type === 'pinterest' && (react.createElement(PinterestSettingsComponent, { settings: settings, onChange: handleSettingsChange, integration: integration })),
+        (platformType === 'threads' || platformType === 'tiktok' || platformType === 'youtube') && (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" },
             "Advanced settings for ",
             integration.identifier,
             " coming soon"))));
@@ -36352,26 +36416,26 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
     const [selectedChannels, setSelectedChannels] = (0,react.useState)([]);
     const [media, setMedia] = (0,react.useState)([]);
     const [scheduledDate, setScheduledDate] = (0,react.useState)(new Date());
-    const [platformSettings, setPlatformSettings] = (0,react.useState)(null);
+    // Changed: Store settings Map<ChannelID, Settings>
+    const [platformSettingsMap, setPlatformSettingsMap] = (0,react.useState)({});
     const [tags, setTags] = (0,react.useState)([]);
     const [showAIRefine, setShowAIRefine] = (0,react.useState)(false);
     const [isSubmitting, setIsSubmitting] = (0,react.useState)(false);
     const [error, setError] = (0,react.useState)(null);
+    // State for accordion: which channel settings are open?
+    const [openSettingsId, setOpenSettingsId] = (0,react.useState)(null);
     // Initialize form when date or post changes
     (0,react.useEffect)(() => {
         if (date) {
             setScheduledDate(date.toDate());
         }
-        // Load WordPress content if provided (Phase 7)
+        // Load WordPress content if provided
         if (wordPressContent) {
-            // Pre-fill with WordPress post content
             let contentHtml = wordPressContent.content;
-            // Add title as heading if provided
             if (wordPressContent.title) {
                 contentHtml = `<h2>${wordPressContent.title}</h2>${contentHtml}`;
             }
             setContent(contentHtml);
-            // Add featured image if provided
             if (wordPressContent.featuredImage) {
                 setMedia([
                     {
@@ -36383,10 +36447,8 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
             }
         }
         else if (post) {
-            // Load existing post for editing
             setContent(post.value[0]?.content || '');
             setSelectedChannels([post.integration.id]);
-            // Load media if exists
             if (post.value[0]?.image) {
                 setMedia(post.value[0].image.map((img) => ({
                     id: img.id,
@@ -36394,15 +36456,21 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                     type: 'image',
                 })));
             }
-            // Load tags if exists
-            if (post.tags) {
-                setTags(post.tags);
+            if (post.tags && post.tags.length > 0) {
+                // Map from API format {tag: {id, name, color}} to UI format {label, value}
+                setTags(post.tags.map(t => ({
+                    label: t.tag.name,
+                    value: t.tag.id
+                })));
+            }
+            // Load existing settings if any
+            if (post.settings) {
+                setPlatformSettingsMap({ [post.integration.id]: post.settings });
             }
         }
     }, [date, post, wordPressContent]);
     const handleSubmit = async (type = 'schedule') => {
         setError(null);
-        // Validation
         if (selectedChannels.length === 0) {
             setError('Please select at least one channel');
             return;
@@ -36412,31 +36480,77 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
             setError('Please add some content or media');
             return;
         }
+        // Check if Pinterest is selected and media is required
+        const hasPinterest = selectedChannels.some((channelId) => {
+            const integration = integrations.find((i) => i.id === channelId);
+            return integration && getPlatformType(integration.identifier) === 'pinterest';
+        });
+        if (hasPinterest && media.length === 0) {
+            setError('Pinterest posts require at least one image or video. Please upload media.');
+            return;
+        }
+        // Warn about Discord/Slack channels
+        const hasDiscord = selectedChannels.some((channelId) => {
+            const integration = integrations.find((i) => i.id === channelId);
+            return integration && getPlatformType(integration.identifier) === 'discord';
+        });
+        if (hasDiscord) {
+            console.warn('Discord/Slack channels will be skipped - not fully supported in WordPress plugin yet');
+        }
         setIsSubmitting(true);
         try {
-            // Build payload matching PostQuee API structure
             const payload = {
                 type,
                 date: dayjs_min_default()(scheduledDate).toISOString(),
                 shortLink: false,
-                tags: tags.length > 0 ? tags : undefined, // Include tags if present
-                posts: selectedChannels.map((channelId) => ({
-                    integration: { id: channelId },
-                    value: [
-                        {
-                            content,
-                            image: media.map((m) => ({
-                                id: m.id,
-                                path: m.path,
-                            })),
-                        },
-                    ],
-                    settings: platformSettings || { __type: 'x' }, // Use platform settings if available
-                })),
+                tags: tags.length > 0 ? tags : [],
+                posts: selectedChannels.map((channelId) => {
+                    // Get specific settings for this channel or default
+                    let settings = platformSettingsMap[channelId];
+                    if (!settings) {
+                        const integration = integrations.find((i) => i.id === channelId);
+                        const type = integration ? getPlatformType(integration.identifier) : 'x';
+                        // Smart defaults
+                        if (type === 'discord') {
+                            // Discord/Slack require a specific channel ID within the integration
+                            // WordPress plugin doesn't have channel selection UI yet
+                            // Skip Discord channels for now to avoid validation errors
+                            console.warn(`Discord/Slack posting not fully supported in WordPress plugin yet. Skipping channel: ${integration?.name || channelId}`);
+                            return null; // Will be filtered out
+                        }
+                        else if (type === 'tiktok') {
+                            // TikTok requires all these fields
+                            settings = {
+                                __type: 'tiktok',
+                                privacy_level: 'PUBLIC_TO_EVERYONE',
+                                duet: true,
+                                stitch: true,
+                                comment: true,
+                                autoAddMusic: false,
+                                brand_organic_toggle: false,
+                                content_posting_method: 'DIRECT_POST',
+                            };
+                        }
+                        else {
+                            settings = { __type: type || 'x' };
+                        }
+                    }
+                    return {
+                        integration: { id: channelId },
+                        value: [
+                            {
+                                content,
+                                image: media.map((m) => ({
+                                    id: m.id,
+                                    path: m.path,
+                                })),
+                            },
+                        ],
+                        settings,
+                    };
+                }).filter((post) => post !== null), // Remove Discord/unsupported channels
             };
-            // Create or update post
             if (post?.id) {
-                // Update existing post (not implemented in API yet)
                 throw new Error('Post editing not yet available via API');
             }
             else {
@@ -36455,8 +36569,16 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
     };
     if (!date)
         return null;
-    // Get first selected integration for preview
     const previewIntegration = integrations.find((i) => i.id === selectedChannels[0]) || null;
+    // Helper to toggle accordion
+    const toggleSettings = (id) => {
+        if (openSettingsId === id) {
+            setOpenSettingsId(null);
+        }
+        else {
+            setOpenSettingsId(id);
+        }
+    };
     return (react.createElement("div", { className: "fixed inset-0 bg-newBackdrop flex items-center justify-center z-50 p-4", onClick: onClose },
         react.createElement("div", { className: "bg-newSettings rounded-lg border border-newBorder w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col", onClick: (e) => e.stopPropagation() },
             react.createElement("div", { className: "flex items-center justify-between p-4 border-b border-newBorder" },
@@ -36468,14 +36590,35 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                 react.createElement("div", { className: "grid grid-cols-2 gap-6 p-6" },
                     react.createElement("div", { className: "space-y-6" },
                         react.createElement(ChannelSelector, { integrations: integrations, selectedIds: selectedChannels, onChange: setSelectedChannels }),
-                        selectedChannels.length === 1 && (() => {
-                            const selectedIntegration = integrations.find((i) => i.id === selectedChannels[0]);
-                            return selectedIntegration ? (react.createElement(PlatformSettings, { integration: selectedIntegration, onChange: setPlatformSettings })) : null;
-                        })(),
+                        selectedChannels.length > 0 && (react.createElement("div", { className: "space-y-2" }, selectedChannels.map((channelId) => {
+                            const integration = integrations.find((i) => i.id === channelId);
+                            if (!integration)
+                                return null;
+                            const isOpen = openSettingsId === channelId || selectedChannels.length === 1;
+                            return (react.createElement("div", { key: channelId, className: "border border-newBorder rounded overflow-hidden" },
+                                selectedChannels.length > 1 && (react.createElement("button", { onClick: () => toggleSettings(channelId), className: "w-full flex items-center justify-between px-4 py-3 bg-[#FF6900] text-white hover:bg-[#E65E00] transition-colors" },
+                                    react.createElement("div", { className: "flex items-center gap-2" },
+                                        integration.picture ? (react.createElement("img", { src: integration.picture, alt: "", className: "w-5 h-5 rounded-full bg-white/10" })) : (react.createElement("div", { className: "w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold" }, integration.identifier?.[0]?.toUpperCase())),
+                                        react.createElement("span", { className: "font-medium text-sm" },
+                                            integration.name,
+                                            " Settings")),
+                                    react.createElement("svg", { className: `w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
+                                        react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M19 9l-7 7-7-7" })))),
+                                isOpen && (react.createElement("div", { className: selectedChannels.length > 1 ? 'p-4 bg-newBgColorInner' : '' },
+                                    react.createElement(PlatformSettings, { integration: integration, onChange: (newSettings) => {
+                                            setPlatformSettingsMap((prev) => ({
+                                                ...prev,
+                                                [channelId]: newSettings,
+                                            }));
+                                        } })))));
+                        }))),
                         react.createElement("div", null,
                             react.createElement("label", { className: "block text-sm font-medium text-newTextColor mb-3" }, "Content"),
                             react.createElement(TipTapEditor, { content: content, onChange: setContent, onAIRefine: () => setShowAIRefine(true) })),
-                        react.createElement(MediaUpload, { media: media, onChange: setMedia }),
+                        react.createElement(MediaUpload, { media: media, onChange: setMedia, required: selectedChannels.some((channelId) => {
+                                const integration = integrations.find((i) => i.id === channelId);
+                                return integration && getPlatformType(integration.identifier) === 'pinterest';
+                            }), requirementMessage: "Pinterest posts require at least one image or video." }),
                         react.createElement(DateTimePicker, { value: scheduledDate, onChange: setScheduledDate }),
                         react.createElement(TagsInput, { selectedTags: tags, onChange: setTags })),
                     react.createElement("div", { className: "sticky top-0" },
@@ -36607,8 +36750,18 @@ const CalendarAppInner = () => {
                 setEditingPost(null);
             }
         };
-        // Add event listener
+        // Listen for sidebar "Create Post" button clicks
+        const handleCreatePostEvent = (event) => {
+            const customEvent = event;
+            const date = customEvent.detail?.date ? dayjs_min_default()(customEvent.detail.date) : dayjs_min_default()();
+            // Open modal with the provided date
+            setModalDate(date);
+            setEditingPost(null);
+            setWordPressContent(null); // Clear any WordPress content
+        };
+        // Add event listeners
         window.addEventListener('message', handleMessage);
+        window.addEventListener('pq-open-create-modal', handleCreatePostEvent);
         // Check sessionStorage for pending message (from page navigation)
         const pendingMessage = sessionStorage.getItem('postquee_pending_message');
         if (pendingMessage) {
@@ -36630,6 +36783,7 @@ const CalendarAppInner = () => {
         }
         return () => {
             window.removeEventListener('message', handleMessage);
+            window.removeEventListener('pq-open-create-modal', handleCreatePostEvent);
         };
     }, []);
     // Clear WordPress content when modal closes

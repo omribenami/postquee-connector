@@ -119,7 +119,7 @@ class Controller
         ));
 
         // AI Refine Content (Phase 6)
-        register_rest_route('postquee/v1', '/ai/refine', array(
+        register_rest_route($namespace, '/ai-refine', array(
             'methods' => 'POST',
             'callback' => array($this, 'ai_refine'),
             'permission_callback' => array($this, 'check_permission'),
@@ -130,7 +130,7 @@ class Controller
                     'sanitize_callback' => 'sanitize_textarea_field',
                 ),
                 'prompt' => array(
-                    'required' => true,
+                    'required' => false,
                     'type' => 'string',
                     'sanitize_callback' => 'sanitize_text_field',
                 ),
@@ -229,6 +229,9 @@ class Controller
         update_post_meta($post_id, '_postquee_synced_id', $synced_id);
         delete_post_meta($post_id, '_postquee_error_log');
 
+        // Invalidate posts cache
+        update_option('postquee_posts_cache_version', time());
+
         return rest_ensure_response(array(
             'success' => true,
             'id' => $synced_id,
@@ -274,6 +277,15 @@ class Controller
             return new \WP_Error('missing_params', 'startDate and endDate required', array('status' => 400));
         }
 
+        // Check Cache
+        $cache_version = get_option('postquee_posts_cache_version', '1');
+        $cache_key = 'pq_posts_' . md5($cache_version . $api_key . $start_date . $end_date . ($customer ?: ''));
+        $cached = get_transient($cache_key);
+
+        if ($cached !== false) {
+            return rest_ensure_response($cached);
+        }
+
         $client = new Client($api_key);
         $endpoints = new Endpoints($client);
         $result = $endpoints->list_posts($start_date, $end_date, $customer);
@@ -281,6 +293,9 @@ class Controller
         if (is_wp_error($result)) {
             return $result;
         }
+
+        // Cache for 5 minutes
+        set_transient($cache_key, $result, 5 * MINUTE_IN_SECONDS);
 
         return rest_ensure_response($result);
     }
@@ -308,6 +323,9 @@ class Controller
             return $result;
         }
 
+        // Invalidate posts cache
+        update_option('postquee_posts_cache_version', time());
+
         return rest_ensure_response($result);
     }
 
@@ -333,6 +351,9 @@ class Controller
         if (is_wp_error($result)) {
             return $result;
         }
+
+        // Invalidate posts cache
+        update_option('postquee_posts_cache_version', time());
 
         return rest_ensure_response(array('success' => true, 'id' => $post_id));
     }
@@ -447,8 +468,8 @@ class Controller
         $content = $request->get_param('content');
         $prompt = $request->get_param('prompt');
 
-        if (empty($content) || empty($prompt)) {
-            return new \WP_Error('missing_params', 'Content and prompt are required', array('status' => 400));
+        if (empty($content)) {
+            return new \WP_Error('missing_params', 'Content is required', array('status' => 400));
         }
 
         $api_key = get_option(Settings::OPTION_API_KEY);
@@ -456,10 +477,10 @@ class Controller
             return new \WP_Error('no_api_key', 'API key not configured', array('status' => 400));
         }
 
-        // Call PostQuee's AI refinement endpoint
         $client = new Client($api_key);
         $endpoints = new Endpoints($client);
 
+        // Call the real API (which maps to /generate)
         $result = $endpoints->refine_content($content, $prompt);
 
         if (is_wp_error($result)) {

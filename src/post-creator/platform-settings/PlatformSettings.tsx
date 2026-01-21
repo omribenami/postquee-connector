@@ -5,6 +5,7 @@ import { XTwitterSettingsComponent } from './XTwitterSettings';
 import { FacebookSettingsComponent } from './FacebookSettings';
 import { LinkedInSettingsComponent } from './LinkedInSettings';
 import { InstagramSettingsComponent } from './InstagramSettings';
+import { PinterestSettingsComponent } from './PinterestSettings';
 
 interface PlatformSettingsProps {
   integration: Integration;
@@ -14,11 +15,14 @@ interface PlatformSettingsProps {
 /**
  * Map integration provider to platform type
  */
-const getPlatformType = (provider: string): PlatformSettingsType['__type'] | null => {
+export const getPlatformType = (provider: string): PlatformSettingsType['__type'] | null => {
   const providerLower = provider.toLowerCase();
 
   if (providerLower.includes('twitter') || providerLower === 'x') {
     return 'x';
+  }
+  if (providerLower.includes('discord') || providerLower.includes('slack')) {
+    return 'discord';
   }
   if (providerLower.includes('facebook')) {
     return 'facebook';
@@ -66,7 +70,16 @@ export const PlatformSettings: React.FC<PlatformSettingsProps> = ({ integration,
       case 'threads':
         return { __type: 'threads', who_can_reply: 'everyone' };
       case 'tiktok':
-        return { __type: 'tiktok', privacy: 'public' };
+        return {
+          __type: 'tiktok',
+          privacy_level: 'PUBLIC_TO_EVERYONE',
+          duet: true,
+          stitch: true,
+          comment: true,
+          autoAddMusic: false,
+          brand_organic_toggle: false,
+          content_posting_method: 'DIRECT_POST',
+        };
       case 'pinterest':
         return { __type: 'pinterest' };
       case 'youtube':
@@ -108,8 +121,17 @@ export const PlatformSettings: React.FC<PlatformSettingsProps> = ({ integration,
         <InstagramSettingsComponent settings={settings} onChange={handleSettingsChange} />
       )}
 
+      {/* Pinterest Settings */}
+      {platformType === 'pinterest' && settings.__type === 'pinterest' && (
+        <PinterestSettingsComponent
+          settings={settings}
+          onChange={handleSettingsChange}
+          integration={integration}
+        />
+      )}
+
       {/* Additional platforms can be added here */}
-      {(platformType === 'threads' || platformType === 'tiktok' || platformType === 'pinterest' || platformType === 'youtube') && (
+      {(platformType === 'threads' || platformType === 'tiktok' || platformType === 'youtube') && (
         <div className="text-sm text-textItemBlur text-center py-4">
           Advanced settings for {integration.identifier} coming soon
         </div>

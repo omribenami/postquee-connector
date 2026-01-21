@@ -123,10 +123,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post, variant = 'week', onDe
         <div className="mt-2">
           <span
             className={`text-xs px-2 py-1 rounded ${
-              post.state === 'published'
+              post.state === 'PUBLISHED'
                 ? 'bg-green-500/20 text-green-400'
-                : post.state === 'schedule'
+                : post.state === 'QUEUE'
                 ? 'bg-blue-500/20 text-blue-400'
+                : post.state === 'ERROR'
+                ? 'bg-red-500/20 text-red-400'
                 : 'bg-gray-500/20 text-gray-400'
             }`}
           >
