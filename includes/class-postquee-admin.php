@@ -119,7 +119,7 @@ class PostQuee_Admin
 				'postquee-calendar',
 				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.css',
 				array(),
-				$this->version
+				$this->version . '.' . time() // Force cache refresh
 			);
 
 			// Enqueue React calendar bundle
@@ -127,7 +127,7 @@ class PostQuee_Admin
 				'postquee-calendar-js',
 				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.bundle.js',
 				array(), // React is bundled, no dependencies
-				$this->version,
+				$this->version . '.' . time(), // Force cache refresh
 				true
 			);
 
