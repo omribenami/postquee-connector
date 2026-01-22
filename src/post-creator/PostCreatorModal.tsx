@@ -169,16 +169,26 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
           // Get specific settings for this channel or default
           let settings = platformSettingsMap[channelId];
 
+          const integration = integrations.find((i) => i.id === channelId);
+          const platformType = integration ? getPlatformType(integration.identifier) : 'x';
+
+          console.log('🔍 DEBUG - Processing channel:', {
+            channelId,
+            integrationName: integration?.name,
+            integrationIdentifier: integration?.identifier,
+            detectedPlatformType: platformType,
+            hasExistingSettings: !!settings
+          });
+
           if (!settings) {
-            const integration = integrations.find((i) => i.id === channelId);
-            const type = integration ? getPlatformType(integration.identifier) : 'x';
+            const type = platformType;
 
             // Smart defaults
             if (type === 'discord' || type === 'slack') {
               // Discord/Slack require a specific channel ID within the integration
               // WordPress plugin doesn't have channel selection UI yet
               // Skip Discord/Slack channels for now to avoid validation errors
-              console.warn(`Discord/Slack posting not fully supported in WordPress plugin yet. Skipping channel: ${integration?.name || channelId}`);
+              console.warn(`⚠️ DEBUG - Filtering out Discord/Slack channel: ${integration?.name || channelId} (type: ${type})`);
               return null; // Will be filtered out
             } else if (type === 'tiktok') {
               // TikTok requires all these fields
@@ -202,6 +212,13 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
             Object.entries(settings).filter(([_, value]) => value !== null && value !== undefined)
           );
 
+          console.log('🔍 DEBUG - Settings for channel:', {
+            channelId,
+            settingsBeforeClean: settings,
+            settingsAfterClean: cleanSettings,
+            willBeIncluded: true
+          });
+
           return {
             integration: { id: channelId },
             value: [
@@ -217,6 +234,8 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
           };
         }).filter((post) => post !== null), // Remove Discord/unsupported channels
       };
+
+      console.log('📤 DEBUG - Final payload being sent to API:', JSON.stringify(payload, null, 2));
 
       if (post?.id) {
         throw new Error('Post editing not yet available via API');
