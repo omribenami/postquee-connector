@@ -147,12 +147,13 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
     }
 
     // Warn about Discord/Slack channels
-    const hasDiscord = selectedChannels.some((channelId) => {
+    const hasUnsupportedChannels = selectedChannels.some((channelId) => {
       const integration = integrations.find((i) => i.id === channelId);
-      return integration && getPlatformType(integration.identifier) === 'discord';
+      const type = integration ? getPlatformType(integration.identifier) : null;
+      return type === 'discord' || type === 'slack';
     });
 
-    if (hasDiscord) {
+    if (hasUnsupportedChannels) {
       console.warn('Discord/Slack channels will be skipped - not fully supported in WordPress plugin yet');
     }
 
@@ -173,10 +174,10 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
             const type = integration ? getPlatformType(integration.identifier) : 'x';
 
             // Smart defaults
-            if (type === 'discord') {
+            if (type === 'discord' || type === 'slack') {
               // Discord/Slack require a specific channel ID within the integration
               // WordPress plugin doesn't have channel selection UI yet
-              // Skip Discord channels for now to avoid validation errors
+              // Skip Discord/Slack channels for now to avoid validation errors
               console.warn(`Discord/Slack posting not fully supported in WordPress plugin yet. Skipping channel: ${integration?.name || channelId}`);
               return null; // Will be filtered out
             } else if (type === 'tiktok') {

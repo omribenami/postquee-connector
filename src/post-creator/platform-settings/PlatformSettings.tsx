@@ -21,8 +21,11 @@ export const getPlatformType = (provider: string): PlatformSettingsType['__type'
   if (providerLower.includes('twitter') || providerLower === 'x') {
     return 'x';
   }
-  if (providerLower.includes('discord') || providerLower.includes('slack')) {
+  if (providerLower.includes('discord')) {
     return 'discord';
+  }
+  if (providerLower.includes('slack')) {
+    return 'slack';
   }
   if (providerLower.includes('facebook')) {
     return 'facebook';

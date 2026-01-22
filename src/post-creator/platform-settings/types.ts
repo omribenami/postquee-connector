@@ -71,6 +71,11 @@ export interface DiscordSettings {
   channel?: string; // Channel ID
 }
 
+export interface SlackSettings {
+  __type: 'slack';
+  channel?: string; // Channel ID
+}
+
 export type PlatformSettings =
   | XTwitterSettings
   | FacebookSettings
@@ -80,7 +85,8 @@ export type PlatformSettings =
   | TikTokSettings
   | PinterestSettings
   | YouTubeSettings
-  | DiscordSettings;
+  | DiscordSettings
+  | SlackSettings;
 
 export interface PlatformSettingsProps<T extends PlatformSettings> {
   settings: T;
