@@ -1,6 +1,6 @@
 {
   "name": "postquee-wordpress-plugin",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "PostQuee Calendar and Post Creator for WordPress",
   "private": true,
   "scripts": {
