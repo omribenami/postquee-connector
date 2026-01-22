@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { TipTapEditor } from './components/TipTapEditor';
 import { ChannelSelector } from './components/ChannelSelector';
@@ -7,10 +7,12 @@ import { PostPreview } from './components/PostPreview';
 import { DateTimePicker } from './components/DateTimePicker';
 import { TagsInput, type Tag } from './components/TagsInput';
 import { AIRefineModal } from './components/AIRefineModal';
+import { CharacterCounter } from './components/CharacterCounter';
 import { PlatformSettings, getPlatformType } from './platform-settings/PlatformSettings';
 import type { PlatformSettings as PlatformSettingsType } from './platform-settings/types';
 import { calendarAPI } from '../shared/api/client';
 import type { Integration, Post } from '../calendar/types';
+import { validateContentLength } from '../shared/utils/platformLimits';
 
 interface MediaItem {
   id: string;
@@ -101,6 +103,16 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
     }
   }, [date, post, wordPressContent]);
 
+  // Calculate character validation based on selected channels
+  const characterValidation = useMemo(() => {
+    const selectedIdentifiers = selectedChannels.map((channelId) => {
+      const integration = integrations.find((i) => i.id === channelId);
+      return integration?.identifier || '';
+    }).filter(Boolean);
+
+    return validateContentLength(content, selectedIdentifiers);
+  }, [content, selectedChannels, integrations]);
+
   const handleSubmit = async (type: 'schedule' | 'draft' = 'schedule') => {
     setError(null);
 
@@ -112,6 +124,14 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
     const textContent = content.replace(/<[^>]*>/g, '').trim();
     if (!textContent && media.length === 0) {
       setError('Please add some content or media');
+      return;
+    }
+
+    // Check character limit
+    if (!characterValidation.isValid) {
+      setError(
+        `Content exceeds ${characterValidation.platform} character limit by ${Math.abs(characterValidation.remaining)} characters`
+      );
       return;
     }
 
@@ -323,13 +343,22 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
               )}
 
               {/* Content Editor */}
-              <div>
-                <label className="block text-sm font-medium text-newTextColor mb-3">Content</label>
+              <div className="space-y-3">
+                <label className="block text-sm font-medium text-newTextColor">Content</label>
                 <TipTapEditor
                   content={content}
                   onChange={setContent}
                   onAIRefine={() => setShowAIRefine(true)}
                 />
+                {/* Character Counter */}
+                {selectedChannels.length > 0 && (
+                  <CharacterCounter
+                    currentLength={characterValidation.currentLength}
+                    limit={characterValidation.limit}
+                    platform={characterValidation.platform}
+                    remaining={characterValidation.remaining}
+                  />
+                )}
               </div>
 
               {/* Media Upload */}
@@ -403,7 +432,15 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
       {showAIRefine && (
         <AIRefineModal
           currentContent={content}
-          onApply={setContent}
+          onApply={(refinedContent, extractedTags) => {
+            setContent(refinedContent);
+            if (extractedTags && extractedTags.length > 0) {
+              // Merge with existing tags, avoiding duplicates
+              const existingValues = new Set(tags.map(t => t.value));
+              const newTags = extractedTags.filter(t => !existingValues.has(t.value));
+              setTags([...tags, ...newTags]);
+            }
+          }}
           onClose={() => setShowAIRefine(false)}
         />
       )}

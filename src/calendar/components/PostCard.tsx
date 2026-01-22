@@ -2,6 +2,7 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import dayjs from 'dayjs';
 import type { Post } from '../types';
+import { SocialIcon } from '../../shared/components/SocialIcon';
 
 const DND_TYPE = 'POST';
 
@@ -62,11 +63,22 @@ export const PostCard: React.FC<PostCardProps> = ({ post, variant = 'week', onDe
       {/* Header with integration info */}
       <div className="flex items-center gap-2 mb-1">
         {post.integration.picture && (
-          <img
-            src={post.integration.picture}
-            alt={post.integration.name}
-            className={variant === 'month' ? 'w-3 h-3 rounded-full' : 'w-4 h-4 rounded-full'}
-          />
+          <div className="relative flex-shrink-0">
+            <img
+              src={post.integration.picture}
+              alt={post.integration.name}
+              className={variant === 'month' ? 'w-3 h-3 rounded-full' : 'w-4 h-4 rounded-full'}
+            />
+            {/* Social media platform badge */}
+            <div className={`absolute -bottom-0.5 -right-0.5 bg-white rounded-full flex items-center justify-center border border-newBorder ${
+              variant === 'month' ? 'w-2 h-2' : 'w-2.5 h-2.5'
+            }`}>
+              <SocialIcon
+                identifier={post.integration.providerIdentifier}
+                className={variant === 'month' ? 'w-1 h-1' : 'w-1.5 h-1.5'}
+              />
+            </div>
+          </div>
         )}
         <span className="text-newTextColor font-medium truncate">
           {dayjs(post.publishDate).format('HH:mm')}

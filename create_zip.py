@@ -16,6 +16,8 @@ def zip_plugin(output_filename, source_dir):
         'create-release-zip.py',
         'create-release-zip.sh',
         'verify_zip.py',
+        'postquee-connector.zip', # Old build artifact
+        'postquee-connector-2.0.9.zip', # Old build artifact
         'README.md', # GitHub readme, not for WP plugin (we use readme.txt)
         'CLAUDE.md', # Development instructions
         '.gitignore',
@@ -98,8 +100,9 @@ def zip_plugin(output_filename, source_dir):
         print("  ✗ .bak and .map files\n")
 
 if __name__ == "__main__":
-    VERSION = "2.0.9"
+    VERSION = "2.1.0"
     output_file = f'postquee-connector-{VERSION}.zip'
     zip_plugin(output_file, '/root/WP_PostQuee')
     print(f"\n✨ PostQuee Connector v{VERSION} - Ready for distribution!")
+
     print(f"📍 Location: /root/{output_file}")

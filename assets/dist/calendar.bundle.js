@@ -6930,7 +6930,39 @@ function useRegisteredDragSource(spec, monitor, connector) {
 }
 
 //# sourceMappingURL=useDrag.js.map
+;// ./src/shared/components/SocialIcon.tsx
+
+/**
+ * Social Media Platform Icon Component
+ * Renders the appropriate icon based on the platform identifier
+ */
+const SocialIcon = ({ identifier, className = 'w-4 h-4' }) => {
+    const icons = {
+        x: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" }))),
+        facebook: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" }))),
+        linkedin: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" }))),
+        instagram: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" }))),
+        pinterest: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" }))),
+        tiktok: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" }))),
+        youtube: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" }))),
+        threads: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.295a13.526 13.526 0 0 1 3.02.142l.126.02.002-1.126c0-.926-.08-1.65-.237-2.152-.18-.577-.49-1.033-.92-1.353-.495-.37-1.184-.567-2.046-.586-.75-.015-1.438.155-2.046.505-.581.336-1.016.8-1.293 1.382l-1.828-.803c.434-.965 1.138-1.74 2.095-2.303.965-.566 2.084-.85 3.33-.846 1.346.024 2.448.336 3.27.93.854.616 1.445 1.485 1.755 2.582.157.56.235 1.42.235 2.554v6.464c.002.476.091.846.264 1.096.173.25.408.375.699.375.408 0 .776-.202 1.096-.604.32-.402.569-.967.745-1.687l1.633.546c-.268 1.012-.677 1.88-1.217 2.583-.54.703-1.25 1.054-2.115 1.054-.764 0-1.414-.27-1.936-.806-.522-.537-.784-1.253-.784-2.138v-.354c-1.784 2.13-4.117 3.127-6.947 2.965zm-.191-7.5c-1.065.05-1.933.335-2.583.845-.65.51-.975 1.165-.975 1.96 0 .86.355 1.555.975 2.085.62.53 1.455.795 2.505.795 1.065 0 1.978-.275 2.74-.825.761-.55 1.293-1.335 1.595-2.355.138-.47.207-1.015.207-1.635v-.885c-1.213-.142-2.493-.242-3.83-.242l-.634-.002zm8.304 3.635c-.002 0-.004-.002-.006-.004.002.002.004.004.006.004z" }))),
+    };
+    const defaultIcon = (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        react.createElement("circle", { cx: "12", cy: "12", r: "10", fillOpacity: "0.3" }),
+        react.createElement("path", { d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" })));
+    return icons[identifier.toLowerCase()] || defaultIcon;
+};
+
 ;// ./src/calendar/components/PostCard.tsx
+
 
 
 
@@ -6972,7 +7004,10 @@ const PostCard = ({ post, variant = 'week', onDelete, onEdit }) => {
     };
     return (react.createElement("div", { ref: drag, className: `mb-1 rounded bg-newColColor border-l-2 border-btnPrimary hover:bg-newBoxHover cursor-move group ${getVariantStyles()} ${isDragging ? 'opacity-50' : ''}`, onClick: handleEdit },
         react.createElement("div", { className: "flex items-center gap-2 mb-1" },
-            post.integration.picture && (react.createElement("img", { src: post.integration.picture, alt: post.integration.name, className: variant === 'month' ? 'w-3 h-3 rounded-full' : 'w-4 h-4 rounded-full' })),
+            post.integration.picture && (react.createElement("div", { className: "relative flex-shrink-0" },
+                react.createElement("img", { src: post.integration.picture, alt: post.integration.name, className: variant === 'month' ? 'w-3 h-3 rounded-full' : 'w-4 h-4 rounded-full' }),
+                react.createElement("div", { className: `absolute -bottom-0.5 -right-0.5 bg-white rounded-full flex items-center justify-center border border-newBorder ${variant === 'month' ? 'w-2 h-2' : 'w-2.5 h-2.5'}` },
+                    react.createElement(SocialIcon, { identifier: post.integration.providerIdentifier, className: variant === 'month' ? 'w-1 h-1' : 'w-1.5 h-1.5' })))),
             react.createElement("span", { className: "text-newTextColor font-medium truncate" }, dayjs_min_default()(post.publishDate).format('HH:mm')),
             react.createElement("div", { className: "ml-auto opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity" },
                 onEdit && (react.createElement("button", { onClick: handleEdit, className: "p-1 hover:bg-newBoxHover rounded", title: "Edit post" },
@@ -35809,6 +35844,7 @@ const TipTapEditor = ({ content, onChange, placeholder = 'Write your post...', o
 
 ;// ./src/post-creator/components/ChannelSelector.tsx
 
+
 /**
  * Channel Selection Component
  * Displays available integrations as circular icons
@@ -35833,9 +35869,12 @@ const ChannelSelector = ({ integrations, selectedIds, onChange, }) => {
             const isSelected = selectedIds.includes(integration.id);
             const isDisabled = integration.disabled;
             return (react.createElement("button", { key: integration.id, onClick: () => !isDisabled && toggleChannel(integration.id), disabled: isDisabled, className: `relative group ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`, title: integration.name },
-                react.createElement("div", { className: `w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${isSelected
-                        ? 'border-btnPrimary ring-2 ring-btnPrimary/30'
-                        : 'border-newBorder grayscale hover:grayscale-0'}` }, integration.picture ? (react.createElement("img", { src: integration.picture, alt: integration.name, className: "w-full h-full object-cover" })) : (react.createElement("div", { className: "w-full h-full bg-newBgColorInner flex items-center justify-center text-newTextColor font-semibold" }, integration.name.charAt(0).toUpperCase()))),
+                react.createElement("div", { className: "relative" },
+                    react.createElement("div", { className: `w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${isSelected
+                            ? 'border-btnPrimary ring-2 ring-btnPrimary/30'
+                            : 'border-newBorder grayscale hover:grayscale-0'}` }, integration.picture ? (react.createElement("img", { src: integration.picture, alt: integration.name, className: "w-full h-full object-cover" })) : (react.createElement("div", { className: "w-full h-full bg-newBgColorInner flex items-center justify-center text-newTextColor font-semibold" }, integration.name.charAt(0).toUpperCase()))),
+                    react.createElement("div", { className: "absolute bottom-0 right-0 w-5 h-5 bg-white rounded-full flex items-center justify-center border border-newBorder" },
+                        react.createElement(SocialIcon, { identifier: integration.identifier, className: "w-3 h-3" }))),
                 isSelected && (react.createElement("div", { className: "absolute -top-1 -right-1 w-5 h-5 bg-btnPrimary rounded-full flex items-center justify-center" },
                     react.createElement("svg", { className: "w-3 h-3 text-white", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
                         react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 3, d: "M5 13l4 4L19 7" })))),
@@ -36106,8 +36145,15 @@ const AIRefineModal = ({ currentContent, onApply, onClose, }) => {
     };
     const handleApply = () => {
         if (refinedContent) {
+            // Extract hashtags from refined content
+            const hashtagRegex = /#[\w]+/g;
+            const hashtags = refinedContent.match(hashtagRegex) || [];
+            const extractedTags = hashtags.map(tag => ({
+                label: tag,
+                value: tag.substring(1), // Remove the # symbol
+            }));
             // Wrap in paragraph tags to match TipTap format
-            onApply(`<p>${refinedContent}</p>`);
+            onApply(`<p>${refinedContent}</p>`, extractedTags);
             onClose();
         }
     };
@@ -36144,6 +36190,60 @@ const AIRefineModal = ({ currentContent, onApply, onClose, }) => {
                 react.createElement("div", { className: "flex items-center gap-3" }, !refinedContent ? (react.createElement("button", { onClick: handleRefine, disabled: isRefining || !currentContent.trim(), className: "px-6 py-2 rounded bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed" }, isRefining ? 'Refining...' : 'Refine with AI')) : (react.createElement(react.Fragment, null,
                     react.createElement("button", { onClick: () => setRefinedContent(''), className: "px-4 py-2 rounded border border-newBorder text-newTextColor hover:bg-newBoxHover transition-colors" }, "Try Again"),
                     react.createElement("button", { onClick: handleApply, className: "px-6 py-2 rounded bg-btnPrimary text-white hover:bg-btnPrimaryHover transition-colors font-medium" }, "Apply Suggestion"))))))));
+};
+
+;// ./src/post-creator/components/CharacterCounter.tsx
+
+/**
+ * Character Counter Component
+ * Shows current character count and limit with visual warning
+ */
+const CharacterCounter = ({ currentLength, limit, platform, remaining, }) => {
+    // Calculate percentage for visual indicator
+    const percentage = (currentLength / limit) * 100;
+    // Determine color based on remaining characters
+    const getColorClasses = () => {
+        if (remaining < 0) {
+            return 'text-red-400 font-semibold'; // Over limit
+        }
+        else if (remaining < limit * 0.1) {
+            return 'text-orange-400'; // Warning: less than 10% remaining
+        }
+        else {
+            return 'text-textItemBlur'; // Normal
+        }
+    };
+    // Determine progress bar color
+    const getProgressColor = () => {
+        if (remaining < 0) {
+            return 'bg-red-500';
+        }
+        else if (remaining < limit * 0.1) {
+            return 'bg-orange-500';
+        }
+        else {
+            return 'bg-btnPrimary';
+        }
+    };
+    return (react.createElement("div", { className: "space-y-2" },
+        react.createElement("div", { className: "flex items-center justify-between text-xs" },
+            react.createElement("span", { className: getColorClasses() },
+                currentLength,
+                " / ",
+                limit,
+                " characters"),
+            react.createElement("span", { className: "text-textItemBlur" }, platform)),
+        react.createElement("div", { className: "h-1 bg-newBgColorInner rounded-full overflow-hidden" },
+            react.createElement("div", { className: `h-full transition-all duration-300 ${getProgressColor()}`, style: { width: `${Math.min(percentage, 100)}%` } })),
+        remaining < 0 && (react.createElement("div", { className: "text-xs text-red-400 flex items-center gap-1" },
+            react.createElement("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
+                react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" })),
+            react.createElement("span", null,
+                "Content exceeds ",
+                platform,
+                " character limit by ",
+                Math.abs(remaining),
+                " characters")))));
 };
 
 ;// ./src/post-creator/platform-settings/XTwitterSettings.tsx
@@ -36395,7 +36495,73 @@ const PlatformSettings = ({ integration, onChange }) => {
             " coming soon"))));
 };
 
+;// ./src/shared/utils/platformLimits.ts
+/**
+ * Character limits and validation rules for different social media platforms
+ */
+const PLATFORM_LIMITS = {
+    x: { maxChars: 280, name: 'X (Twitter)' },
+    facebook: { maxChars: 63206, name: 'Facebook' }, // Practically unlimited, but 63k is the technical limit
+    linkedin: { maxChars: 3000, name: 'LinkedIn' },
+    instagram: { maxChars: 2200, name: 'Instagram' },
+    pinterest: { maxChars: 500, name: 'Pinterest' },
+    tiktok: { maxChars: 2200, name: 'TikTok' },
+    youtube: { maxChars: 5000, name: 'YouTube' },
+    threads: { maxChars: 500, name: 'Threads' },
+};
+/**
+ * Get character limit for a platform
+ */
+const getCharacterLimit = (identifier) => {
+    return PLATFORM_LIMITS[identifier.toLowerCase()]?.maxChars || 2200; // Default to Instagram limit
+};
+/**
+ * Get the most restrictive character limit from selected platforms
+ */
+const getMostRestrictiveLimit = (identifiers) => {
+    if (identifiers.length === 0) {
+        return { limit: 280, platform: 'X (Twitter)' }; // Default to Twitter as it's most restrictive
+    }
+    let minLimit = Infinity;
+    let minPlatform = '';
+    identifiers.forEach((id) => {
+        const limit = getCharacterLimit(id);
+        if (limit < minLimit) {
+            minLimit = limit;
+            minPlatform = PLATFORM_LIMITS[id.toLowerCase()]?.name || id;
+        }
+    });
+    return { limit: minLimit, platform: minPlatform };
+};
+/**
+ * Count characters in text (strips HTML tags)
+ */
+const countCharacters = (htmlContent) => {
+    // Remove HTML tags
+    const textContent = htmlContent.replace(/<[^>]*>/g, '');
+    // Remove extra whitespace
+    const cleanText = textContent.trim();
+    return cleanText.length;
+};
+/**
+ * Validate content against platform limits
+ */
+const validateContentLength = (htmlContent, selectedIdentifiers) => {
+    const currentLength = countCharacters(htmlContent);
+    const { limit, platform } = getMostRestrictiveLimit(selectedIdentifiers);
+    const remaining = limit - currentLength;
+    return {
+        isValid: currentLength <= limit,
+        currentLength,
+        limit,
+        platform,
+        remaining,
+    };
+};
+
 ;// ./src/post-creator/PostCreatorModal.tsx
+
+
 
 
 
@@ -36469,6 +36635,14 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
             }
         }
     }, [date, post, wordPressContent]);
+    // Calculate character validation based on selected channels
+    const characterValidation = (0,react.useMemo)(() => {
+        const selectedIdentifiers = selectedChannels.map((channelId) => {
+            const integration = integrations.find((i) => i.id === channelId);
+            return integration?.identifier || '';
+        }).filter(Boolean);
+        return validateContentLength(content, selectedIdentifiers);
+    }, [content, selectedChannels, integrations]);
     const handleSubmit = async (type = 'schedule') => {
         setError(null);
         if (selectedChannels.length === 0) {
@@ -36478,6 +36652,11 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
         const textContent = content.replace(/<[^>]*>/g, '').trim();
         if (!textContent && media.length === 0) {
             setError('Please add some content or media');
+            return;
+        }
+        // Check character limit
+        if (!characterValidation.isValid) {
+            setError(`Content exceeds ${characterValidation.platform} character limit by ${Math.abs(characterValidation.remaining)} characters`);
             return;
         }
         // Check if Pinterest is selected and media is required
@@ -36612,9 +36791,10 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                                             }));
                                         } })))));
                         }))),
-                        react.createElement("div", null,
-                            react.createElement("label", { className: "block text-sm font-medium text-newTextColor mb-3" }, "Content"),
-                            react.createElement(TipTapEditor, { content: content, onChange: setContent, onAIRefine: () => setShowAIRefine(true) })),
+                        react.createElement("div", { className: "space-y-3" },
+                            react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Content"),
+                            react.createElement(TipTapEditor, { content: content, onChange: setContent, onAIRefine: () => setShowAIRefine(true) }),
+                            selectedChannels.length > 0 && (react.createElement(CharacterCounter, { currentLength: characterValidation.currentLength, limit: characterValidation.limit, platform: characterValidation.platform, remaining: characterValidation.remaining }))),
                         react.createElement(MediaUpload, { media: media, onChange: setMedia, required: selectedChannels.some((channelId) => {
                                 const integration = integrations.find((i) => i.id === channelId);
                                 return integration && getPlatformType(integration.identifier) === 'pinterest';
@@ -36635,7 +36815,15 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                         react.createElement("button", { onClick: onClose, disabled: isSubmitting, className: "px-4 py-2 rounded border border-newBorder text-newTextColor hover:bg-newBoxHover transition-colors disabled:opacity-50" }, "Cancel"),
                         react.createElement("button", { onClick: () => handleSubmit('draft'), disabled: isSubmitting, className: "px-4 py-2 rounded border border-newBorder text-newTextColor hover:bg-newBoxHover transition-colors disabled:opacity-50" }, "Save as Draft"),
                         react.createElement("button", { onClick: () => handleSubmit('schedule'), disabled: isSubmitting, className: "px-6 py-2 rounded bg-btnPrimary text-white hover:bg-btnPrimaryHover transition-colors disabled:opacity-50 font-medium" }, isSubmitting ? 'Scheduling...' : 'Schedule Post'))))),
-        showAIRefine && (react.createElement(AIRefineModal, { currentContent: content, onApply: setContent, onClose: () => setShowAIRefine(false) }))));
+        showAIRefine && (react.createElement(AIRefineModal, { currentContent: content, onApply: (refinedContent, extractedTags) => {
+                setContent(refinedContent);
+                if (extractedTags && extractedTags.length > 0) {
+                    // Merge with existing tags, avoiding duplicates
+                    const existingValues = new Set(tags.map(t => t.value));
+                    const newTags = extractedTags.filter(t => !existingValues.has(t.value));
+                    setTags([...tags, ...newTags]);
+                }
+            }, onClose: () => setShowAIRefine(false) }))));
 };
 
 ;// ./src/calendar/CalendarApp.tsx

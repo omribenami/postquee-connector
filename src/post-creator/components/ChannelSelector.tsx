@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Integration } from '../../calendar/types';
+import { SocialIcon } from '../../shared/components/SocialIcon';
 
 interface ChannelSelectorProps {
   integrations: Integration[];
@@ -53,25 +54,32 @@ export const ChannelSelector: React.FC<ChannelSelectorProps> = ({
               className={`relative group ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
               title={integration.name}
             >
-              {/* Channel icon */}
-              <div
-                className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${
-                  isSelected
-                    ? 'border-btnPrimary ring-2 ring-btnPrimary/30'
-                    : 'border-newBorder grayscale hover:grayscale-0'
-                }`}
-              >
-                {integration.picture ? (
-                  <img
-                    src={integration.picture}
-                    alt={integration.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-newBgColorInner flex items-center justify-center text-newTextColor font-semibold">
-                    {integration.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
+              {/* Channel icon with platform badge */}
+              <div className="relative">
+                <div
+                  className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${
+                    isSelected
+                      ? 'border-btnPrimary ring-2 ring-btnPrimary/30'
+                      : 'border-newBorder grayscale hover:grayscale-0'
+                  }`}
+                >
+                  {integration.picture ? (
+                    <img
+                      src={integration.picture}
+                      alt={integration.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-newBgColorInner flex items-center justify-center text-newTextColor font-semibold">
+                      {integration.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+
+                {/* Social media platform badge */}
+                <div className="absolute bottom-0 right-0 w-5 h-5 bg-white rounded-full flex items-center justify-center border border-newBorder">
+                  <SocialIcon identifier={integration.identifier} className="w-3 h-3" />
+                </div>
               </div>
 
               {/* Selection checkmark */}

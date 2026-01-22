@@ -3,7 +3,7 @@
  * Matches the PostQuee app calendar functionality
  */
 
-(function($) {
+(function ($) {
     'use strict';
 
     // Configuration
@@ -185,7 +185,7 @@
                 const isToday = this.isToday(day);
                 const dayName = day.toLocaleDateString('en-US', { weekday: 'long' });
                 const dateStr = (day.getMonth() + 1).toString().padStart(2, '0') + '/' +
-                               day.getDate().toString().padStart(2, '0');
+                    day.getDate().toString().padStart(2, '0');
                 html += `<div class="pq-day-header ${isToday ? 'today' : ''}">
                     <div class="day-name">${dayName}</div>
                     <div class="day-num">${dateStr}</div>
@@ -282,7 +282,8 @@
         },
 
         renderPost(post) {
-            const content = this.escapeHtml(post.content || '').substring(0, 50);
+            const rawContent = post.content || post.title || 'Untitled Post';
+            const content = this.escapeHtml(rawContent).substring(0, 50);
             const integration = post.integration || {};
             const picture = integration.picture || '';
 
@@ -295,22 +296,25 @@
 
         getPostsForSlot(slotDate) {
             return CalendarState.posts.filter(post => {
-                if (!post.publishDate) return false;
-                const postDate = new Date(post.publishDate);
+                const dateStr = post.scheduledAt || post.publishDate || post.date;
+                if (!dateStr) return false;
+
+                const postDate = new Date(dateStr);
                 return postDate.getFullYear() === slotDate.getFullYear() &&
-                       postDate.getMonth() === slotDate.getMonth() &&
-                       postDate.getDate() === slotDate.getDate() &&
-                       postDate.getHours() === slotDate.getHours();
+                    postDate.getMonth() === slotDate.getMonth() &&
+                    postDate.getDate() === slotDate.getDate() &&
+                    postDate.getHours() === slotDate.getHours();
             });
         },
 
         getPostsForDay(date) {
             return CalendarState.posts.filter(post => {
-                if (!post.publishDate) return false;
-                const postDate = new Date(post.publishDate);
+                const dateStr = post.scheduledAt || post.publishDate || post.date;
+                if (!dateStr) return false;
+                const postDate = new Date(dateStr);
                 return postDate.getFullYear() === date.getFullYear() &&
-                       postDate.getMonth() === date.getMonth() &&
-                       postDate.getDate() === date.getDate();
+                    postDate.getMonth() === date.getMonth() &&
+                    postDate.getDate() === date.getDate();
             });
         },
 
@@ -324,8 +328,8 @@
         isToday(date) {
             const today = new Date();
             return date.getDate() === today.getDate() &&
-                   date.getMonth() === today.getMonth() &&
-                   date.getFullYear() === today.getFullYear();
+                date.getMonth() === today.getMonth() &&
+                date.getFullYear() === today.getFullYear();
         },
 
         escapeHtml(text) {
@@ -353,31 +357,31 @@
             const self = this;
 
             // Open modal
-            $('#postquee_open_create, .pq-time-slot').on('click', function(e) {
+            $('#postquee_open_create, .pq-time-slot').on('click', function (e) {
                 if ($(e.target).closest('.pq-calendar-post').length) return;
                 const slotDate = $(this).data('date');
                 self.open(slotDate);
             });
 
             // Close modal
-            $('.postquee-close-modal, .postquee-modal').on('click', function(e) {
+            $('.postquee-close-modal, .postquee-modal').on('click', function (e) {
                 if (e.target === this) {
                     self.close();
                 }
             });
 
             // Live preview
-            this.$content.on('input', function() {
+            this.$content.on('input', function () {
                 const text = $(this).val() || 'Your post caption will appear here...';
                 self.$preview.text(text);
             });
 
             // Image preview
-            $('[name="postque_image"]').on('change', function(e) {
+            $('[name="postque_image"]').on('change', function (e) {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         self.$imagePreview.html(`<img src="${e.target.result}" alt="Preview">`).removeClass('empty');
                     };
                     reader.readAsDataURL(file);
@@ -387,7 +391,7 @@
             });
 
             // Schedule radio
-            this.$scheduleRadio.on('change', function() {
+            this.$scheduleRadio.on('change', function () {
                 if ($(this).val() === 'schedule') {
                     self.$scheduleInput.slideDown();
                 } else {
@@ -396,7 +400,7 @@
             });
 
             // AI Assistant
-            $('#postquee_ai_btn').on('click', function() {
+            $('#postquee_ai_btn').on('click', function () {
                 self.handleAIAssist();
             });
         },
@@ -484,7 +488,7 @@
         },
 
         bindViewSwitcher() {
-            $('.postquee-btn-group button').on('click', function() {
+            $('.postquee-btn-group button').on('click', function () {
                 $('.postquee-btn-group button').removeClass('active');
                 $(this).addClass('active');
 
@@ -495,7 +499,7 @@
         },
 
         bindPostActions() {
-            $(document).on('click', '.pq-post-delete', async function(e) {
+            $(document).on('click', '.pq-post-delete', async function (e) {
                 e.stopPropagation();
                 const postId = $(this).data('id');
 
@@ -570,7 +574,11 @@
 
             try {
                 const data = await API.getPosts(startDate, endDate);
+                console.log('API Response:', data); // DEBUG
                 CalendarState.posts = data.posts || [];
+                if (CalendarState.posts.length > 0) {
+                    console.log('First Post Structure:', CalendarState.posts[0]); // DEBUG
+                }
                 console.log('Loaded posts:', CalendarState.posts.length);
             } catch (error) {
                 console.error('Failed to load posts:', error);
@@ -580,7 +588,7 @@
     };
 
     // Initialize when DOM is ready
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Only init on the PostQuee dashboard page
         if ($('.postquee-app-container').length) {
             CalendarApp.init();

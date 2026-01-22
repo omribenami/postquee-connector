@@ -138,6 +138,31 @@ class Dashboard
                                         <?php else: ?>
                                             <span class="dashicons dashicons-admin-site"></span>
                                         <?php endif; ?>
+
+                                        <?php
+                                        // Map provider to dashicon
+                                        $icon_class = 'dashicons-share';
+                                        $prov_lower = strtolower($provider);
+                                        if (strpos($prov_lower, 'twitter') !== false || strpos($prov_lower, 'x') !== false)
+                                            $icon_class = 'dashicons-twitter';
+                                        elseif (strpos($prov_lower, 'facebook') !== false)
+                                            $icon_class = 'dashicons-facebook';
+                                        elseif (strpos($prov_lower, 'instagram') !== false)
+                                            $icon_class = 'dashicons-camera';
+                                        elseif (strpos($prov_lower, 'linkedin') !== false)
+                                            $icon_class = 'dashicons-businessman';
+                                        elseif (strpos($prov_lower, 'youtube') !== false)
+                                            $icon_class = 'dashicons-video-alt3';
+                                        elseif (strpos($prov_lower, 'tiktok') !== false)
+                                            $icon_class = 'dashicons-format-video';
+                                        elseif (strpos($prov_lower, 'pinterest') !== false)
+                                            $icon_class = 'dashicons-format-image';
+                                        ?>
+                                        <div class="postquee-provider-icon provider-<?php echo esc_attr($prov_lower); ?>"
+                                            style="position: absolute; bottom: -4px; right: -4px; width: 16px; height: 16px; background: #1F2937; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #030304; color: white; z-index: 99; box-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                                            <span class="dashicons <?php echo esc_attr($icon_class); ?>"
+                                                style="font-size: 10px; width: 10px; height: 10px;"></span>
+                                        </div>
                                     </div>
                                     <div class="postquee-channel-info">
                                         <span class="postquee-channel-name"><?php echo esc_html($integ['name']); ?></span>
@@ -147,6 +172,24 @@ class Dashboard
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
+
+                    <!-- DEBUG SECTION -->
+                    <div style="margin-top: 20px; padding: 10px; background: rgba(255,0,0,0.1); border: 1px solid red; font-size: 10px; color: white; display: none;"
+                        id="pq-debug-area">
+                        <strong>Debug Info:</strong><br>
+                        Integrations (PHP): <?php echo count($integrations); ?><br>
+                        API Key: <?php echo $api_key ? 'Set' : 'Missing'; ?><br>
+                        JS Loaded Posts: <span id="pq-debug-posts">...</span><br>
+                        First Post Date: <span id="pq-debug-date">...</span>
+                        <div id="pq-debug-raw" style="white-space: pre; overflow: hidden; height: 50px;"></div>
+                    </div>
+                    <script>
+                        // Force show debug if 'debug' param is in URL
+                        if (window.location.search.indexOf('debug') > -1) {
+                            document.getElementById('pq-debug-area').style.display = 'block';
+                        }
+                    </script>
+
 
                     <a href="https://discord.gg/hrxAGpV5cP" target="_blank" class="postquee-discord-float">
                         <span class="dashicons dashicons-groups" style="margin-right: 8px;"></span> Discord Support
@@ -244,6 +287,31 @@ class Dashboard
                                                         <?php else: ?>
                                                             <span class="dashicons dashicons-share channel-icon"></span>
                                                         <?php endif; ?>
+
+                                                        <?php
+                                                        // Map provider to dashicon for modal
+                                                        $icon_class = 'dashicons-share';
+                                                        $prov_lower = strtolower($provider);
+                                                        if (strpos($prov_lower, 'twitter') !== false || strpos($prov_lower, 'x') !== false)
+                                                            $icon_class = 'dashicons-twitter';
+                                                        elseif (strpos($prov_lower, 'facebook') !== false)
+                                                            $icon_class = 'dashicons-facebook';
+                                                        elseif (strpos($prov_lower, 'instagram') !== false)
+                                                            $icon_class = 'dashicons-camera';
+                                                        elseif (strpos($prov_lower, 'linkedin') !== false)
+                                                            $icon_class = 'dashicons-businessman';
+                                                        elseif (strpos($prov_lower, 'youtube') !== false)
+                                                            $icon_class = 'dashicons-video-alt3';
+                                                        elseif (strpos($prov_lower, 'tiktok') !== false)
+                                                            $icon_class = 'dashicons-format-video';
+                                                        elseif (strpos($prov_lower, 'pinterest') !== false)
+                                                            $icon_class = 'dashicons-format-image';
+                                                        ?>
+                                                        <div class="postquee-provider-icon provider-<?php echo esc_attr($prov_lower); ?>"
+                                                            style="width:14px; height:14px; bottom: 0; right: 0;">
+                                                            <span class="dashicons <?php echo esc_attr($icon_class); ?>"
+                                                                style="font-size: 8px; width: 8px; height: 8px;"></span>
+                                                        </div>
                                                         <span class="channel-name"
                                                             style="font-weight: 600; margin-bottom: 4px;"><?php echo esc_html($integ['name']); ?></span>
                                                         <span class="channel-name"

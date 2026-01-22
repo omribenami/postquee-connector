@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('POSTQUEE_BRIDGE_VERSION', '2.0.9');
+define('POSTQUEE_BRIDGE_VERSION', '2.1.0');
 define('POSTQUEE_BRIDGE_PATH', plugin_dir_path(__FILE__));
 define('POSTQUEE_BRIDGE_URL', plugin_dir_url(__FILE__));
 

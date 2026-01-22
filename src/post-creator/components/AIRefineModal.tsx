@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 interface AIRefineModalProps {
   currentContent: string;
-  onApply: (refinedContent: string) => void;
+  onApply: (refinedContent: string, extractedTags?: Array<{ label: string; value: string }>) => void;
   onClose: () => void;
 }
 
@@ -69,8 +69,16 @@ export const AIRefineModal: React.FC<AIRefineModalProps> = ({
 
   const handleApply = () => {
     if (refinedContent) {
+      // Extract hashtags from refined content
+      const hashtagRegex = /#[\w]+/g;
+      const hashtags = refinedContent.match(hashtagRegex) || [];
+      const extractedTags = hashtags.map(tag => ({
+        label: tag,
+        value: tag.substring(1), // Remove the # symbol
+      }));
+
       // Wrap in paragraph tags to match TipTap format
-      onApply(`<p>${refinedContent}</p>`);
+      onApply(`<p>${refinedContent}</p>`, extractedTags);
       onClose();
     }
   };
