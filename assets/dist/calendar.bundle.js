@@ -862,7 +862,7 @@ __webpack_require__.d(NativeTypes_namespaceObject, {
   FILE: function() { return FILE; },
   HTML: function() { return HTML; },
   TEXT: function() { return TEXT; },
-  URL: function() { return NativeTypes_URL; }
+  URL: function() { return URL; }
 });
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
@@ -2438,6 +2438,27 @@ class CalendarAPI {
     getIntegrations() {
         // Already passed from PHP, return from window
         return window.postqueeWP.integrations || [];
+    }
+    /**
+     * Upload media file
+     */
+    async uploadMedia(file) {
+        const { restUrl, nonce } = window.postqueeWP;
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await fetch(`${restUrl}upload`, {
+            method: 'POST',
+            headers: {
+                'X-WP-Nonce': nonce,
+            },
+            body: formData,
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            const message = errorData.message || `Upload failed: ${response.statusText}`;
+            throw new Error(message);
+        }
+        return response.json();
     }
 }
 const calendarAPI = new CalendarAPI();
@@ -5006,7 +5027,7 @@ class NativeDragSource {
 //# sourceMappingURL=NativeDragSource.js.map
 ;// ./node_modules/react-dnd-html5-backend/dist/NativeTypes.js
 const FILE = '__NATIVE_FILE__';
-const NativeTypes_URL = '__NATIVE_URL__';
+const URL = '__NATIVE_URL__';
 const TEXT = '__NATIVE_TEXT__';
 const HTML = '__NATIVE_HTML__';
 
@@ -5046,7 +5067,7 @@ const nativeTypesConfig = {
             'text/html'
         ]
     },
-    [NativeTypes_URL]: {
+    [URL]: {
         exposeProperties: {
             urls: (dataTransfer, matchesTypes)=>getDataFromDataTransfer(dataTransfer, matchesTypes, '').split('\n')
             ,
@@ -35890,27 +35911,50 @@ const ChannelSelector = ({ integrations, selectedIds, onChange, }) => {
 
 ;// ./src/post-creator/components/MediaUpload.tsx
 
+
 /**
  * Media Upload Component
- * Simple file upload with preview (can be enhanced with Uppy in Phase 5)
+ * Uploads files to PostQuee and provides preview
  */
 const MediaUpload = ({ media, onChange, maxFiles = 4, required = false, requirementMessage = '', }) => {
     const fileInputRef = (0,react.useRef)(null);
+    const [isUploading, setIsUploading] = (0,react.useState)(false);
+    const [uploadError, setUploadError] = (0,react.useState)(null);
     const handleFileSelect = async (e) => {
         const files = e.target.files;
         if (!files || files.length === 0)
             return;
-        // For now, create object URLs for preview
-        // In production, this would upload to PostQuee API
-        const newMedia = Array.from(files).map((file) => ({
-            id: `temp-${Date.now()}-${Math.random()}`,
-            path: URL.createObjectURL(file),
-            type: file.type.startsWith('image/') ? 'image' : 'video',
-        }));
-        onChange([...media, ...newMedia].slice(0, maxFiles));
-        // Reset input
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+        setIsUploading(true);
+        setUploadError(null);
+        try {
+            // Upload files to PostQuee API
+            const uploadedMedia = [];
+            for (const file of Array.from(files).slice(0, maxFiles - media.length)) {
+                try {
+                    const result = await calendarAPI.uploadMedia(file);
+                    uploadedMedia.push({
+                        id: result.id || `uploaded-${Date.now()}-${Math.random()}`,
+                        path: result.path,
+                        type: file.type.startsWith('image/') ? 'image' : 'video',
+                    });
+                }
+                catch (error) {
+                    console.error('Upload error for file:', file.name, error);
+                    setUploadError(`Failed to upload ${file.name}: ${error.message}`);
+                }
+            }
+            onChange([...media, ...uploadedMedia].slice(0, maxFiles));
+        }
+        catch (error) {
+            console.error('Upload error:', error);
+            setUploadError(error.message || 'Failed to upload files');
+        }
+        finally {
+            setIsUploading(false);
+            // Reset input
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
         }
     };
     const removeMedia = (id) => {
@@ -35933,14 +35977,19 @@ const MediaUpload = ({ media, onChange, maxFiles = 4, required = false, requirem
             react.createElement("button", { onClick: () => removeMedia(item.id), className: "absolute top-1 right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" },
                 react.createElement("svg", { className: "w-4 h-4 text-white", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
                     react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" })))))))),
-        media.length < maxFiles && (react.createElement("button", { onClick: () => fileInputRef.current?.click(), className: "w-full p-4 border-2 border-dashed border-newBorder rounded-lg hover:border-btnPrimary hover:bg-newBoxHover transition-colors text-textItemBlur hover:text-newTextColor" },
+        uploadError && (react.createElement("div", { className: "mb-3 p-3 bg-red-500/10 border border-red-500/20 rounded text-red-400 text-sm" }, uploadError)),
+        media.length < maxFiles && (react.createElement("button", { onClick: () => fileInputRef.current?.click(), disabled: isUploading, className: "w-full p-4 border-2 border-dashed border-newBorder rounded-lg hover:border-btnPrimary hover:bg-newBoxHover transition-colors text-textItemBlur hover:text-newTextColor disabled:opacity-50 disabled:cursor-not-allowed" }, isUploading ? (react.createElement(react.Fragment, null,
+            react.createElement("svg", { className: "w-8 h-8 mx-auto mb-2 animate-spin", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
+                react.createElement("circle", { className: "opacity-25", cx: "12", cy: "12", r: "10", stroke: "currentColor", strokeWidth: "4" }),
+                react.createElement("path", { className: "opacity-75", fill: "currentColor", d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" })),
+            react.createElement("div", { className: "text-sm" }, "Uploading..."))) : (react.createElement(react.Fragment, null,
             react.createElement("svg", { className: "w-8 h-8 mx-auto mb-2", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
                 react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 4v16m8-8H4" })),
             react.createElement("div", { className: "text-sm" }, "Click to upload media"),
             react.createElement("div", { className: "text-xs mt-1" },
                 "Images or videos (max ",
                 maxFiles,
-                ")"))),
+                ")"))))),
         react.createElement("input", { ref: fileInputRef, type: "file", accept: "image/*,video/*", multiple: true, onChange: handleFileSelect, className: "hidden" })));
 };
 
@@ -36714,6 +36763,8 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                             settings = { __type: type || 'x' };
                         }
                     }
+                    // Remove any undefined/null fields from settings
+                    const cleanSettings = Object.fromEntries(Object.entries(settings).filter(([_, value]) => value !== null && value !== undefined));
                     return {
                         integration: { id: channelId },
                         value: [
@@ -36725,7 +36776,7 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                                 })),
                             },
                         ],
-                        settings,
+                        settings: cleanSettings,
                     };
                 }).filter((post) => post !== null), // Remove Discord/unsupported channels
             };

@@ -111,6 +111,31 @@ export class CalendarAPI {
     // Already passed from PHP, return from window
     return window.postqueeWP.integrations || [];
   }
+
+  /**
+   * Upload media file
+   */
+  async uploadMedia(file: File): Promise<{ path: string; id: string }> {
+    const { restUrl, nonce } = window.postqueeWP;
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${restUrl}upload`, {
+      method: 'POST',
+      headers: {
+        'X-WP-Nonce': nonce,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const message = errorData.message || `Upload failed: ${response.statusText}`;
+      throw new Error(message);
+    }
+
+    return response.json();
+  }
 }
 
 export const calendarAPI = new CalendarAPI();

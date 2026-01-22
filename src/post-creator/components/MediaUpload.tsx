@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { calendarAPI } from '../../shared/api/client';
 
 interface MediaItem {
   id: string;
@@ -16,7 +17,7 @@ interface MediaUploadProps {
 
 /**
  * Media Upload Component
- * Simple file upload with preview (can be enhanced with Uppy in Phase 5)
+ * Uploads files to PostQuee and provides preview
  */
 export const MediaUpload: React.FC<MediaUploadProps> = ({
   media,
@@ -26,24 +27,46 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({
   requirementMessage = '',
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    // For now, create object URLs for preview
-    // In production, this would upload to PostQuee API
-    const newMedia: MediaItem[] = Array.from(files).map((file) => ({
-      id: `temp-${Date.now()}-${Math.random()}`,
-      path: URL.createObjectURL(file),
-      type: file.type.startsWith('image/') ? 'image' : 'video',
-    }));
+    setIsUploading(true);
+    setUploadError(null);
 
-    onChange([...media, ...newMedia].slice(0, maxFiles));
+    try {
+      // Upload files to PostQuee API
+      const uploadedMedia: MediaItem[] = [];
 
-    // Reset input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      for (const file of Array.from(files).slice(0, maxFiles - media.length)) {
+        try {
+          const result = await calendarAPI.uploadMedia(file);
+
+          uploadedMedia.push({
+            id: result.id || `uploaded-${Date.now()}-${Math.random()}`,
+            path: result.path,
+            type: file.type.startsWith('image/') ? 'image' : 'video',
+          });
+        } catch (error: any) {
+          console.error('Upload error for file:', file.name, error);
+          setUploadError(`Failed to upload ${file.name}: ${error.message}`);
+        }
+      }
+
+      onChange([...media, ...uploadedMedia].slice(0, maxFiles));
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      setUploadError(error.message || 'Failed to upload files');
+    } finally {
+      setIsUploading(false);
+
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -100,17 +123,37 @@ export const MediaUpload: React.FC<MediaUploadProps> = ({
         </div>
       )}
 
+      {/* Upload error */}
+      {uploadError && (
+        <div className="mb-3 p-3 bg-red-500/10 border border-red-500/20 rounded text-red-400 text-sm">
+          {uploadError}
+        </div>
+      )}
+
       {/* Upload button */}
       {media.length < maxFiles && (
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="w-full p-4 border-2 border-dashed border-newBorder rounded-lg hover:border-btnPrimary hover:bg-newBoxHover transition-colors text-textItemBlur hover:text-newTextColor"
+          disabled={isUploading}
+          className="w-full p-4 border-2 border-dashed border-newBorder rounded-lg hover:border-btnPrimary hover:bg-newBoxHover transition-colors text-textItemBlur hover:text-newTextColor disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          <div className="text-sm">Click to upload media</div>
-          <div className="text-xs mt-1">Images or videos (max {maxFiles})</div>
+          {isUploading ? (
+            <>
+              <svg className="w-8 h-8 mx-auto mb-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              <div className="text-sm">Uploading...</div>
+            </>
+          ) : (
+            <>
+              <svg className="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              <div className="text-sm">Click to upload media</div>
+              <div className="text-xs mt-1">Images or videos (max {maxFiles})</div>
+            </>
+          )}
         </button>
       )}
 

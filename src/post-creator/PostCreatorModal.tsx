@@ -196,6 +196,11 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
             }
           }
 
+          // Remove any undefined/null fields from settings
+          const cleanSettings = Object.fromEntries(
+            Object.entries(settings).filter(([_, value]) => value !== null && value !== undefined)
+          );
+
           return {
             integration: { id: channelId },
             value: [
@@ -207,7 +212,7 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
                 })),
               },
             ],
-            settings,
+            settings: cleanSettings,
           };
         }).filter((post) => post !== null), // Remove Discord/unsupported channels
       };
