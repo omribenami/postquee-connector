@@ -122,10 +122,10 @@ class PostQuee_Admin
 				$this->version . '.' . time() // Force cache refresh
 			);
 
-			// Enqueue React calendar bundle
+			// Enqueue React calendar bundle (renamed to force cache invalidation)
 			wp_enqueue_script(
 				'postquee-calendar-js',
-				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.bundle.js',
+				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar-debug.bundle.js',
 				array(), // React is bundled, no dependencies
 				$this->version . '.' . time(), // Force cache refresh
 				true
