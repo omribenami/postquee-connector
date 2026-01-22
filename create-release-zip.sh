@@ -3,7 +3,7 @@
 # PostQuee Connector - Release ZIP Creator
 # Creates a clean distribution ZIP with only necessary files
 
-VERSION="2.1.0"
+VERSION="2.1.1"
 PLUGIN_NAME="postquee-connector"
 PLUGIN_DIR="WP_PostQuee"
 OUTPUT_FILE="${PLUGIN_NAME}-${VERSION}.zip"

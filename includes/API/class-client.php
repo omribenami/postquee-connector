@@ -118,9 +118,10 @@ class Client
      * Upload a file to PostQuee.
      *
      * @param string $file_path Path to the file.
+     * @param string|null $original_filename Original filename with extension (optional).
      * @return array|\WP_Error Upload response.
      */
-    public function upload_file($file_path)
+    public function upload_file($file_path, $original_filename = null)
     {
         if (!file_exists($file_path)) {
             return new \WP_Error('file_not_found', 'File does not exist: ' . $file_path);
@@ -129,7 +130,8 @@ class Client
         $url = $this->get_base_url() . '/upload';
         $boundary = wp_generate_password(24);
         $file_contents = file_get_contents($file_path);
-        $filename = basename($file_path);
+        // Use original filename if provided, otherwise fallback to basename
+        $filename = $original_filename ?: basename($file_path);
 
         $body = '';
         $body .= '--' . $boundary . "\r\n";

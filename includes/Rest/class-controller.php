@@ -398,10 +398,11 @@ class Controller
 
         $file = $files['file'];
         $file_path = $file['tmp_name'];
+        $original_filename = $file['name']; // Preserve original filename with extension
 
         $client = new Client($api_key);
         $endpoints = new Endpoints($client);
-        $result = $endpoints->upload_file($file_path);
+        $result = $endpoints->upload_file($file_path, $original_filename);
 
         if (is_wp_error($result)) {
             return $result;

@@ -137,11 +137,12 @@ class Endpoints
      * Upload a file.
      *
      * @param string $file_path Path to file.
+     * @param string|null $original_filename Original filename with extension (optional).
      * @return array|\WP_Error Upload response with 'id', 'path', 'name'.
      */
-    public function upload_file($file_path)
+    public function upload_file($file_path, $original_filename = null)
     {
-        return $this->client->upload_file($file_path);
+        return $this->client->upload_file($file_path, $original_filename);
     }
 
     /**
