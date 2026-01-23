@@ -114,12 +114,18 @@ class PostQuee_Admin
 	{
 		// Only load React calendar on our admin page
 		if ($hook === 'toplevel_page_postquee') {
+			// Use file modification time for aggressive cache busting
+			$bundle_path = POSTQUEE_BRIDGE_PATH . 'assets/dist/calendar.bundle.js';
+			$css_path = POSTQUEE_BRIDGE_PATH . 'assets/dist/calendar.css';
+			$bundle_version = file_exists($bundle_path) ? filemtime($bundle_path) : '2.2.0';
+			$css_version = file_exists($css_path) ? filemtime($css_path) : '2.2.0';
+
 			// Enqueue React calendar CSS
 			wp_enqueue_style(
 				'postquee-calendar',
 				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.css',
 				array(),
-				'2.2.0'
+				$css_version
 			);
 
 			// Enqueue React calendar bundle
@@ -127,7 +133,7 @@ class PostQuee_Admin
 				'postquee-calendar-js',
 				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.bundle.js',
 				array(), // React is bundled, no dependencies
-				'2.2.0',
+				$bundle_version,
 				true
 			);
 
