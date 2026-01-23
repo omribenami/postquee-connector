@@ -136,16 +136,6 @@ export class CalendarAPI {
 
     return response.json();
   }
-
-  /**
-   * Get channels for an integration (Discord/Slack)
-   */
-  async getIntegrationChannels(integrationId: string): Promise<Array<{ id: string; name: string }>> {
-    return wpApiFetch({
-      path: `integrations/${integrationId}/channels`,
-      method: 'GET',
-    });
-  }
 }
 
 export const calendarAPI = new CalendarAPI();

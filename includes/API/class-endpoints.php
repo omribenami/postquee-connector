@@ -250,24 +250,4 @@ class Endpoints
         // PostQuee API returns: { "success": true, "refined": "AI-refined content here" }
         return $response;
     }
-
-    /**
-     * Call an integration function (e.g., get channels for Discord/Slack).
-     *
-     * @param string $integration_id The integration ID.
-     * @param string $function_name The function name (e.g., 'channels').
-     * @param array  $data Additional data to pass to the function.
-     * @return array|\WP_Error Function result or error.
-     */
-    public function call_integration_function($integration_id, $function_name, $data = array())
-    {
-        $payload = array(
-            'id' => $integration_id,
-            'name' => $function_name,
-            'data' => $data,
-        );
-
-        // Use private API for integration functions
-        return $this->client->request('/integrations/function', 'POST', $payload, array(), true);
-    }
 }

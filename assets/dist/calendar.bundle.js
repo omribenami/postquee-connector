@@ -2460,15 +2460,6 @@ class CalendarAPI {
         }
         return response.json();
     }
-    /**
-     * Get channels for an integration (Discord/Slack)
-     */
-    async getIntegrationChannels(integrationId) {
-        return wpApiFetch({
-            path: `integrations/${integrationId}/channels`,
-            method: 'GET',
-        });
-    }
 }
 const calendarAPI = new CalendarAPI();
 
@@ -36453,100 +36444,46 @@ const PinterestSettingsComponent = ({ settings, onChange, }) => {
 
 ;// ./src/post-creator/platform-settings/DiscordSettings.tsx
 
-
-const DiscordSettingsComponent = ({ settings, onChange, integrationId }) => {
-    const [channels, setChannels] = (0,react.useState)([]);
-    const [loading, setLoading] = (0,react.useState)(true);
-    const [error, setError] = (0,react.useState)(null);
-    (0,react.useEffect)(() => {
-        async function fetchChannels() {
-            try {
-                setLoading(true);
-                const result = await calendarAPI.getIntegrationChannels(integrationId);
-                setChannels(result);
-            }
-            catch (err) {
-                console.error('Failed to fetch Discord channels:', err);
-                setError(err.message || 'Failed to load channels');
-            }
-            finally {
-                setLoading(false);
-            }
-        }
-        fetchChannels();
-    }, [integrationId]);
+const DiscordSettingsComponent = ({ settings, onChange }) => {
     const handleChannelChange = (channelId) => {
         onChange({
             ...settings,
             channel: channelId,
         });
     };
-    if (loading) {
-        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "Loading Discord channels..."));
-    }
-    if (error) {
-        return (react.createElement("div", { className: "text-sm text-red-400 text-center py-4" }, error));
-    }
-    if (channels.length === 0) {
-        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "No channels available"));
-    }
     return (react.createElement("div", { className: "space-y-3" },
-        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Discord Channel *"),
-        react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
-            react.createElement("option", { value: "" }, "Select a channel"),
-            channels.map((channel) => (react.createElement("option", { key: channel.id, value: channel.id },
-                "#",
-                channel.name)))),
-        react.createElement("p", { className: "text-xs text-textItemBlur" }, "Select the Discord channel where this post will be published")));
+        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Discord Channel ID *"),
+        react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Discord channel ID", className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
+        react.createElement("div", { className: "text-xs text-textItemBlur space-y-1" },
+            react.createElement("p", null, "To find your Discord channel ID:"),
+            react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
+                react.createElement("li", null, "Enable Developer Mode in Discord: User Settings \u2192 Advanced \u2192 Developer Mode"),
+                react.createElement("li", null, "Right-click on the channel in Discord"),
+                react.createElement("li", null, "Click \"Copy Channel ID\""),
+                react.createElement("li", null, "Paste the ID here")))));
 };
 
 ;// ./src/post-creator/platform-settings/SlackSettings.tsx
 
-
-const SlackSettingsComponent = ({ settings, onChange, integrationId }) => {
-    const [channels, setChannels] = (0,react.useState)([]);
-    const [loading, setLoading] = (0,react.useState)(true);
-    const [error, setError] = (0,react.useState)(null);
-    (0,react.useEffect)(() => {
-        async function fetchChannels() {
-            try {
-                setLoading(true);
-                const result = await calendarAPI.getIntegrationChannels(integrationId);
-                setChannels(result);
-            }
-            catch (err) {
-                console.error('Failed to fetch Slack channels:', err);
-                setError(err.message || 'Failed to load channels');
-            }
-            finally {
-                setLoading(false);
-            }
-        }
-        fetchChannels();
-    }, [integrationId]);
+const SlackSettingsComponent = ({ settings, onChange }) => {
     const handleChannelChange = (channelId) => {
         onChange({
             ...settings,
             channel: channelId,
         });
     };
-    if (loading) {
-        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "Loading Slack channels..."));
-    }
-    if (error) {
-        return (react.createElement("div", { className: "text-sm text-red-400 text-center py-4" }, error));
-    }
-    if (channels.length === 0) {
-        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "No channels available"));
-    }
     return (react.createElement("div", { className: "space-y-3" },
-        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Slack Channel *"),
-        react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
-            react.createElement("option", { value: "" }, "Select a channel"),
-            channels.map((channel) => (react.createElement("option", { key: channel.id, value: channel.id },
-                "#",
-                channel.name)))),
-        react.createElement("p", { className: "text-xs text-textItemBlur" }, "Select the Slack channel where this post will be published")));
+        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Slack Channel ID *"),
+        react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Slack channel ID (e.g., C01234ABCDE)", className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
+        react.createElement("div", { className: "text-xs text-textItemBlur space-y-1" },
+            react.createElement("p", null, "To find your Slack channel ID:"),
+            react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
+                react.createElement("li", null, "Open Slack in your browser (not desktop app)"),
+                react.createElement("li", null, "Navigate to the channel"),
+                react.createElement("li", null,
+                    "The channel ID is in the URL: slack.com/messages/",
+                    react.createElement("strong", null, "C01234ABCDE")),
+                react.createElement("li", null, "Copy the ID (starts with C) and paste it here")))));
 };
 
 ;// ./src/post-creator/platform-settings/PlatformSettings.tsx
