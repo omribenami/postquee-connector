@@ -7,7 +7,7 @@ const shouldAnalyze = process.env.ANALYZE === 'true';
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
-  devtool: 'source-map', // Always generate source maps for debugging
+  devtool: isProduction ? 'source-map' : 'source-map',
 
   entry: {
     calendar: './src/calendar/index.tsx',
@@ -45,7 +45,7 @@ module.exports = {
   },
 
   optimization: {
-    minimize: false, // Disable minification to preserve console.log for debugging
+    minimize: isProduction,
     usedExports: true,
   },
 

@@ -3,7 +3,7 @@
  * Plugin Name:       PostQuee Connector
  * Plugin URI:        https://postquee.com/
  * Description:       Integrates the PostQuee social media dashboard directly into your WordPress admin.
- * Version:           2.1.4
+ * Version:           2.2.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Omri Ben Ami
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-define('POSTQUEE_BRIDGE_VERSION', '2.1.4');
+define('POSTQUEE_BRIDGE_VERSION', '2.2.0');
 define('POSTQUEE_BRIDGE_PATH', plugin_dir_path(__FILE__));
 define('POSTQUEE_BRIDGE_URL', plugin_dir_url(__FILE__));
 

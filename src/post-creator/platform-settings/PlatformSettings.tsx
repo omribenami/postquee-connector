@@ -6,6 +6,8 @@ import { FacebookSettingsComponent } from './FacebookSettings';
 import { LinkedInSettingsComponent } from './LinkedInSettings';
 import { InstagramSettingsComponent } from './InstagramSettings';
 import { PinterestSettingsComponent } from './PinterestSettings';
+import { DiscordSettingsComponent } from './DiscordSettings';
+import { SlackSettingsComponent } from './SlackSettings';
 
 interface PlatformSettingsProps {
   integration: Integration;
@@ -70,6 +72,10 @@ export const PlatformSettings: React.FC<PlatformSettingsProps> = ({ integration,
         return { __type: 'linkedin', visibility: 'public' };
       case 'instagram':
         return { __type: 'instagram', post_type: 'post' };
+      case 'discord':
+        return { __type: 'discord', channel: '' };
+      case 'slack':
+        return { __type: 'slack', channel: '' };
       case 'threads':
         return { __type: 'threads', who_can_reply: 'everyone' };
       case 'tiktok':
@@ -130,6 +136,24 @@ export const PlatformSettings: React.FC<PlatformSettingsProps> = ({ integration,
           settings={settings}
           onChange={handleSettingsChange}
           integration={integration}
+        />
+      )}
+
+      {/* Discord Settings */}
+      {platformType === 'discord' && settings.__type === 'discord' && (
+        <DiscordSettingsComponent
+          settings={settings}
+          onChange={handleSettingsChange}
+          integrationId={integration.id}
+        />
+      )}
+
+      {/* Slack Settings */}
+      {platformType === 'slack' && settings.__type === 'slack' && (
+        <SlackSettingsComponent
+          settings={settings}
+          onChange={handleSettingsChange}
+          integrationId={integration.id}
         />
       )}
 

@@ -2460,6 +2460,15 @@ class CalendarAPI {
         }
         return response.json();
     }
+    /**
+     * Get channels for an integration (Discord/Slack)
+     */
+    async getIntegrationChannels(integrationId) {
+        return wpApiFetch({
+            path: `integrations/${integrationId}/channels`,
+            method: 'GET',
+        });
+    }
 }
 const calendarAPI = new CalendarAPI();
 
@@ -36442,7 +36451,107 @@ const PinterestSettingsComponent = ({ settings, onChange, }) => {
             react.createElement("input", { type: "text", value: link, onChange: (e) => setLink(e.target.value), placeholder: "Destination URL (optional)", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" }))));
 };
 
+;// ./src/post-creator/platform-settings/DiscordSettings.tsx
+
+
+const DiscordSettingsComponent = ({ settings, onChange, integrationId }) => {
+    const [channels, setChannels] = (0,react.useState)([]);
+    const [loading, setLoading] = (0,react.useState)(true);
+    const [error, setError] = (0,react.useState)(null);
+    (0,react.useEffect)(() => {
+        async function fetchChannels() {
+            try {
+                setLoading(true);
+                const result = await calendarAPI.getIntegrationChannels(integrationId);
+                setChannels(result);
+            }
+            catch (err) {
+                console.error('Failed to fetch Discord channels:', err);
+                setError(err.message || 'Failed to load channels');
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        fetchChannels();
+    }, [integrationId]);
+    const handleChannelChange = (channelId) => {
+        onChange({
+            ...settings,
+            channel: channelId,
+        });
+    };
+    if (loading) {
+        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "Loading Discord channels..."));
+    }
+    if (error) {
+        return (react.createElement("div", { className: "text-sm text-red-400 text-center py-4" }, error));
+    }
+    if (channels.length === 0) {
+        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "No channels available"));
+    }
+    return (react.createElement("div", { className: "space-y-3" },
+        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Discord Channel *"),
+        react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
+            react.createElement("option", { value: "" }, "Select a channel"),
+            channels.map((channel) => (react.createElement("option", { key: channel.id, value: channel.id },
+                "#",
+                channel.name)))),
+        react.createElement("p", { className: "text-xs text-textItemBlur" }, "Select the Discord channel where this post will be published")));
+};
+
+;// ./src/post-creator/platform-settings/SlackSettings.tsx
+
+
+const SlackSettingsComponent = ({ settings, onChange, integrationId }) => {
+    const [channels, setChannels] = (0,react.useState)([]);
+    const [loading, setLoading] = (0,react.useState)(true);
+    const [error, setError] = (0,react.useState)(null);
+    (0,react.useEffect)(() => {
+        async function fetchChannels() {
+            try {
+                setLoading(true);
+                const result = await calendarAPI.getIntegrationChannels(integrationId);
+                setChannels(result);
+            }
+            catch (err) {
+                console.error('Failed to fetch Slack channels:', err);
+                setError(err.message || 'Failed to load channels');
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        fetchChannels();
+    }, [integrationId]);
+    const handleChannelChange = (channelId) => {
+        onChange({
+            ...settings,
+            channel: channelId,
+        });
+    };
+    if (loading) {
+        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "Loading Slack channels..."));
+    }
+    if (error) {
+        return (react.createElement("div", { className: "text-sm text-red-400 text-center py-4" }, error));
+    }
+    if (channels.length === 0) {
+        return (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, "No channels available"));
+    }
+    return (react.createElement("div", { className: "space-y-3" },
+        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Slack Channel *"),
+        react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
+            react.createElement("option", { value: "" }, "Select a channel"),
+            channels.map((channel) => (react.createElement("option", { key: channel.id, value: channel.id },
+                "#",
+                channel.name)))),
+        react.createElement("p", { className: "text-xs text-textItemBlur" }, "Select the Slack channel where this post will be published")));
+};
+
 ;// ./src/post-creator/platform-settings/PlatformSettings.tsx
+
+
 
 
 
@@ -36503,6 +36612,10 @@ const PlatformSettings = ({ integration, onChange }) => {
                 return { __type: 'linkedin', visibility: 'public' };
             case 'instagram':
                 return { __type: 'instagram', post_type: 'post' };
+            case 'discord':
+                return { __type: 'discord', channel: '' };
+            case 'slack':
+                return { __type: 'slack', channel: '' };
             case 'threads':
                 return { __type: 'threads', who_can_reply: 'everyone' };
             case 'tiktok':
@@ -36541,6 +36654,8 @@ const PlatformSettings = ({ integration, onChange }) => {
         platformType === 'linkedin' && settings.__type === 'linkedin' && (react.createElement(LinkedInSettingsComponent, { settings: settings, onChange: handleSettingsChange })),
         platformType === 'instagram' && settings.__type === 'instagram' && (react.createElement(InstagramSettingsComponent, { settings: settings, onChange: handleSettingsChange })),
         platformType === 'pinterest' && settings.__type === 'pinterest' && (react.createElement(PinterestSettingsComponent, { settings: settings, onChange: handleSettingsChange, integration: integration })),
+        platformType === 'discord' && settings.__type === 'discord' && (react.createElement(DiscordSettingsComponent, { settings: settings, onChange: handleSettingsChange, integrationId: integration.id })),
+        platformType === 'slack' && settings.__type === 'slack' && (react.createElement(SlackSettingsComponent, { settings: settings, onChange: handleSettingsChange, integrationId: integration.id })),
         (platformType === 'threads' || platformType === 'tiktok' || platformType === 'youtube') && (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" },
             "Advanced settings for ",
             integration.identifier,
@@ -36720,15 +36835,6 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
             setError('Pinterest posts require at least one image or video. Please upload media.');
             return;
         }
-        // Warn about Discord/Slack channels
-        const hasUnsupportedChannels = selectedChannels.some((channelId) => {
-            const integration = integrations.find((i) => i.id === channelId);
-            const type = integration ? getPlatformType(integration.identifier) : null;
-            return type === 'discord' || type === 'slack';
-        });
-        if (hasUnsupportedChannels) {
-            console.warn('Discord/Slack channels will be skipped - not fully supported in WordPress plugin yet');
-        }
         setIsSubmitting(true);
         try {
             const payload = {
@@ -36751,12 +36857,11 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                     if (!settings) {
                         const type = platformType;
                         // Smart defaults
-                        if (type === 'discord' || type === 'slack') {
-                            // Discord/Slack require a specific channel ID within the integration
-                            // WordPress plugin doesn't have channel selection UI yet
-                            // Skip Discord/Slack channels for now to avoid validation errors
-                            console.warn(`⚠️ DEBUG - Filtering out Discord/Slack channel: ${integration?.name || channelId} (type: ${type})`);
-                            return null; // Will be filtered out
+                        if (type === 'discord') {
+                            settings = { __type: 'discord', channel: '' };
+                        }
+                        else if (type === 'slack') {
+                            settings = { __type: 'slack', channel: '' };
                         }
                         else if (type === 'tiktok') {
                             // TikTok requires all these fields
@@ -36774,6 +36879,11 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                         else {
                             settings = { __type: type || 'x' };
                         }
+                    }
+                    // Validate Discord/Slack have channel selected
+                    if ((settings.__type === 'discord' || settings.__type === 'slack') && !settings.channel) {
+                        console.warn(`⚠️ Skipping ${settings.__type} channel without channel ID: ${integration?.name || channelId}`);
+                        return null; // Will be filtered out
                     }
                     // Remove any undefined/null fields from settings
                     const cleanSettings = Object.fromEntries(Object.entries(settings).filter(([_, value]) => value !== null && value !== undefined));

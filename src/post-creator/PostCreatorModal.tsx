@@ -146,17 +146,6 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
       return;
     }
 
-    // Warn about Discord/Slack channels
-    const hasUnsupportedChannels = selectedChannels.some((channelId) => {
-      const integration = integrations.find((i) => i.id === channelId);
-      const type = integration ? getPlatformType(integration.identifier) : null;
-      return type === 'discord' || type === 'slack';
-    });
-
-    if (hasUnsupportedChannels) {
-      console.warn('Discord/Slack channels will be skipped - not fully supported in WordPress plugin yet');
-    }
-
     setIsSubmitting(true);
 
     try {
@@ -184,12 +173,10 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
             const type = platformType;
 
             // Smart defaults
-            if (type === 'discord' || type === 'slack') {
-              // Discord/Slack require a specific channel ID within the integration
-              // WordPress plugin doesn't have channel selection UI yet
-              // Skip Discord/Slack channels for now to avoid validation errors
-              console.warn(`⚠️ DEBUG - Filtering out Discord/Slack channel: ${integration?.name || channelId} (type: ${type})`);
-              return null; // Will be filtered out
+            if (type === 'discord') {
+              settings = { __type: 'discord', channel: '' };
+            } else if (type === 'slack') {
+              settings = { __type: 'slack', channel: '' };
             } else if (type === 'tiktok') {
               // TikTok requires all these fields
               settings = {
@@ -205,6 +192,12 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
             } else {
               settings = { __type: type || 'x' } as any;
             }
+          }
+
+          // Validate Discord/Slack have channel selected
+          if ((settings.__type === 'discord' || settings.__type === 'slack') && !settings.channel) {
+            console.warn(`⚠️ Skipping ${settings.__type} channel without channel ID: ${integration?.name || channelId}`);
+            return null; // Will be filtered out
           }
 
           // Remove any undefined/null fields from settings

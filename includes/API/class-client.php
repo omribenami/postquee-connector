@@ -31,13 +31,21 @@ class Client
     /**
      * Get the Base URL.
      *
+     * @param bool $private Whether to use private API (default: false for public API).
      * @return string
      */
-    private function get_base_url()
+    private function get_base_url($private = false)
     {
         // Use app.postquee.com API
-        $url = defined('POSTQUEE_API_URL') ? POSTQUEE_API_URL : 'https://app.postquee.com/api/public/v1';
-        return untrailingslashit(apply_filters('postquee_api_base', $url));
+        $base = defined('POSTQUEE_API_URL') ? POSTQUEE_API_URL : 'https://app.postquee.com/api';
+
+        if (!$private) {
+            // Public API: /api/public/v1
+            $base .= '/public/v1';
+        }
+        // Private API: /api (no suffix)
+
+        return untrailingslashit(apply_filters('postquee_api_base', $base));
     }
 
     /**
@@ -47,14 +55,15 @@ class Client
      * @param string $method   HTTP method (GET, POST, DELETE, etc.).
      * @param array  $body     Optional body data.
      * @param array  $query    Optional query parameters.
+     * @param bool   $private  Whether to use private API (default: false for public API).
      * @return array|\WP_Error Decoded JSON response or WP_Error.
      */
-    public function request($endpoint, $method = 'GET', $body = null, $query = [])
+    public function request($endpoint, $method = 'GET', $body = null, $query = [], $private = false)
     {
         if (strpos($endpoint, 'http') === 0) {
             $url = $endpoint;
         } else {
-            $url = $this->get_base_url() . $endpoint;
+            $url = $this->get_base_url($private) . $endpoint;
         }
 
         // Add query parameters

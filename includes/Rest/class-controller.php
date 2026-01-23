@@ -136,6 +136,13 @@ class Controller
                 ),
             ),
         ));
+
+        // Get integration channels (Discord/Slack)
+        register_rest_route($namespace, '/integrations/(?P<id>[a-zA-Z0-9_-]+)/channels', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'get_integration_channels'),
+            'permission_callback' => array($this, 'check_permission'),
+        ));
     }
 
     /**
@@ -483,6 +490,36 @@ class Controller
 
         // Call the real API (which maps to /generate)
         $result = $endpoints->refine_content($content, $prompt);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return rest_ensure_response($result);
+    }
+
+    /**
+     * Get integration channels (Discord/Slack).
+     * Calls the provider's channels() method via the function endpoint.
+     */
+    public function get_integration_channels($request)
+    {
+        $integration_id = $request->get_param('id');
+
+        if (empty($integration_id)) {
+            return new \WP_Error('missing_params', 'Integration ID is required', array('status' => 400));
+        }
+
+        $api_key = get_option(Settings::OPTION_API_KEY);
+        if (!$api_key) {
+            return new \WP_Error('no_api_key', 'API key not configured', array('status' => 400));
+        }
+
+        $client = new Client($api_key);
+        $endpoints = new Endpoints($client);
+
+        // Call the function endpoint to get channels
+        $result = $endpoints->call_integration_function($integration_id, 'channels', array());
 
         if (is_wp_error($result)) {
             return $result;

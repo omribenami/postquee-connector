@@ -119,15 +119,15 @@ class PostQuee_Admin
 				'postquee-calendar',
 				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.css',
 				array(),
-				'2.1.4-debug'
+				'2.2.0'
 			);
 
-			// Enqueue React calendar bundle with debug logging (unminified)
+			// Enqueue React calendar bundle
 			wp_enqueue_script(
 				'postquee-calendar-js',
 				POSTQUEE_BRIDGE_URL . 'assets/dist/calendar.bundle.js',
 				array(), // React is bundled, no dependencies
-				'2.1.4-debug', // New version number forces cache refresh
+				'2.2.0',
 				true
 			);
 
