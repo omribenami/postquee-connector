@@ -136,13 +136,6 @@ class Controller
                 ),
             ),
         ));
-
-        // Call Integration Function (for dynamic provider settings like Discord channels, Pinterest boards, etc.)
-        register_rest_route($namespace, '/integrations/(?P<id>[a-zA-Z0-9_-]+)/function', array(
-            'methods' => 'POST',
-            'callback' => array($this, 'call_integration_function'),
-            'permission_callback' => array($this, 'check_permission'),
-        ));
     }
 
     /**
@@ -490,39 +483,6 @@ class Controller
 
         // Call the real API (which maps to /generate)
         $result = $endpoints->refine_content($content, $prompt);
-
-        if (is_wp_error($result)) {
-            return $result;
-        }
-
-        return rest_ensure_response($result);
-    }
-
-    /**
-     * Call Integration Function.
-     * Calls @Tool decorated methods on provider backends (e.g., channels, boards, subreddits).
-     */
-    public function call_integration_function($request)
-    {
-        $api_key = get_option(Settings::OPTION_API_KEY);
-        if (!$api_key) {
-            return new \WP_Error('no_api_key', 'API key not configured', array('status' => 400));
-        }
-
-        $integration_id = $request->get_param('id');
-        $payload = $request->get_json_params();
-
-        if (empty($payload['name'])) {
-            return new \WP_Error('missing_function_name', 'Function name required', array('status' => 400));
-        }
-
-        $function_name = sanitize_text_field($payload['name']);
-        $params = isset($payload['params']) ? $payload['params'] : array();
-
-        $client = new Client($api_key);
-        $endpoints = new Endpoints($client);
-
-        $result = $endpoints->call_integration_function($integration_id, $function_name, $params);
 
         if (is_wp_error($result)) {
             return $result;

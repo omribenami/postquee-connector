@@ -1,12 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import type { Integration } from '../../calendar/types';
 import type { PlatformSettings, PinterestSettings } from './types';
-import { useProviderFunction } from '../../shared/api/provider-functions';
-
-interface Board {
-  id: string;
-  name: string;
-}
 
 interface PinterestSettingsComponentProps {
     settings: PinterestSettings;
@@ -17,35 +11,7 @@ interface PinterestSettingsComponentProps {
 export const PinterestSettingsComponent: React.FC<PinterestSettingsComponentProps> = ({
     settings,
     onChange,
-    integration,
 }) => {
-    const [boards, setBoards] = useState<Board[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const { call } = useProviderFunction();
-
-    useEffect(() => {
-        const fetchBoards = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-                const result = await call<Board[]>(integration.id, 'boards');
-                setBoards(result || []);
-            } catch (err: any) {
-                console.error('Failed to fetch Pinterest boards:', err);
-                setError(err.message || 'Failed to load boards');
-                // Fallback to manual input on error
-                setBoards([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (integration.id) {
-            fetchBoards();
-        }
-    }, [integration.id]);
-
     const handleBoardChange = (boardId: string) => {
         onChange({
             ...settings,
@@ -58,39 +24,24 @@ export const PinterestSettingsComponent: React.FC<PinterestSettingsComponentProp
             <h3 className="text-sm font-medium text-newTextColor">Pinterest Settings</h3>
 
             <div>
-                <label className="block text-xs text-textItemBlur mb-2">Board *</label>
-                {loading ? (
-                    <div className="text-sm text-textItemBlur">Loading boards...</div>
-                ) : error || boards.length === 0 ? (
-                    <>
-                        <input
-                            type="text"
-                            value={settings.board || ''}
-                            onChange={(e) => handleBoardChange(e.target.value)}
-                            placeholder="Enter Board ID"
-                            className="w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none"
-                            required
-                        />
-                        {error && (
-                            <p className="text-xs text-red-400 mt-1">{error}</p>
-                        )}
-                    </>
-                ) : (
-                    <select
-                        value={settings.board || ''}
-                        onChange={(e) => handleBoardChange(e.target.value)}
-                        className="w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none"
-                        required
-                    >
-                        <option value="">Select a board...</option>
-                        {boards.map((board) => (
-                            <option key={board.id} value={board.id}>
-                                {board.name}
-                            </option>
-                        ))}
-                    </select>
-                )}
-                <p className="text-xs text-textItemBlur mt-1">Required for Pinterest posts</p>
+                <label className="block text-xs text-textItemBlur mb-2">Board ID *</label>
+                <input
+                    type="text"
+                    value={settings.board || ''}
+                    onChange={(e) => handleBoardChange(e.target.value)}
+                    placeholder="Enter Board ID"
+                    className="w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none"
+                    required
+                />
+                <div className="text-xs text-textItemBlur space-y-1 mt-2">
+                    <p>To find your Pinterest Board ID:</p>
+                    <ol className="list-decimal list-inside space-y-1 ml-2">
+                        <li>Go to pinterest.com and open the board</li>
+                        <li>Copy the board ID from the URL</li>
+                        <li>Example: pinterest.com/username/<strong>board-name</strong>/</li>
+                        <li>Paste the board name or ID here</li>
+                    </ol>
+                </div>
             </div>
 
             <div>
