@@ -22,33 +22,36 @@ export const XTwitterSettingsComponent: React.FC<PlatformSettingsProps<XTwitterS
 
       {/* Who can reply */}
       <div>
-        <label className="block text-xs text-textItemBlur mb-2">Who can reply</label>
+        <label className="block text-xs text-textItemBlur mb-2">Who can reply *</label>
         <select
           value={settings.who_can_reply_post || 'everyone'}
           onChange={(e) => handleReplyChange(e.target.value as XTwitterSettings['who_can_reply_post'])}
           className="w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none"
+          required
         >
           <option value="everyone">Everyone</option>
-          <option value="verified">Verified accounts only</option>
           <option value="following">People you follow</option>
-          <option value="mentioned">Only people you mention</option>
+          <option value="mentionedUsers">Only people you mention</option>
+          <option value="subscribers">Subscribers only</option>
+          <option value="verified">Verified accounts</option>
         </select>
       </div>
 
-      {/* Community ID */}
+      {/* Community URL */}
       <div>
         <label className="block text-xs text-textItemBlur mb-2">
-          Community ID (optional)
+          Community URL (optional)
         </label>
         <input
-          type="text"
+          type="url"
           value={settings.community || ''}
           onChange={handleCommunityChange}
-          placeholder="Enter community ID"
+          placeholder="https://x.com/i/communities/[id]"
           className="w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none"
+          pattern="^(https:\/\/x\.com\/i\/communities\/\d+)?$"
         />
         <p className="mt-1 text-xs text-textItemBlur">
-          Post to a specific X community
+          Optional: Post to a specific X community
         </p>
       </div>
     </div>

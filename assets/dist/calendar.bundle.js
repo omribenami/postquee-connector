@@ -36310,16 +36310,17 @@ const XTwitterSettingsComponent = ({ settings, onChange, }) => {
     return (react.createElement("div", { className: "space-y-4" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "X (Twitter) Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Who can reply"),
-            react.createElement("select", { value: settings.who_can_reply_post || 'everyone', onChange: (e) => handleReplyChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none" },
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Who can reply *"),
+            react.createElement("select", { value: settings.who_can_reply_post || 'everyone', onChange: (e) => handleReplyChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none", required: true },
                 react.createElement("option", { value: "everyone" }, "Everyone"),
-                react.createElement("option", { value: "verified" }, "Verified accounts only"),
                 react.createElement("option", { value: "following" }, "People you follow"),
-                react.createElement("option", { value: "mentioned" }, "Only people you mention"))),
+                react.createElement("option", { value: "mentionedUsers" }, "Only people you mention"),
+                react.createElement("option", { value: "subscribers" }, "Subscribers only"),
+                react.createElement("option", { value: "verified" }, "Verified accounts"))),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Community ID (optional)"),
-            react.createElement("input", { type: "text", value: settings.community || '', onChange: handleCommunityChange, placeholder: "Enter community ID", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" }),
-            react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Post to a specific X community"))));
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Community URL (optional)"),
+            react.createElement("input", { type: "url", value: settings.community || '', onChange: handleCommunityChange, placeholder: "https://x.com/i/communities/[id]", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none", pattern: "^(https:\\/\\/x\\.com\\/i\\/communities\\/\\d+)?$" }),
+            react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Optional: Post to a specific X community"))));
 };
 
 ;// ./src/post-creator/platform-settings/FacebookSettings.tsx
@@ -36328,31 +36329,15 @@ const XTwitterSettingsComponent = ({ settings, onChange, }) => {
  * Facebook Platform Settings
  */
 const FacebookSettingsComponent = ({ settings, onChange, }) => {
-    const handlePrivacyChange = (value) => {
-        onChange({ ...settings, privacy: value });
-    };
-    const handleLocationChange = (e) => {
-        onChange({ ...settings, location: e.target.value });
-    };
-    const handleTagsChange = (e) => {
-        const tags = e.target.value.split(',').map((t) => t.trim()).filter(Boolean);
-        onChange({ ...settings, tags });
+    const handleUrlChange = (e) => {
+        onChange({ ...settings, url: e.target.value });
     };
     return (react.createElement("div", { className: "space-y-4" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Facebook Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Privacy"),
-            react.createElement("select", { value: settings.privacy || 'public', onChange: (e) => handlePrivacyChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none" },
-                react.createElement("option", { value: "public" }, "Public"),
-                react.createElement("option", { value: "friends" }, "Friends"),
-                react.createElement("option", { value: "only_me" }, "Only me"))),
-        react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Location (optional)"),
-            react.createElement("input", { type: "text", value: settings.location || '', onChange: handleLocationChange, placeholder: "Add a location", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" })),
-        react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Tags (optional)"),
-            react.createElement("input", { type: "text", value: settings.tags?.join(', ') || '', onChange: handleTagsChange, placeholder: "tag1, tag2, tag3", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" }),
-            react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Separate multiple tags with commas"))));
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "URL (optional)"),
+            react.createElement("input", { type: "url", value: settings.url || '', onChange: handleUrlChange, placeholder: "https://example.com", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" }),
+            react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Optional URL to attach to the post"))));
 };
 
 ;// ./src/post-creator/platform-settings/LinkedInSettings.tsx
@@ -36361,23 +36346,15 @@ const FacebookSettingsComponent = ({ settings, onChange, }) => {
  * LinkedIn Platform Settings
  */
 const LinkedInSettingsComponent = ({ settings, onChange, }) => {
-    const handleVisibilityChange = (value) => {
-        onChange({ ...settings, visibility: value });
-    };
     const handleCarouselChange = (checked) => {
-        onChange({ ...settings, carousel: checked });
+        onChange({ ...settings, post_as_images_carousel: checked });
     };
     return (react.createElement("div", { className: "space-y-4" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "LinkedIn Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Visibility"),
-            react.createElement("select", { value: settings.visibility || 'public', onChange: (e) => handleVisibilityChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none" },
-                react.createElement("option", { value: "public" }, "Public"),
-                react.createElement("option", { value: "connections" }, "Connections only"))),
-        react.createElement("div", null,
             react.createElement("label", { className: "flex items-center gap-2 cursor-pointer" },
-                react.createElement("input", { type: "checkbox", checked: settings.carousel || false, onChange: (e) => handleCarouselChange(e.target.checked), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary focus:ring-offset-0" }),
-                react.createElement("span", { className: "text-sm text-newTextColor" }, "Post as carousel")),
+                react.createElement("input", { type: "checkbox", checked: settings.post_as_images_carousel || false, onChange: (e) => handleCarouselChange(e.target.checked), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary focus:ring-offset-0" }),
+                react.createElement("span", { className: "text-sm text-newTextColor" }, "Post as images carousel")),
             react.createElement("p", { className: "mt-1 text-xs text-textItemBlur ml-6" }, "Convert multiple images into a LinkedIn carousel post"))));
 };
 
@@ -36390,61 +36367,138 @@ const InstagramSettingsComponent = ({ settings, onChange, }) => {
     const handlePostTypeChange = (value) => {
         onChange({ ...settings, post_type: value });
     };
-    const handleLocationChange = (e) => {
-        onChange({ ...settings, location: e.target.value });
-    };
-    const handleCollaboratorsChange = (e) => {
-        const collaborators = e.target.value.split(',').map((c) => c.trim()).filter(Boolean);
-        onChange({ ...settings, collaborators });
-    };
     return (react.createElement("div", { className: "space-y-4" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Instagram Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Post type"),
-            react.createElement("select", { value: settings.post_type || 'post', onChange: (e) => handlePostTypeChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none" },
-                react.createElement("option", { value: "post" }, "Post"),
-                react.createElement("option", { value: "reel" }, "Reel"),
-                react.createElement("option", { value: "story" }, "Story"))),
-        react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Location (optional)"),
-            react.createElement("input", { type: "text", value: settings.location || '', onChange: handleLocationChange, placeholder: "Add a location", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" })),
-        react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Collaborators (optional)"),
-            react.createElement("input", { type: "text", value: settings.collaborators?.join(', ') || '', onChange: handleCollaboratorsChange, placeholder: "@username1, @username2", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" }),
-            react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Tag collaborators for this post"))));
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Post type *"),
+            react.createElement("select", { value: settings.post_type || 'post', onChange: (e) => handlePostTypeChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none", required: true },
+                react.createElement("option", { value: "post" }, "Post (Feed)"),
+                react.createElement("option", { value: "story" }, "Story")),
+            react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Choose whether to post to feed or stories"))));
 };
+
+;// ./src/shared/api/provider-functions.ts
+/**
+ * Provider Function Helper
+ * Calls @Tool decorated methods on provider backends via /integrations/function
+ */
+
+/**
+ * Call a provider function (e.g., 'channels', 'boards', 'subreddits')
+ * This maps to backend @Tool decorated methods
+ */
+async function callProviderFunction(options) {
+    const { integrationId, functionName, params = {} } = options;
+    try {
+        // Call WordPress REST endpoint which will proxy to PostQuee API
+        const result = await wpApiFetch({
+            path: `integrations/${integrationId}/function`,
+            method: 'POST',
+            data: {
+                name: functionName,
+                params,
+            },
+        });
+        return result;
+    }
+    catch (error) {
+        console.error(`Failed to call provider function ${functionName}:`, error);
+        throw error;
+    }
+}
+/**
+ * React hook for calling provider functions
+ */
+function useProviderFunction() {
+    const call = async (integrationId, functionName, params) => {
+        return callProviderFunction({ integrationId, functionName, params });
+    };
+    return { call };
+}
 
 ;// ./src/post-creator/platform-settings/PinterestSettings.tsx
 
-const PinterestSettingsComponent = ({ settings, onChange, }) => {
-    const [board, setBoard] = (0,react.useState)(settings.Board || '');
-    const [title, setTitle] = (0,react.useState)(settings.title || '');
-    const [link, setLink] = (0,react.useState)(settings.link || '');
+
+const PinterestSettingsComponent = ({ settings, onChange, integration, }) => {
+    const [boards, setBoards] = (0,react.useState)([]);
+    const [loading, setLoading] = (0,react.useState)(true);
+    const [error, setError] = (0,react.useState)(null);
+    const { call } = useProviderFunction();
     (0,react.useEffect)(() => {
+        const fetchBoards = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const result = await call(integration.id, 'boards');
+                setBoards(result || []);
+            }
+            catch (err) {
+                console.error('Failed to fetch Pinterest boards:', err);
+                setError(err.message || 'Failed to load boards');
+                // Fallback to manual input on error
+                setBoards([]);
+            }
+            finally {
+                setLoading(false);
+            }
+        };
+        if (integration.id) {
+            fetchBoards();
+        }
+    }, [integration.id]);
+    const handleBoardChange = (boardId) => {
         onChange({
             ...settings,
-            Board: board, // Map local state to Uppercase 'Board' per API error
-            title,
-            link,
+            board: boardId,
         });
-    }, [board, title, link]);
+    };
     return (react.createElement("div", { className: "space-y-4" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Pinterest Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-1" }, "Board *"),
-            react.createElement("input", { type: "text", value: board, onChange: (e) => setBoard(e.target.value), placeholder: "Enter Board Name or ID (e.g. My Board)", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" }),
-            react.createElement("p", { className: "text-xs text-textItemBlur mt-1" }, "Required for Pinterest")),
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Board *"),
+            loading ? (react.createElement("div", { className: "text-sm text-textItemBlur" }, "Loading boards...")) : error || boards.length === 0 ? (react.createElement(react.Fragment, null,
+                react.createElement("input", { type: "text", value: settings.board || '', onChange: (e) => handleBoardChange(e.target.value), placeholder: "Enter Board ID", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none", required: true }),
+                error && (react.createElement("p", { className: "text-xs text-red-400 mt-1" }, error)))) : (react.createElement("select", { value: settings.board || '', onChange: (e) => handleBoardChange(e.target.value), className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none", required: true },
+                react.createElement("option", { value: "" }, "Select a board..."),
+                boards.map((board) => (react.createElement("option", { key: board.id, value: board.id }, board.name))))),
+            react.createElement("p", { className: "text-xs text-textItemBlur mt-1" }, "Required for Pinterest posts")),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-1" }, "Title"),
-            react.createElement("input", { type: "text", value: title, onChange: (e) => setTitle(e.target.value), placeholder: "Pin Title", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" })),
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Title (optional, max 100 chars)"),
+            react.createElement("input", { type: "text", value: settings.title || '', onChange: (e) => onChange({ ...settings, title: e.target.value }), placeholder: "Pin Title", maxLength: 100, className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" })),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-1" }, "Link"),
-            react.createElement("input", { type: "text", value: link, onChange: (e) => setLink(e.target.value), placeholder: "Destination URL (optional)", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" }))));
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Link (optional)"),
+            react.createElement("input", { type: "url", value: settings.link || '', onChange: (e) => onChange({ ...settings, link: e.target.value }), placeholder: "https://example.com", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" }))));
 };
 
 ;// ./src/post-creator/platform-settings/DiscordSettings.tsx
 
-const DiscordSettingsComponent = ({ settings, onChange }) => {
+
+const DiscordSettingsComponent = ({ settings, onChange, integrationId }) => {
+    const [channels, setChannels] = (0,react.useState)([]);
+    const [loading, setLoading] = (0,react.useState)(true);
+    const [error, setError] = (0,react.useState)(null);
+    const { call } = useProviderFunction();
+    (0,react.useEffect)(() => {
+        const fetchChannels = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const result = await call(integrationId, 'channels');
+                setChannels(result || []);
+            }
+            catch (err) {
+                console.error('Failed to fetch Discord channels:', err);
+                setError(err.message || 'Failed to load channels');
+                setChannels([]);
+            }
+            finally {
+                setLoading(false);
+            }
+        };
+        if (integrationId) {
+            fetchChannels();
+        }
+    }, [integrationId]);
     const handleChannelChange = (channelId) => {
         onChange({
             ...settings,
@@ -36452,20 +36506,52 @@ const DiscordSettingsComponent = ({ settings, onChange }) => {
         });
     };
     return (react.createElement("div", { className: "space-y-3" },
-        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Discord Channel ID *"),
-        react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Discord channel ID", className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
-        react.createElement("div", { className: "text-xs text-textItemBlur space-y-1" },
-            react.createElement("p", null, "To find your Discord channel ID:"),
-            react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
-                react.createElement("li", null, "Enable Developer Mode in Discord: User Settings \u2192 Advanced \u2192 Developer Mode"),
-                react.createElement("li", null, "Right-click on the channel in Discord"),
-                react.createElement("li", null, "Click \"Copy Channel ID\""),
-                react.createElement("li", null, "Paste the ID here")))));
+        react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Discord Settings"),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Channel *"),
+            loading ? (react.createElement("div", { className: "text-sm text-textItemBlur" }, "Loading channels...")) : error || channels.length === 0 ? (react.createElement(react.Fragment, null,
+                react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Discord channel ID", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
+                error && (react.createElement("p", { className: "text-xs text-red-400 mt-1" }, error)),
+                react.createElement("div", { className: "text-xs text-textItemBlur space-y-1 mt-2" },
+                    react.createElement("p", null, "To find your Discord channel ID:"),
+                    react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
+                        react.createElement("li", null, "Enable Developer Mode in Discord: User Settings \u2192 Advanced \u2192 Developer Mode"),
+                        react.createElement("li", null, "Right-click on the channel in Discord"),
+                        react.createElement("li", null, "Click \"Copy Channel ID\""),
+                        react.createElement("li", null, "Paste the ID here"))))) : (react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
+                react.createElement("option", { value: "" }, "Select a channel..."),
+                channels.map((channel) => (react.createElement("option", { key: channel.id, value: channel.id }, channel.name))))))));
 };
 
 ;// ./src/post-creator/platform-settings/SlackSettings.tsx
 
-const SlackSettingsComponent = ({ settings, onChange }) => {
+
+const SlackSettingsComponent = ({ settings, onChange, integrationId }) => {
+    const [channels, setChannels] = (0,react.useState)([]);
+    const [loading, setLoading] = (0,react.useState)(true);
+    const [error, setError] = (0,react.useState)(null);
+    const { call } = useProviderFunction();
+    (0,react.useEffect)(() => {
+        const fetchChannels = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const result = await call(integrationId, 'channels');
+                setChannels(result || []);
+            }
+            catch (err) {
+                console.error('Failed to fetch Slack channels:', err);
+                setError(err.message || 'Failed to load channels');
+                setChannels([]);
+            }
+            finally {
+                setLoading(false);
+            }
+        };
+        if (integrationId) {
+            fetchChannels();
+        }
+    }, [integrationId]);
     const handleChannelChange = (channelId) => {
         onChange({
             ...settings,
@@ -36473,20 +36559,101 @@ const SlackSettingsComponent = ({ settings, onChange }) => {
         });
     };
     return (react.createElement("div", { className: "space-y-3" },
-        react.createElement("label", { className: "block text-sm font-medium text-newTextColor" }, "Slack Channel ID *"),
-        react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Slack channel ID (e.g., C01234ABCDE)", className: "w-full px-3 py-2 bg-newBgColorInner border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
-        react.createElement("div", { className: "text-xs text-textItemBlur space-y-1" },
-            react.createElement("p", null, "To find your Slack channel ID:"),
-            react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
-                react.createElement("li", null, "Open Slack in your browser (not desktop app)"),
-                react.createElement("li", null, "Navigate to the channel"),
-                react.createElement("li", null,
-                    "The channel ID is in the URL: slack.com/messages/",
-                    react.createElement("strong", null, "C01234ABCDE")),
-                react.createElement("li", null, "Copy the ID (starts with C) and paste it here")))));
+        react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Slack Settings"),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Channel *"),
+            loading ? (react.createElement("div", { className: "text-sm text-textItemBlur" }, "Loading channels...")) : error || channels.length === 0 ? (react.createElement(react.Fragment, null,
+                react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Slack channel ID (e.g., C01234ABCDE)", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
+                error && (react.createElement("p", { className: "text-xs text-red-400 mt-1" }, error)),
+                react.createElement("div", { className: "text-xs text-textItemBlur space-y-1 mt-2" },
+                    react.createElement("p", null, "To find your Slack channel ID:"),
+                    react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
+                        react.createElement("li", null, "Open Slack in your browser (not desktop app)"),
+                        react.createElement("li", null, "Navigate to the channel"),
+                        react.createElement("li", null,
+                            "The channel ID is in the URL: slack.com/messages/",
+                            react.createElement("strong", null, "C01234ABCDE")),
+                        react.createElement("li", null, "Copy the ID (starts with C) and paste it here"))))) : (react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
+                react.createElement("option", { value: "" }, "Select a channel..."),
+                channels.map((channel) => (react.createElement("option", { key: channel.id, value: channel.id }, channel.name))))))));
+};
+
+;// ./src/post-creator/platform-settings/TikTokSettings.tsx
+
+const TikTokSettingsComponent = ({ settings, onChange }) => {
+    return (react.createElement("div", { className: "space-y-4" },
+        react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "TikTok Settings"),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Title (optional, max 90 chars)"),
+            react.createElement("input", { type: "text", value: settings.title || '', onChange: (e) => onChange({ ...settings, title: e.target.value }), placeholder: "Enter video title", maxLength: 90, className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" })),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Privacy Level *"),
+            react.createElement("select", { value: settings.privacy_level || 'PUBLIC_TO_EVERYONE', onChange: (e) => onChange({ ...settings, privacy_level: e.target.value }), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none", required: true },
+                react.createElement("option", { value: "PUBLIC_TO_EVERYONE" }, "Public"),
+                react.createElement("option", { value: "MUTUAL_FOLLOW_FRIENDS" }, "Friends"),
+                react.createElement("option", { value: "FOLLOWER_OF_CREATOR" }, "Followers"),
+                react.createElement("option", { value: "SELF_ONLY" }, "Private"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "flex items-center gap-2 cursor-pointer" },
+                react.createElement("input", { type: "checkbox", checked: settings.duet !== false, onChange: (e) => onChange({ ...settings, duet: e.target.checked }), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary" }),
+                react.createElement("span", { className: "text-sm text-newTextColor" }, "Allow Duet"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "flex items-center gap-2 cursor-pointer" },
+                react.createElement("input", { type: "checkbox", checked: settings.stitch !== false, onChange: (e) => onChange({ ...settings, stitch: e.target.checked }), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary" }),
+                react.createElement("span", { className: "text-sm text-newTextColor" }, "Allow Stitch"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "flex items-center gap-2 cursor-pointer" },
+                react.createElement("input", { type: "checkbox", checked: settings.comment !== false, onChange: (e) => onChange({ ...settings, comment: e.target.checked }), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary" }),
+                react.createElement("span", { className: "text-sm text-newTextColor" }, "Allow Comments"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Auto Add Music *"),
+            react.createElement("select", { value: settings.autoAddMusic || 'no', onChange: (e) => onChange({ ...settings, autoAddMusic: e.target.value }), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none", required: true },
+                react.createElement("option", { value: "yes" }, "Yes"),
+                react.createElement("option", { value: "no" }, "No"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "flex items-center gap-2 cursor-pointer" },
+                react.createElement("input", { type: "checkbox", checked: settings.brand_content_toggle === true, onChange: (e) => onChange({ ...settings, brand_content_toggle: e.target.checked }), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary" }),
+                react.createElement("span", { className: "text-sm text-newTextColor" }, "Brand Content"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "flex items-center gap-2 cursor-pointer" },
+                react.createElement("input", { type: "checkbox", checked: settings.brand_organic_toggle === true, onChange: (e) => onChange({ ...settings, brand_organic_toggle: e.target.checked }), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary" }),
+                react.createElement("span", { className: "text-sm text-newTextColor" }, "Brand Organic"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "flex items-center gap-2 cursor-pointer" },
+                react.createElement("input", { type: "checkbox", checked: settings.video_made_with_ai === true, onChange: (e) => onChange({ ...settings, video_made_with_ai: e.target.checked }), className: "w-4 h-4 rounded border-newBorder bg-newBgColor text-btnPrimary focus:ring-btnPrimary" }),
+                react.createElement("span", { className: "text-sm text-newTextColor" }, "Video Made with AI"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Content Posting Method *"),
+            react.createElement("select", { value: settings.content_posting_method || 'DIRECT_POST', onChange: (e) => onChange({ ...settings, content_posting_method: e.target.value }), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none", required: true },
+                react.createElement("option", { value: "DIRECT_POST" }, "Direct Post"),
+                react.createElement("option", { value: "UPLOAD" }, "Upload")))));
+};
+
+;// ./src/post-creator/platform-settings/YouTubeSettings.tsx
+
+const YouTubeSettingsComponent = ({ settings, onChange }) => {
+    return (react.createElement("div", { className: "space-y-4" },
+        react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "YouTube Settings"),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Title * (2-100 chars)"),
+            react.createElement("input", { type: "text", value: settings.title || '', onChange: (e) => onChange({ ...settings, title: e.target.value }), placeholder: "Enter video title", minLength: 2, maxLength: 100, required: true, className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor placeholder-textItemBlur focus:border-btnPrimary focus:outline-none" })),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Privacy *"),
+            react.createElement("select", { value: settings.type || 'public', onChange: (e) => onChange({ ...settings, type: e.target.value }), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none", required: true },
+                react.createElement("option", { value: "public" }, "Public"),
+                react.createElement("option", { value: "unlisted" }, "Unlisted"),
+                react.createElement("option", { value: "private" }, "Private"))),
+        react.createElement("div", null,
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Made for Kids (optional)"),
+            react.createElement("select", { value: settings.selfDeclaredMadeForKids || '', onChange: (e) => onChange({ ...settings, selfDeclaredMadeForKids: (e.target.value || undefined) }), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:border-btnPrimary focus:outline-none" },
+                react.createElement("option", { value: "" }, "Not specified"),
+                react.createElement("option", { value: "yes" }, "Yes, made for kids"),
+                react.createElement("option", { value: "no" }, "No, not made for kids")))));
 };
 
 ;// ./src/post-creator/platform-settings/PlatformSettings.tsx
+
+
 
 
 
@@ -36500,36 +36667,60 @@ const SlackSettingsComponent = ({ settings, onChange }) => {
  */
 const getPlatformType = (provider) => {
     const providerLower = provider.toLowerCase();
-    if (providerLower.includes('twitter') || providerLower === 'x') {
+    // Social Media Platforms
+    if (providerLower.includes('twitter') || providerLower === 'x')
         return 'x';
-    }
-    if (providerLower.includes('discord')) {
-        return 'discord';
-    }
-    if (providerLower.includes('slack')) {
-        return 'slack';
-    }
-    if (providerLower.includes('facebook')) {
+    if (providerLower.includes('facebook'))
         return 'facebook';
-    }
-    if (providerLower.includes('linkedin')) {
-        return 'linkedin';
-    }
-    if (providerLower.includes('instagram')) {
+    if (providerLower.includes('instagram'))
         return 'instagram';
-    }
-    if (providerLower.includes('threads')) {
+    if (providerLower.includes('linkedin'))
+        return 'linkedin';
+    if (providerLower.includes('threads'))
         return 'threads';
-    }
-    if (providerLower.includes('tiktok')) {
+    if (providerLower.includes('tiktok'))
         return 'tiktok';
-    }
-    if (providerLower.includes('pinterest')) {
+    if (providerLower.includes('pinterest'))
         return 'pinterest';
-    }
-    if (providerLower.includes('youtube')) {
+    if (providerLower.includes('youtube'))
         return 'youtube';
-    }
+    if (providerLower.includes('reddit'))
+        return 'reddit';
+    if (providerLower.includes('mastodon'))
+        return 'mastodon';
+    if (providerLower.includes('bluesky'))
+        return 'bluesky';
+    // Messaging Platforms
+    if (providerLower.includes('discord'))
+        return 'discord';
+    if (providerLower.includes('slack'))
+        return 'slack';
+    if (providerLower.includes('telegram'))
+        return 'telegram';
+    // Blogging Platforms
+    if (providerLower.includes('medium'))
+        return 'medium';
+    if (providerLower.includes('hashnode'))
+        return 'hashnode';
+    if (providerLower.includes('dev.to') || providerLower.includes('dev-to'))
+        return 'dev.to';
+    if (providerLower.includes('wordpress'))
+        return 'wordpress';
+    // Other Platforms
+    if (providerLower.includes('lemmy'))
+        return 'lemmy';
+    if (providerLower.includes('dribbble'))
+        return 'dribbble';
+    if (providerLower.includes('listmonk'))
+        return 'listmonk';
+    if (providerLower.includes('gmb') || providerLower.includes('google my business'))
+        return 'gmb';
+    if (providerLower.includes('farcaster') || providerLower.includes('warpcast'))
+        return 'farcaster';
+    if (providerLower.includes('nostr'))
+        return 'nostr';
+    if (providerLower.includes('vk'))
+        return 'vk';
     return null;
 };
 /**
@@ -36541,20 +36732,17 @@ const PlatformSettings = ({ integration, onChange }) => {
     // Initialize settings with default values based on platform
     const [settings, setSettings] = (0,react.useState)(() => {
         switch (platformType) {
+            // Social Media
             case 'x':
                 return { __type: 'x', who_can_reply_post: 'everyone' };
             case 'facebook':
-                return { __type: 'facebook', privacy: 'public' };
+                return { __type: 'facebook' };
             case 'linkedin':
-                return { __type: 'linkedin', visibility: 'public' };
+                return { __type: 'linkedin' };
             case 'instagram':
                 return { __type: 'instagram', post_type: 'post' };
-            case 'discord':
-                return { __type: 'discord', channel: '' };
-            case 'slack':
-                return { __type: 'slack', channel: '' };
             case 'threads':
-                return { __type: 'threads', who_can_reply: 'everyone' };
+                return { __type: 'threads' };
             case 'tiktok':
                 return {
                     __type: 'tiktok',
@@ -36562,16 +36750,54 @@ const PlatformSettings = ({ integration, onChange }) => {
                     duet: true,
                     stitch: true,
                     comment: true,
-                    autoAddMusic: false,
+                    autoAddMusic: 'no',
+                    brand_content_toggle: false,
                     brand_organic_toggle: false,
                     content_posting_method: 'DIRECT_POST',
                 };
             case 'pinterest':
-                return { __type: 'pinterest' };
+                return { __type: 'pinterest', board: '' };
             case 'youtube':
-                return { __type: 'youtube', title: '', privacy: 'public' };
+                return { __type: 'youtube', title: '', type: 'public' };
+            case 'mastodon':
+                return { __type: 'mastodon' };
+            case 'bluesky':
+                return { __type: 'bluesky' };
+            // Messaging
+            case 'discord':
+                return { __type: 'discord', channel: '' };
+            case 'slack':
+                return { __type: 'slack', channel: '' };
+            case 'telegram':
+                return { __type: 'telegram' };
+            // Blogging
+            case 'medium':
+                return { __type: 'medium', title: '', publication: '', tags: [] };
+            case 'hashnode':
+                return { __type: 'hashnode', title: '', publication: '', tags: [] };
+            case 'dev.to':
+                return { __type: 'dev.to', title: '' };
+            case 'wordpress':
+                return { __type: 'wordpress', title: '', type: 'post' };
+            // Other
+            case 'reddit':
+                return { __type: 'reddit', subreddit: [] };
+            case 'lemmy':
+                return { __type: 'lemmy', subreddit: [] };
+            case 'dribbble':
+                return { __type: 'dribbble', title: '' };
+            case 'listmonk':
+                return { __type: 'listmonk', subject: '', preview: '', list: '' };
+            case 'gmb':
+                return { __type: 'gmb' };
+            case 'farcaster':
+                return { __type: 'farcaster' };
+            case 'nostr':
+                return { __type: 'nostr' };
+            case 'vk':
+                return { __type: 'vk' };
             default:
-                return { __type: 'x' }; // Fallback
+                return { __type: 'x', who_can_reply_post: 'everyone' }; // Fallback
         }
     });
     // Notify parent when settings change
@@ -36593,10 +36819,11 @@ const PlatformSettings = ({ integration, onChange }) => {
         platformType === 'pinterest' && settings.__type === 'pinterest' && (react.createElement(PinterestSettingsComponent, { settings: settings, onChange: handleSettingsChange, integration: integration })),
         platformType === 'discord' && settings.__type === 'discord' && (react.createElement(DiscordSettingsComponent, { settings: settings, onChange: handleSettingsChange, integrationId: integration.id })),
         platformType === 'slack' && settings.__type === 'slack' && (react.createElement(SlackSettingsComponent, { settings: settings, onChange: handleSettingsChange, integrationId: integration.id })),
-        (platformType === 'threads' || platformType === 'tiktok' || platformType === 'youtube') && (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" },
-            "Advanced settings for ",
-            integration.identifier,
-            " coming soon"))));
+        platformType === 'tiktok' && settings.__type === 'tiktok' && (react.createElement(TikTokSettingsComponent, { settings: settings, onChange: handleSettingsChange })),
+        platformType === 'youtube' && settings.__type === 'youtube' && (react.createElement(YouTubeSettingsComponent, { settings: settings, onChange: handleSettingsChange })),
+        (platformType && !['x', 'facebook', 'linkedin', 'instagram', 'discord', 'slack', 'tiktok', 'pinterest', 'youtube'].includes(platformType)) && (react.createElement("div", { className: "text-sm text-textItemBlur text-center py-4" }, ['threads', 'mastodon', 'bluesky', 'telegram', 'nostr', 'vk'].includes(platformType)
+            ? `${integration.identifier} - No additional settings required`
+            : `Advanced settings for ${integration.identifier} coming soon`))));
 };
 
 ;// ./src/shared/utils/platformLimits.ts

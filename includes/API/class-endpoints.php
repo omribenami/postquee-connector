@@ -250,4 +250,24 @@ class Endpoints
         // PostQuee API returns: { "success": true, "refined": "AI-refined content here" }
         return $response;
     }
+
+    /**
+     * Call integration function (e.g., fetch channels, boards, subreddits).
+     * Maps to @Tool decorated methods on provider backends.
+     *
+     * @param string $integration_id Integration ID.
+     * @param string $function_name Function name (e.g., 'channels', 'boards').
+     * @param array $params Optional parameters for the function.
+     * @return array|\WP_Error Function result.
+     */
+    public function call_integration_function($integration_id, $function_name, $params = [])
+    {
+        $payload = [
+            'name' => $function_name,
+            'id' => $integration_id,
+            'data' => $params,
+        ];
+
+        return $this->client->request('/integrations/function', 'POST', $payload);
+    }
 }
