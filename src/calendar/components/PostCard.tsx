@@ -3,6 +3,7 @@ import { useDrag } from 'react-dnd';
 import dayjs from 'dayjs';
 import type { Post } from '../types';
 import { SocialIcon } from '../../shared/components/SocialIcon';
+import { getPlatformGradient } from '../../shared/utils/platformColors';
 
 const DND_TYPE = 'POST';
 
@@ -55,9 +56,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, variant = 'week', onDe
   return (
     <div
       ref={drag}
-      className={`mb-1 rounded bg-newColColor border-l-2 border-btnPrimary hover:bg-newBoxHover cursor-move group ${getVariantStyles()} ${
-        isDragging ? 'opacity-50' : ''
-      }`}
+      className={`mb-1 rounded bg-newColColor border-l-2 border-btnPrimary hover:bg-newBoxHover cursor-move group ${getVariantStyles()} ${isDragging ? 'opacity-50' : ''
+        }`}
       onClick={handleEdit}
     >
       {/* Header with integration info */}
@@ -70,12 +70,13 @@ export const PostCard: React.FC<PostCardProps> = ({ post, variant = 'week', onDe
               className={variant === 'month' ? 'w-3 h-3 rounded-full' : 'w-4 h-4 rounded-full'}
             />
             {/* Social media platform badge */}
-            <div className={`absolute -bottom-0.5 -right-0.5 bg-white rounded-full flex items-center justify-center border border-newBorder ${
-              variant === 'month' ? 'w-2 h-2' : 'w-2.5 h-2.5'
-            }`}>
+            <div
+              className={`absolute -bottom-0.5 -right-0.5 rounded-full flex items-center justify-center border border-newBorder ${variant === 'month' ? 'w-2 h-2' : 'w-2.5 h-2.5'}`}
+              style={{ background: getPlatformGradient(post.integration.providerIdentifier) }}
+            >
               <SocialIcon
                 identifier={post.integration.providerIdentifier}
-                className={variant === 'month' ? 'w-1 h-1' : 'w-1.5 h-1.5'}
+                className={`${variant === 'month' ? 'w-1 h-1' : 'w-1.5 h-1.5'} text-white`}
               />
             </div>
           </div>
@@ -113,11 +114,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post, variant = 'week', onDe
 
       {/* Content preview */}
       <div className={`text-textItemBlur ${variant === 'month' ? 'line-clamp-1' : 'line-clamp-2'}`}>
-        {post.value[0]?.content.replace(/<[^>]*>/g, '') || 'No content'}
+        {post.value?.[0]?.content.replace(/<[^>]*>/g, '') || 'No content'}
       </div>
 
       {/* Images (only in day view) */}
-      {variant === 'day' && post.value[0]?.image && post.value[0].image.length > 0 && (
+      {variant === 'day' && post.value?.[0]?.image && post.value[0].image.length > 0 && (
         <div className="mt-2 flex gap-2">
           {post.value[0].image.slice(0, 4).map((img, idx) => (
             <img
@@ -134,15 +135,14 @@ export const PostCard: React.FC<PostCardProps> = ({ post, variant = 'week', onDe
       {variant === 'day' && post.state && (
         <div className="mt-2">
           <span
-            className={`text-xs px-2 py-1 rounded ${
-              post.state === 'PUBLISHED'
-                ? 'bg-green-500/20 text-green-400'
-                : post.state === 'QUEUE'
+            className={`text-xs px-2 py-1 rounded ${post.state === 'PUBLISHED'
+              ? 'bg-green-500/20 text-green-400'
+              : post.state === 'QUEUE'
                 ? 'bg-blue-500/20 text-blue-400'
                 : post.state === 'ERROR'
-                ? 'bg-red-500/20 text-red-400'
-                : 'bg-gray-500/20 text-gray-400'
-            }`}
+                  ? 'bg-red-500/20 text-red-400'
+                  : 'bg-gray-500/20 text-gray-400'
+              }`}
           >
             {post.state}
           </span>

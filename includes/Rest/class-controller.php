@@ -136,6 +136,13 @@ class Controller
                 ),
             ),
         ));
+
+        // Integration Function (e.g. get channels for Discord)
+        register_rest_route($namespace, '/integration/function', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'integration_function'),
+            'permission_callback' => array($this, 'check_permission'),
+        ));
     }
 
     /**
@@ -483,6 +490,37 @@ class Controller
 
         // Call the real API (which maps to /generate)
         $result = $endpoints->refine_content($content, $prompt);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return rest_ensure_response($result);
+    }
+
+    /**
+     * Integration Function Callback.
+     * Used for fetching dynamic data like Discord channels.
+     */
+    public function integration_function($request)
+    {
+        $api_key = get_option(Settings::OPTION_API_KEY);
+        if (!$api_key) {
+            return new \WP_Error('no_api_key', 'API key not configured', array('status' => 400));
+        }
+
+        $params = $request->get_json_params();
+        $integration_id = isset($params['id']) ? $params['id'] : '';
+        $function_name = isset($params['name']) ? $params['name'] : '';
+        $data = isset($params['data']) ? $params['data'] : [];
+
+        if (!$integration_id || !$function_name) {
+            return new \WP_Error('missing_params', 'Integration ID and Function Name required', array('status' => 400));
+        }
+
+        $client = new Client($api_key);
+        $endpoints = new Endpoints($client);
+        $result = $endpoints->call_integration_function($integration_id, $function_name, $data);
 
         if (is_wp_error($result)) {
             return $result;

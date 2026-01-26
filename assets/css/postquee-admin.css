@@ -253,6 +253,14 @@ body.toplevel_page_postquee.folded #wpcontent {
     color: #bd081c;
 }
 
+.provider-discord {
+    color: #5865F2;
+}
+
+.provider-slack {
+    color: #E01E5A;
+}
+
 /* Main Content */
 .pq-main-content {
     flex: 1;

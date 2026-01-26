@@ -16,6 +16,7 @@ interface WordPressGlobal {
   integrations: any[];
   ajaxUrl: string;
   user: string;
+  aiNonce?: string;
 }
 
 declare global {

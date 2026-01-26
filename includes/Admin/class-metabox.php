@@ -84,13 +84,15 @@ class Metabox
 
         <button type="button" id="postquee-push-now" class="button button-small"
             data-post-id="<?php echo esc_attr($post->ID); ?>"
-            data-nonce="<?php echo wp_create_nonce('postquee_push_now'); ?>">
+            data-nonce="<?php echo esc_attr(wp_create_nonce('postquee_push_now')); ?>">
             Push Now
         </button>
+        <?php
 
-        <script>
-            jQuery(document).ready(function ($) {
-                $('#postquee-push-now').on('click', function (e) {
+        // Enqueue inline script for metabox button (WordPress.org compliant)
+        wp_add_inline_script('jquery', "
+            jQuery(document).ready(function($) {
+                $('#postquee-push-now').on('click', function(e) {
                     e.preventDefault();
                     var btn = $(this);
                     btn.prop('disabled', true).text('Pushing...');
@@ -99,7 +101,7 @@ class Metabox
                         action: 'postquee_push_now',
                         post_id: btn.data('post-id'),
                         nonce: btn.data('nonce')
-                    }, function (response) {
+                    }, function(response) {
                         if (response.success) {
                             btn.text('Success!');
                             location.reload();
@@ -110,8 +112,8 @@ class Metabox
                     });
                 });
             });
-        </script>
-        <?php
+        ");
+        ?>
     }
 
     /**

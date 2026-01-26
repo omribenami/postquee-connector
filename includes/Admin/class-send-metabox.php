@@ -55,93 +55,18 @@ class Send_Metabox
                 id="postquee-send-button"
                 class="button button-primary button-large"
                 style="width: 100%; height: 40px; font-size: 14px;"
+                data-post-id="<?php echo esc_attr($post->ID); ?>"
             >
                 <span class="dashicons dashicons-share" style="margin-top: 4px;"></span>
                 Send to PostQuee
             </button>
 
+            <input type="hidden" name="postquee_calendar_url" value="<?php echo esc_url(admin_url('admin.php?page=postquee-calendar')); ?>">
+
             <p class="description" style="margin-top: 12px; font-size: 12px; color: #666;">
                 This will open the PostQuee calendar with your post content pre-filled.
             </p>
         </div>
-
-        <script>
-        (function() {
-            const button = document.getElementById('postquee-send-button');
-            if (!button) return;
-
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // Get post content
-                let content = '';
-                let title = '';
-
-                // Try to get content from different editors
-                if (typeof tinymce !== 'undefined' && tinymce.activeEditor && !tinymce.activeEditor.isHidden()) {
-                    // Classic Editor (TinyMCE)
-                    content = tinymce.activeEditor.getContent();
-                } else if (document.getElementById('content')) {
-                    // Text mode
-                    content = document.getElementById('content').value;
-                }
-
-                // Get title
-                const titleField = document.getElementById('title');
-                if (titleField) {
-                    title = titleField.value;
-                }
-
-                // Get featured image
-                let featuredImage = '';
-                const featuredImageEl = document.querySelector('#postimagediv img');
-                if (featuredImageEl) {
-                    featuredImage = featuredImageEl.src;
-                }
-
-                // Send message to PostQuee calendar
-                const calendarFrame = document.querySelector('iframe[src*="postquee"]');
-                if (calendarFrame) {
-                    calendarFrame.contentWindow.postMessage({
-                        type: 'POSTQUEE_OPEN_CREATOR',
-                        payload: {
-                            title: title,
-                            content: content,
-                            featuredImage: featuredImage,
-                            postId: <?php echo (int) $post->ID; ?>,
-                            postUrl: '<?php echo esc_js(get_permalink($post->ID)); ?>',
-                        }
-                    }, '*');
-                } else {
-                    // If not in iframe context, broadcast to window
-                    window.postMessage({
-                        type: 'POSTQUEE_OPEN_CREATOR',
-                        payload: {
-                            title: title,
-                            content: content,
-                            featuredImage: featuredImage,
-                            postId: <?php echo (int) $post->ID; ?>,
-                            postUrl: '<?php echo esc_js(get_permalink($post->ID)); ?>',
-                        }
-                    }, '*');
-
-                    // Also try to navigate to PostQuee calendar page if we're not already there
-                    const calendarUrl = '<?php echo esc_js(admin_url('admin.php?page=postquee-calendar')); ?>';
-                    if (!window.location.href.includes('page=postquee-calendar')) {
-                        // Store message for retrieval after page load
-                        sessionStorage.setItem('postquee_pending_message', JSON.stringify({
-                            title: title,
-                            content: content,
-                            featuredImage: featuredImage,
-                            postId: <?php echo (int) $post->ID; ?>,
-                            postUrl: '<?php echo esc_js(get_permalink($post->ID)); ?>',
-                        }));
-                        window.location.href = calendarUrl;
-                    }
-                }
-            });
-        })();
-        </script>
         <?php
     }
 
@@ -171,5 +96,62 @@ class Send_Metabox
                 margin-right: 4px;
             }
         ');
+
+        // Add inline script for "Send to PostQuee" button
+        wp_add_inline_script('jquery', "
+            (function() {
+                const button = document.getElementById('postquee-send-button');
+                if (!button) return;
+
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Get post data from localized script
+                    const postId = button.closest('.inside').querySelector('[data-post-id]')?.getAttribute('data-post-id') || '';
+
+                    // Get post content
+                    let content = '';
+                    let title = '';
+
+                    // Try to get content from different editors
+                    if (typeof tinymce !== 'undefined' && tinymce.activeEditor && !tinymce.activeEditor.isHidden()) {
+                        content = tinymce.activeEditor.getContent();
+                    } else if (document.getElementById('content')) {
+                        content = document.getElementById('content').value;
+                    }
+
+                    // Get title
+                    const titleField = document.getElementById('title');
+                    if (titleField) {
+                        title = titleField.value;
+                    }
+
+                    // Get featured image
+                    let featuredImage = '';
+                    const featuredImageEl = document.querySelector('#postimagediv img');
+                    if (featuredImageEl) {
+                        featuredImage = featuredImageEl.src;
+                    }
+
+                    // Get calendar URL
+                    const calendarUrl = document.querySelector('[name=\"postquee_calendar_url\"]')?.value || '';
+
+                    // Store data in sessionStorage for PostQuee calendar to pick up
+                    sessionStorage.setItem('postquee_pending_message', JSON.stringify({
+                        title: title,
+                        content: content,
+                        featuredImage: featuredImage,
+                        postId: postId,
+                    }));
+
+                    // Navigate to PostQuee calendar
+                    if (calendarUrl) {
+                        window.location.href = calendarUrl;
+                    } else {
+                        alert('PostQuee calendar URL not found. Please check plugin configuration.');
+                    }
+                });
+            })();
+        ");
     }
 }

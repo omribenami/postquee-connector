@@ -250,4 +250,22 @@ class Endpoints
         // PostQuee API returns: { "success": true, "refined": "AI-refined content here" }
         return $response;
     }
+    /**
+     * Execute integration function.
+     *
+     * @param string $integration_id Integration ID.
+     * @param string $function_name Function name (e.g., 'channels').
+     * @param array $data Additional parameters.
+     * @return array|\WP_Error Function execution result.
+     */
+    public function call_integration_function($integration_id, $function_name, $data = [])
+    {
+        $payload = [
+            'id' => $integration_id,
+            'name' => $function_name,
+            'data' => $data,
+        ];
+
+        return $this->client->request('/integration/function', 'POST', $payload);
+    }
 }

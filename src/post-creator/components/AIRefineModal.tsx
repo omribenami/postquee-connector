@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 interface AIRefineModalProps {
   currentContent: string;
   onApply: (refinedContent: string, extractedTags?: Array<{ label: string; value: string }>) => void;
+  maxLength?: number;
   onClose: () => void;
 }
 
@@ -13,6 +14,7 @@ interface AIRefineModalProps {
 export const AIRefineModal: React.FC<AIRefineModalProps> = ({
   currentContent,
   onApply,
+  maxLength,
   onClose,
 }) => {
   const [isRefining, setIsRefining] = useState(false);
@@ -50,6 +52,7 @@ export const AIRefineModal: React.FC<AIRefineModalProps> = ({
           content: textContent,
           // Prompt is now optional in backend, passing it anyway
           prompt: selectedPrompt,
+          maxLength: maxLength || 2200, // Default to a reasonable limit if none provided
         }),
       });
 
@@ -125,8 +128,8 @@ export const AIRefineModal: React.FC<AIRefineModalProps> = ({
                   key={prompt.value}
                   onClick={() => setSelectedPrompt(prompt.value)}
                   className={`p-3 rounded-lg border text-left transition-all ${selectedPrompt === prompt.value
-                      ? 'border-btnPrimary bg-btnPrimary/10'
-                      : 'border-newBorder hover:border-btnPrimary/50'
+                    ? 'border-btnPrimary bg-btnPrimary/10'
+                    : 'border-newBorder hover:border-btnPrimary/50'
                     }`}
                 >
                   <div className="font-medium text-newTextColor">{prompt.label}</div>

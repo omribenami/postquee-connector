@@ -2572,7 +2572,7 @@ function useCalendarPosts() {
         },
     });
     return {
-        posts: data?.data || [],
+        posts: Array.isArray(data) ? data : data?.posts || data?.data || [],
         isLoading,
         error,
         refresh: mutate,
@@ -6958,31 +6958,68 @@ function useRegisteredDragSource(spec, monitor, connector) {
  * Renders the appropriate icon based on the platform identifier
  */
 const SocialIcon = ({ identifier, className = 'w-4 h-4' }) => {
+    // Normalize identifier: lowercase and remove non-alphanumeric chars
+    const normalizedId = identifier.toLowerCase().replace(/[^a-z0-9]/g, '');
+    // Ensure icon is black/dark so it shows up on white backgrounds
+    // We append text-black, but allow className to override if it has !text-something
+    const iconClass = `${className} text-black`;
     const icons = {
-        x: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        x: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" }))),
-        facebook: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        facebook: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" }))),
-        linkedin: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        linkedin: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" }))),
-        instagram: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        instagram: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" }))),
-        pinterest: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        pinterest: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" }))),
-        tiktok: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        tiktok: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" }))),
-        youtube: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        youtube: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" }))),
-        threads: (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
+        discord: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.772-.6083 1.1588a18.3246 18.3246 0 00-5.4876 0C8.91 5.3787 8.6534 6.7588 8.86 8.356c-1.36.43-2.61 1.7-2.61 3.25 0 2.06 1.83 3.73 4.09 3.73 1.96 0 3.58-1.29 4.02-3.08.15.02.3.03.45.03 2.26 0 4.09-1.67 4.09-3.73 0-1.55-1.25-2.82-2.61-3.25.206-1.597.462-2.977 1.127-4.008zM9.25 10.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zm5.5 0c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z" }))),
+        slack: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
+            react.createElement("path", { d: "M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.522 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.166 0a2.528 2.528 0 0 1 2.522 2.522v6.312zM15.166 18.956a2.528 2.528 0 0 1 2.522 2.521A2.528 2.528 0 0 1 15.166 24a2.527 2.527 0 0 1-2.522-2.521v-2.522h2.522zM15.166 17.688a2.527 2.527 0 0 1-2.522-2.521 2.527 2.527 0 0 1 2.522-2.522h6.312A2.527 2.527 0 0 1 24 15.167a2.528 2.528 0 0 1-2.522 2.521h-6.312z" }))),
+        threads: (react.createElement("svg", { className: iconClass, viewBox: "0 0 24 24", fill: "currentColor" },
             react.createElement("path", { d: "M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.295a13.526 13.526 0 0 1 3.02.142l.126.02.002-1.126c0-.926-.08-1.65-.237-2.152-.18-.577-.49-1.033-.92-1.353-.495-.37-1.184-.567-2.046-.586-.75-.015-1.438.155-2.046.505-.581.336-1.016.8-1.293 1.382l-1.828-.803c.434-.965 1.138-1.74 2.095-2.303.965-.566 2.084-.85 3.33-.846 1.346.024 2.448.336 3.27.93.854.616 1.445 1.485 1.755 2.582.157.56.235 1.42.235 2.554v6.464c.002.476.091.846.264 1.096.173.25.408.375.699.375.408 0 .776-.202 1.096-.604.32-.402.569-.967.745-1.687l1.633.546c-.268 1.012-.677 1.88-1.217 2.583-.54.703-1.25 1.054-2.115 1.054-.764 0-1.414-.27-1.936-.806-.522-.537-.784-1.253-.784-2.138v-.354c-1.784 2.13-4.117 3.127-6.947 2.965zm-.191-7.5c-1.065.05-1.933.335-2.583.845-.65.51-.975 1.165-.975 1.96 0 .86.355 1.555.975 2.085.62.53 1.455.795 2.505.795 1.065 0 1.978-.275 2.74-.825.761-.55 1.293-1.335 1.595-2.355.138-.47.207-1.015.207-1.635v-.885c-1.213-.142-2.493-.242-3.83-.242l-.634-.002zm8.304 3.635c-.002 0-.004-.002-.006-.004.002.002.004.004.006.004z" }))),
     };
+    // Fallback icon
     const defaultIcon = (react.createElement("svg", { className: className, viewBox: "0 0 24 24", fill: "currentColor" },
         react.createElement("circle", { cx: "12", cy: "12", r: "10", fillOpacity: "0.3" }),
         react.createElement("path", { d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" })));
-    return icons[identifier.toLowerCase()] || defaultIcon;
+    return icons[normalizedId] || defaultIcon;
+};
+
+;// ./src/shared/utils/platformColors.ts
+const platformColors = {
+    discord: '#5865F2',
+    facebook: '#1877F2',
+    instagram: '#E4405F', // Gradient usually, but fallback to main color
+    linkedin: '#0A66C2',
+    pinterest: '#BD081C',
+    slack: '#4A154B',
+    tiktok: '#000000',
+    twitter: '#1DA1F2',
+    x: '#000000',
+    youtube: '#FF0000',
+    threads: '#000000',
+};
+const getPlatformColor = (identifier) => {
+    const id = identifier.toLowerCase();
+    return platformColors[id] || '#808080'; // Default grey
+};
+const getPlatformGradient = (identifier) => {
+    const id = identifier.toLowerCase();
+    if (id === 'instagram') {
+        return 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)';
+    }
+    return getPlatformColor(id);
 };
 
 ;// ./src/calendar/components/PostCard.tsx
+
 
 
 
@@ -7027,8 +7064,8 @@ const PostCard = ({ post, variant = 'week', onDelete, onEdit }) => {
         react.createElement("div", { className: "flex items-center gap-2 mb-1" },
             post.integration.picture && (react.createElement("div", { className: "relative flex-shrink-0" },
                 react.createElement("img", { src: post.integration.picture, alt: post.integration.name, className: variant === 'month' ? 'w-3 h-3 rounded-full' : 'w-4 h-4 rounded-full' }),
-                react.createElement("div", { className: `absolute -bottom-0.5 -right-0.5 bg-white rounded-full flex items-center justify-center border border-newBorder ${variant === 'month' ? 'w-2 h-2' : 'w-2.5 h-2.5'}` },
-                    react.createElement(SocialIcon, { identifier: post.integration.providerIdentifier, className: variant === 'month' ? 'w-1 h-1' : 'w-1.5 h-1.5' })))),
+                react.createElement("div", { className: `absolute -bottom-0.5 -right-0.5 rounded-full flex items-center justify-center border border-newBorder ${variant === 'month' ? 'w-2 h-2' : 'w-2.5 h-2.5'}`, style: { background: getPlatformGradient(post.integration.providerIdentifier) } },
+                    react.createElement(SocialIcon, { identifier: post.integration.providerIdentifier, className: `${variant === 'month' ? 'w-1 h-1' : 'w-1.5 h-1.5'} text-white` })))),
             react.createElement("span", { className: "text-newTextColor font-medium truncate" }, dayjs_min_default()(post.publishDate).format('HH:mm')),
             react.createElement("div", { className: "ml-auto opacity-0 group-hover:opacity-100 flex gap-1 transition-opacity" },
                 onEdit && (react.createElement("button", { onClick: handleEdit, className: "p-1 hover:bg-newBoxHover rounded", title: "Edit post" },
@@ -7037,8 +7074,8 @@ const PostCard = ({ post, variant = 'week', onDelete, onEdit }) => {
                 onDelete && (react.createElement("button", { onClick: handleDelete, className: "p-1 hover:bg-red-500/20 rounded", title: "Delete post" },
                     react.createElement("svg", { className: "w-3 h-3 text-red-400", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
                         react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" })))))),
-        react.createElement("div", { className: `text-textItemBlur ${variant === 'month' ? 'line-clamp-1' : 'line-clamp-2'}` }, post.value[0]?.content.replace(/<[^>]*>/g, '') || 'No content'),
-        variant === 'day' && post.value[0]?.image && post.value[0].image.length > 0 && (react.createElement("div", { className: "mt-2 flex gap-2" }, post.value[0].image.slice(0, 4).map((img, idx) => (react.createElement("img", { key: idx, src: img.path, alt: img.alt || '', className: "w-12 h-12 object-cover rounded" }))))),
+        react.createElement("div", { className: `text-textItemBlur ${variant === 'month' ? 'line-clamp-1' : 'line-clamp-2'}` }, post.value?.[0]?.content.replace(/<[^>]*>/g, '') || 'No content'),
+        variant === 'day' && post.value?.[0]?.image && post.value[0].image.length > 0 && (react.createElement("div", { className: "mt-2 flex gap-2" }, post.value[0].image.slice(0, 4).map((img, idx) => (react.createElement("img", { key: idx, src: img.path, alt: img.alt || '', className: "w-12 h-12 object-cover rounded" }))))),
         variant === 'day' && post.state && (react.createElement("div", { className: "mt-2" },
             react.createElement("span", { className: `text-xs px-2 py-1 rounded ${post.state === 'PUBLISHED'
                     ? 'bg-green-500/20 text-green-400'
@@ -35824,6 +35861,12 @@ const TipTapEditor = ({ content, onChange, placeholder = 'Write your post...', o
             },
         },
     });
+    // Sync content updates from parent
+    react.useEffect(() => {
+        if (editor && content !== editor.getHTML()) {
+            editor.commands.setContent(content);
+        }
+    }, [content, editor]);
     if (!editor) {
         return null;
     }
@@ -35866,6 +35909,7 @@ const TipTapEditor = ({ content, onChange, placeholder = 'Write your post...', o
 ;// ./src/post-creator/components/ChannelSelector.tsx
 
 
+
 /**
  * Channel Selection Component
  * Displays available integrations as circular icons
@@ -35894,8 +35938,8 @@ const ChannelSelector = ({ integrations, selectedIds, onChange, }) => {
                     react.createElement("div", { className: `w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${isSelected
                             ? 'border-btnPrimary ring-2 ring-btnPrimary/30'
                             : 'border-newBorder grayscale hover:grayscale-0'}` }, integration.picture ? (react.createElement("img", { src: integration.picture, alt: integration.name, className: "w-full h-full object-cover" })) : (react.createElement("div", { className: "w-full h-full bg-newBgColorInner flex items-center justify-center text-newTextColor font-semibold" }, integration.name.charAt(0).toUpperCase()))),
-                    react.createElement("div", { className: "absolute bottom-0 right-0 w-5 h-5 bg-white rounded-full flex items-center justify-center border border-newBorder" },
-                        react.createElement(SocialIcon, { identifier: integration.identifier, className: "w-3 h-3" }))),
+                    react.createElement("div", { className: "absolute bottom-0 right-0 w-5 h-5 rounded-full flex items-center justify-center border border-newBorder", style: { background: getPlatformGradient(integration.identifier) } },
+                        react.createElement(SocialIcon, { identifier: integration.identifier, className: "w-3 h-3 text-white" }))),
                 isSelected && (react.createElement("div", { className: "absolute -top-1 -right-1 w-5 h-5 bg-btnPrimary rounded-full flex items-center justify-center" },
                     react.createElement("svg", { className: "w-3 h-3 text-white", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
                         react.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 3, d: "M5 13l4 4L19 7" })))),
@@ -36144,7 +36188,7 @@ const TagsInput = ({ selectedTags, onChange, availableTags = [], }) => {
  * AI Content Refinement Modal
  * Shows AI-suggested improvements for post content
  */
-const AIRefineModal = ({ currentContent, onApply, onClose, }) => {
+const AIRefineModal = ({ currentContent, onApply, maxLength, onClose, }) => {
     const [isRefining, setIsRefining] = (0,react.useState)(false);
     const [refinedContent, setRefinedContent] = (0,react.useState)('');
     const [error, setError] = (0,react.useState)(null);
@@ -36176,6 +36220,7 @@ const AIRefineModal = ({ currentContent, onApply, onClose, }) => {
                     content: textContent,
                     // Prompt is now optional in backend, passing it anyway
                     prompt: selectedPrompt,
+                    maxLength: maxLength || 2200, // Default to a reasonable limit if none provided
                 }),
             });
             if (!response.ok) {
@@ -36377,9 +36422,80 @@ const InstagramSettingsComponent = ({ settings, onChange, }) => {
             react.createElement("p", { className: "mt-1 text-xs text-textItemBlur" }, "Choose whether to post to feed or stories"))));
 };
 
+;// ./src/helpers/useProviderFunction.ts
+
+const useProviderFunction = () => {
+    const [loading, setLoading] = (0,react.useState)(false);
+    const [error, setError] = (0,react.useState)(null);
+    const callFunction = (0,react.useCallback)(async (integrationId, functionName, data = {}) => {
+        setLoading(true);
+        setError(null);
+        // Safe access to global variables
+        const adminVars = window.postquee_admin_vars || window.postqueeAdminVars;
+        const wpVars = window.postqueeWP;
+        const ajaxUrl = adminVars?.ajaxurl || wpVars?.ajaxUrl; // Note case difference: ajaxurl vs ajaxUrl
+        const nonce = adminVars?.nonce || wpVars?.aiNonce;
+        if (!ajaxUrl || !nonce) {
+            console.error('PostQuee Admin Vars missing:', window);
+            setError('Configuration Error: PostQuee variables not found. Please reload the page.');
+            setLoading(false);
+            return;
+        }
+        const formData = new FormData();
+        formData.append('action', 'postquee_integration_function');
+        formData.append('nonce', nonce);
+        formData.append('id', integrationId);
+        formData.append('function', functionName);
+        formData.append('data', JSON.stringify(data));
+        console.log('Calling Provider Function:', functionName, 'for', integrationId);
+        try {
+            const response = await fetch(ajaxUrl, {
+                method: 'POST',
+                body: formData,
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP Error: ${response.status}`);
+            }
+            const json = await response.json();
+            if (!json.success) {
+                throw new Error(json.data || 'Unknown error');
+            }
+            return json.data;
+        }
+        catch (err) {
+            console.error('Provider Function Error:', err);
+            setError(err.message || 'Request Failed');
+            return undefined;
+        }
+        finally {
+            setLoading(false);
+        }
+    }, []);
+    return { callFunction, loading, error };
+};
+
 ;// ./src/post-creator/platform-settings/PinterestSettings.tsx
 
-const PinterestSettingsComponent = ({ settings, onChange, }) => {
+
+const PinterestSettingsComponent = ({ settings, onChange, integration, }) => {
+    const { callFunction, loading, error } = useProviderFunction();
+    const [boards, setBoards] = (0,react.useState)([]);
+    (0,react.useEffect)(() => {
+        if (integration?.id) {
+            callFunction(integration.id, 'boards')
+                .then((data) => {
+                if (Array.isArray(data)) {
+                    setBoards(data);
+                    if (!settings.board && data.length > 0) {
+                        onChange({ ...settings, board: data[0].id });
+                    }
+                }
+            })
+                .catch((e) => {
+                console.error("Failed to load Pinterest boards", e);
+            });
+        }
+    }, [integration?.id, callFunction]);
     const handleBoardChange = (boardId) => {
         onChange({
             ...settings,
@@ -36389,18 +36505,13 @@ const PinterestSettingsComponent = ({ settings, onChange, }) => {
     return (react.createElement("div", { className: "space-y-4" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Pinterest Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Board ID *"),
-            react.createElement("input", { type: "text", value: settings.board || '', onChange: (e) => handleBoardChange(e.target.value), placeholder: "Enter Board ID", className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none", required: true }),
-            react.createElement("div", { className: "text-xs text-textItemBlur space-y-1 mt-2" },
-                react.createElement("p", null, "To find your Pinterest Board ID:"),
-                react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
-                    react.createElement("li", null, "Go to pinterest.com and open the board"),
-                    react.createElement("li", null, "Copy the board ID from the URL"),
-                    react.createElement("li", null,
-                        "Example: pinterest.com/username/",
-                        react.createElement("strong", null, "board-name"),
-                        "/"),
-                    react.createElement("li", null, "Paste the board name or ID here")))),
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Select Board"),
+            loading ? (react.createElement("div", { className: "text-xs text-textItemBlur" }, "Loading boards...")) : error ? (react.createElement("div", { className: "text-xs text-red-500" },
+                "Error: ",
+                error)) : (react.createElement("select", { value: settings.board || '', onChange: (e) => handleBoardChange(e.target.value), className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none", required: true },
+                react.createElement("option", { value: "" }, "-- Select Board --"),
+                boards.map((board) => (react.createElement("option", { key: board.id, value: board.id }, board.name))))),
+            boards.length === 0 && !loading && !error && (react.createElement("div", { className: "text-xs text-textItemBlur mt-2" }, "No boards found."))),
         react.createElement("div", null,
             react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Title (optional, max 100 chars)"),
             react.createElement("input", { type: "text", value: settings.title || '', onChange: (e) => onChange({ ...settings, title: e.target.value }), placeholder: "Pin Title", maxLength: 100, className: "w-full bg-newBgColor border border-newBorder rounded px-3 py-2 text-sm text-newTextColor focus:border-btnPrimary outline-none" })),
@@ -36411,7 +36522,27 @@ const PinterestSettingsComponent = ({ settings, onChange, }) => {
 
 ;// ./src/post-creator/platform-settings/DiscordSettings.tsx
 
-const DiscordSettingsComponent = ({ settings, onChange }) => {
+
+const DiscordSettingsComponent = ({ settings, onChange, integrationId }) => {
+    const { callFunction, loading, error } = useProviderFunction();
+    const [channels, setChannels] = (0,react.useState)([]);
+    (0,react.useEffect)(() => {
+        if (integrationId) {
+            callFunction(integrationId, 'channels')
+                .then((data) => {
+                if (Array.isArray(data)) {
+                    setChannels(data);
+                    // Auto-select first channel if none selected
+                    if (!settings.channel && data.length > 0) {
+                        onChange({ ...settings, channel: data[0].id });
+                    }
+                }
+            })
+                .catch((e) => {
+                console.error("Failed to load channels", e);
+            });
+        }
+    }, [integrationId, callFunction]);
     const handleChannelChange = (channelId) => {
         onChange({
             ...settings,
@@ -36421,20 +36552,37 @@ const DiscordSettingsComponent = ({ settings, onChange }) => {
     return (react.createElement("div", { className: "space-y-3" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Discord Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Channel ID *"),
-            react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Discord channel ID", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
-            react.createElement("div", { className: "text-xs text-textItemBlur space-y-1 mt-2" },
-                react.createElement("p", null, "To find your Discord channel ID:"),
-                react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
-                    react.createElement("li", null, "Enable Developer Mode in Discord: User Settings \u2192 Advanced \u2192 Developer Mode"),
-                    react.createElement("li", null, "Right-click on the channel in Discord"),
-                    react.createElement("li", null, "Click \"Copy Channel ID\""),
-                    react.createElement("li", null, "Paste the ID here"))))));
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Select Channel"),
+            loading ? (react.createElement("div", { className: "text-xs text-textItemBlur" }, "Loading channels...")) : error ? (react.createElement("div", { className: "text-xs text-red-500" },
+                "Error loading channels: ",
+                error)) : (react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
+                react.createElement("option", { value: "" }, "-- Select Channel --"),
+                channels.map((ch) => (react.createElement("option", { key: ch.id, value: ch.id }, ch.name))))),
+            channels.length === 0 && !loading && !error && (react.createElement("p", { className: "text-xs text-textItemBlur mt-2" }, "No channels found for this Discord server.")))));
 };
 
 ;// ./src/post-creator/platform-settings/SlackSettings.tsx
 
-const SlackSettingsComponent = ({ settings, onChange }) => {
+
+const SlackSettingsComponent = ({ settings, onChange, integrationId }) => {
+    const { callFunction, loading, error } = useProviderFunction();
+    const [channels, setChannels] = (0,react.useState)([]);
+    (0,react.useEffect)(() => {
+        if (integrationId) {
+            callFunction(integrationId, 'channels')
+                .then((data) => {
+                if (Array.isArray(data)) {
+                    setChannels(data);
+                    if (!settings.channel && data.length > 0) {
+                        onChange({ ...settings, channel: data[0].id });
+                    }
+                }
+            })
+                .catch((e) => {
+                console.error("Failed to load Slack channels", e);
+            });
+        }
+    }, [integrationId, callFunction]);
     const handleChannelChange = (channelId) => {
         onChange({
             ...settings,
@@ -36444,17 +36592,13 @@ const SlackSettingsComponent = ({ settings, onChange }) => {
     return (react.createElement("div", { className: "space-y-3" },
         react.createElement("h3", { className: "text-sm font-medium text-newTextColor" }, "Slack Settings"),
         react.createElement("div", null,
-            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Channel ID *"),
-            react.createElement("input", { type: "text", value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), placeholder: "Enter Slack channel ID (e.g., C01234ABCDE)", className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary placeholder-textItemBlur", required: true }),
-            react.createElement("div", { className: "text-xs text-textItemBlur space-y-1 mt-2" },
-                react.createElement("p", null, "To find your Slack channel ID:"),
-                react.createElement("ol", { className: "list-decimal list-inside space-y-1 ml-2" },
-                    react.createElement("li", null, "Open Slack in your browser (not desktop app)"),
-                    react.createElement("li", null, "Navigate to the channel"),
-                    react.createElement("li", null,
-                        "The channel ID is in the URL: slack.com/messages/",
-                        react.createElement("strong", null, "C01234ABCDE")),
-                    react.createElement("li", null, "Copy the ID (starts with C) and paste it here"))))));
+            react.createElement("label", { className: "block text-xs text-textItemBlur mb-2" }, "Select Channel"),
+            loading ? (react.createElement("div", { className: "text-xs text-textItemBlur" }, "Loading channels...")) : error ? (react.createElement("div", { className: "text-xs text-red-500" },
+                "Error: ",
+                error)) : (react.createElement("select", { value: settings.channel || '', onChange: (e) => handleChannelChange(e.target.value), className: "w-full px-3 py-2 bg-newBgColor border border-newBorder rounded text-newTextColor focus:outline-none focus:ring-2 focus:ring-btnPrimary", required: true },
+                react.createElement("option", { value: "" }, "-- Select Channel --"),
+                channels.map((ch) => (react.createElement("option", { key: ch.id, value: ch.id }, ch.name))))),
+            channels.length === 0 && !loading && !error && (react.createElement("div", { className: "text-xs text-textItemBlur mt-2" }, "No channels found. Ensure the bot is added to your channels.")))));
 };
 
 ;// ./src/post-creator/platform-settings/TikTokSettings.tsx
@@ -37046,7 +37190,7 @@ const PostCreatorModal = ({ date, post, integrations, wordPressContent, onClose,
                     const newTags = extractedTags.filter(t => !existingValues.has(t.value));
                     setTags([...tags, ...newTags]);
                 }
-            }, onClose: () => setShowAIRefine(false) }))));
+            }, maxLength: characterValidation.limit, onClose: () => setShowAIRefine(false) }))));
 };
 
 ;// ./src/calendar/CalendarApp.tsx

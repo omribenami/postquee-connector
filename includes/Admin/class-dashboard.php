@@ -28,6 +28,7 @@ class Dashboard
 
         // AJAX
         add_action('wp_ajax_postquee_ai_assist', array($this, 'handle_ai_assist'));
+        add_action('wp_ajax_postquee_integration_function', array($this, 'handle_integration_function'));
     }
 
     /**
@@ -39,30 +40,35 @@ class Dashboard
             return;
         }
 
-        // Version 2.0.1 to break cache - matches plugin version
-        $version = POSTQUEE_CONNECTOR_VERSION . '-' . time(); // Add timestamp to force reload
+        // Version for cache busting
+        $version = POSTQUEE_CONNECTOR_VERSION . '-' . time();
+
+        // Enqueue React App styles
         wp_enqueue_style('postquee-admin-css', POSTQUEE_CONNECTOR_URL . 'assets/css/postquee-admin.css', array(), $version);
+        if (file_exists(POSTQUEE_CONNECTOR_PATH . 'assets/dist/calendar.css')) {
+            wp_enqueue_style('postquee-react-css', POSTQUEE_CONNECTOR_URL . 'assets/dist/calendar.css', array(), $version);
+        }
 
-        wp_enqueue_script('postquee-calendar-js', POSTQUEE_CONNECTOR_URL . 'assets/js/postquee-calendar.js', array('jquery'), $version, true);
+        // Enqueue React App script
+        // We use assets/dist/calendar.bundle.js which is built from src/calendar/index.tsx
+        wp_enqueue_script('postquee-calendar-js', POSTQUEE_CONNECTOR_URL . 'assets/dist/calendar.bundle.js', array('jquery'), $version, true);
 
-        // Localize script with WordPress REST API settings
+        // Localize script with WordPress REST API settings and Admin Vars
         wp_localize_script('postquee-calendar-js', 'wpApiSettings', array(
             'root' => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
         ));
 
-        // Also localize for admin vars (AI assistant + AJAX URL)
-        wp_localize_script('postquee-calendar-js', 'postquee_admin_vars', array(
+        $admin_vars = array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('postquee_ai_nonce'),
-        ));
-
-        // Add global ajaxurl for WordPress admin compatibility
-        wp_add_inline_script(
-            'postquee-calendar-js',
-            'var ajaxurl = "' . admin_url('admin-ajax.php') . '";',
-            'before'
         );
+
+        wp_localize_script('postquee-calendar-js', 'postquee_admin_vars', $admin_vars);
+
+        // Fallback: Manually define access to ensure it's available
+        $inline_script = 'window.postquee_admin_vars = ' . json_encode($admin_vars) . ';';
+        wp_add_inline_script('postquee-calendar-js', $inline_script, 'before');
     }
 
     /**
@@ -95,292 +101,103 @@ class Dashboard
 
         $client = new Client($api_key);
         $endpoints = new Endpoints($client);
-        $integrations_result = $endpoints->get_integrations();
-        $integrations = is_wp_error($integrations_result) ? array() : $integrations_result;
-        $error_msg = is_wp_error($integrations_result) ? $integrations_result->get_error_message() : '';
+        $integrations = $endpoints->get_integrations();
 
-        $this->render_messages();
         ?>
         <div class="postquee-app-container">
-
-            <div class="postquee-layout-main">
+            <div class="postquee-app-wrapper">
                 <!-- Sidebar -->
-                <div class="postquee-sidebar">
-                    <div class="postquee-sidebar-header">
-                        <h2>Channels</h2>
-                        <button class="postquee-btn-icon"><span class="dashicons dashicons-arrow-left-alt2"></span></button>
+                <div class="pq-sidebar">
+                    <div class="pq-sidebar-header">
+                        PostQuee
                     </div>
 
-                    <a href="https://app.postquee.com/settings/channels" target="_blank" class="postquee-btn-outline"
-                        style="width: 100%; text-align: center; margin-bottom: 15px;">
-                        <span class="dashicons dashicons-rss"></span> Add Channel
-                    </a>
-
-                    <button id="postquee_open_create" class="postquee-btn-primary"
-                        style="width: 100%; justify-content: center; margin-bottom: 25px;">
+                    <button class="pq-btn-create-post" id="postquee_react_open_create">
                         <span class="dashicons dashicons-plus"></span> Create Post
                     </button>
 
-                    <div class="postquee-channels-list">
-                        <?php if ($error_msg): ?>
-                            <p style="color: #e53e3e; font-size: 12px;"><?php echo esc_html($error_msg); ?></p>
-                        <?php elseif (empty($integrations)): ?>
-                            <p style="color: #718096; font-size: 12px;">No connected channels.</p>
+                    <div class="pq-channel-list">
+                        <?php if (is_wp_error($integrations)): ?>
+                            <div class="notice notice-error inline">
+                                <p><?php echo esc_html($integrations->get_error_message()); ?></p>
+                            </div>
                         <?php else: ?>
                             <?php foreach ($integrations as $integ):
-                                $provider = !empty($integ['providerIdentifier']) ? $integ['providerIdentifier'] : 'App';
-                                $avatar_url = isset($integ['picture']) ? $integ['picture'] : '';
+                                $provider = isset($integ['providerIdentifier']) ? $integ['providerIdentifier'] : 'unknown';
+                                $name = isset($integ['name']) ? $integ['name'] : ucfirst($provider);
+                                $picture = isset($integ['picture']) ? $integ['picture'] : '';
+
+                                // Map provider to icon
+                                $icon_class = 'dashicons-share';
+                                $prov_lower = strtolower($provider);
+                                if (strpos($prov_lower, 'twitter') !== false || strpos($prov_lower, 'x') !== false)
+                                    $icon_class = 'dashicons-twitter';
+                                elseif (strpos($prov_lower, 'facebook') !== false)
+                                    $icon_class = 'dashicons-facebook';
+                                elseif (strpos($prov_lower, 'instagram') !== false)
+                                    $icon_class = 'dashicons-camera';
+                                elseif (strpos($prov_lower, 'linkedin') !== false)
+                                    $icon_class = 'dashicons-businessman';
+                                elseif (strpos($prov_lower, 'youtube') !== false)
+                                    $icon_class = 'dashicons-video-alt3';
+                                elseif (strpos($prov_lower, 'tiktok') !== false)
+                                    $icon_class = 'dashicons-format-video';
+                                elseif (strpos($prov_lower, 'pinterest') !== false)
+                                    $icon_class = 'dashicons-format-image';
+                                elseif (strpos($prov_lower, 'discord') !== false)
+                                    $icon_class = 'dashicons-groups';
+                                elseif (strpos($prov_lower, 'slack') !== false)
+                                    $icon_class = 'dashicons-format-chat';
                                 ?>
-                                <div class="postquee-channel-item">
+                                <div class="pq-channel-item">
                                     <div class="postquee-channel-avatar">
-                                        <?php if ($avatar_url): ?>
-                                            <img src="<?php echo esc_url($avatar_url); ?>" alt="Channel">
+                                        <?php if ($picture): ?>
+                                            <img src="<?php echo esc_url($picture); ?>" alt="<?php echo esc_attr($name); ?>">
                                         <?php else: ?>
-                                            <span class="dashicons dashicons-admin-site"></span>
+                                            <span class="dashicons <?php echo esc_attr($icon_class); ?>"></span>
                                         <?php endif; ?>
 
-                                        <?php
-                                        // Map provider to dashicon
-                                        $icon_class = 'dashicons-share';
-                                        $prov_lower = strtolower($provider);
-                                        if (strpos($prov_lower, 'twitter') !== false || strpos($prov_lower, 'x') !== false)
-                                            $icon_class = 'dashicons-twitter';
-                                        elseif (strpos($prov_lower, 'facebook') !== false)
-                                            $icon_class = 'dashicons-facebook';
-                                        elseif (strpos($prov_lower, 'instagram') !== false)
-                                            $icon_class = 'dashicons-camera';
-                                        elseif (strpos($prov_lower, 'linkedin') !== false)
-                                            $icon_class = 'dashicons-businessman';
-                                        elseif (strpos($prov_lower, 'youtube') !== false)
-                                            $icon_class = 'dashicons-video-alt3';
-                                        elseif (strpos($prov_lower, 'tiktok') !== false)
-                                            $icon_class = 'dashicons-format-video';
-                                        elseif (strpos($prov_lower, 'pinterest') !== false)
-                                            $icon_class = 'dashicons-format-image';
-                                        ?>
-                                        <div class="postquee-provider-icon provider-<?php echo esc_attr($prov_lower); ?>"
-                                            style="position: absolute; bottom: -4px; right: -4px; width: 16px; height: 16px; background: #1F2937; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #030304; color: white; z-index: 99; box-shadow: 0 1px 2px rgba(0,0,0,0.5);">
-                                            <span class="dashicons <?php echo esc_attr($icon_class); ?>"
-                                                style="font-size: 10px; width: 10px; height: 10px;"></span>
+                                        <div class="postquee-provider-icon provider-<?php echo esc_attr($prov_lower); ?>">
+                                            <span class="dashicons <?php echo esc_attr($icon_class); ?>"></span>
                                         </div>
                                     </div>
-                                    <div class="postquee-channel-info">
-                                        <span class="postquee-channel-name"><?php echo esc_html($integ['name']); ?></span>
-                                    </div>
-                                    <div class="postquee-channel-menu"><span class="dashicons dashicons-ellipsis"></span></div>
+                                    <span class="channel-name"><?php echo esc_html($name); ?></span>
                                 </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
 
-                    <!-- DEBUG SECTION -->
-                    <div style="margin-top: 20px; padding: 10px; background: rgba(255,0,0,0.1); border: 1px solid red; font-size: 10px; color: white; display: none;"
-                        id="pq-debug-area">
-                        <strong>Debug Info:</strong><br>
-                        Integrations (PHP): <?php echo count($integrations); ?><br>
-                        API Key: <?php echo $api_key ? 'Set' : 'Missing'; ?><br>
-                        JS Loaded Posts: <span id="pq-debug-posts">...</span><br>
-                        First Post Date: <span id="pq-debug-date">...</span>
-                        <div id="pq-debug-raw" style="white-space: pre; overflow: hidden; height: 50px;"></div>
-                    </div>
-                    <script>
-                        // Force show debug if 'debug' param is in URL
-                        if (window.location.search.indexOf('debug') > -1) {
-                            document.getElementById('pq-debug-area').style.display = 'block';
-                        }
-                    </script>
-
-
-                    <a href="https://discord.gg/hrxAGpV5cP" target="_blank" class="postquee-discord-float">
-                        <span class="dashicons dashicons-groups" style="margin-right: 8px;"></span> Discord Support
+                    <a href="<?php echo admin_url('admin.php?page=postquee-settings'); ?>" class="pq-btn-add-channel">
+                        <span class="dashicons dashicons-plus-alt"></span> Connect Channel
                     </a>
                 </div>
 
-                <!-- Main Calendar Area -->
-                <div class="postquee-main-content">
-                    <div class="postquee-calendar-header">
-                        <div class="postquee-calendar-nav">
-                            <button class="postquee-btn-icon"><span class="dashicons dashicons-arrow-left-alt2"></span></button>
-                            <span class="postquee-date-range">01/19/2026 - 01/25/2026</span>
-                            <button class="postquee-btn-icon"><span
-                                    class="dashicons dashicons-arrow-right-alt2"></span></button>
-                            <button class="postquee-btn-outline" style="padding: 4px 12px; margin-left: 10px;">Today</button>
-                        </div>
-                        <div class="postquee-calendar-views">
-                            <div class="postquee-btn-group">
-                                <button class="active">Day</button>
-                                <button>Week</button>
-                                <button>Month</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="postquee-calendar-grid">
-                        <!-- Calendar will be rendered here by JavaScript -->
-                        <div
-                            style="display: flex; align-items: center; justify-content: center; min-height: 500px; color: #718096;">
-                            <div class="postquee-spinner" style="width: 40px; height: 40px;"></div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Create Post Modal -->
-        <div id="postquee_create_modal" class="postquee-modal" style="display: none;">
-            <div class="postquee-modal-content">
-                <div class="postquee-modal-header">
-                    <h2>Create Post</h2>
-                    <span class="postquee-close-modal">&times;</span>
-                </div>
-                <div class="postquee-modal-body">
-                    <div style="display: grid; grid-template-columns: 1fr 340px; gap: 30px;">
-
-                        <!-- Form side -->
-                        <div class="postquee-card" style="border: none; background: transparent; padding: 0;">
-                            <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"
-                                enctype="multipart/form-data">
-                                <input type="hidden" name="action" value="postquee_create_post">
-                                <?php wp_nonce_field('postquee_create_post_nonce', 'postquee_nonce'); ?>
-
-                                <div class="postquee-form-group">
-                                    <div
-                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                        <label for="postque_content" style="margin:0;">Post Content</label>
-                                        <button type="button" id="postquee_ai_btn" class="postquee-ai-btn">
-                                            <span class="dashicons dashicons-superhero"></span>
-                                            <span class="text">AI Assistant</span>
-                                            <div class="postquee-spinner"
-                                                style="border-color: #fff; border-top-color: transparent; width: 12px; height: 12px; margin-left: 5px;">
-                                            </div>
-                                        </button>
-                                    </div>
-                                    <textarea name="content" id="postque_content" class="postquee-textarea" required
-                                        placeholder="Write something amazing..."></textarea>
-                                </div>
-
-                                <div class="postquee-form-group">
-                                    <label>Attach Media</label>
-                                    <div class="postquee-file-input-wrapper">
-                                        <input type="file" name="postque_image" accept="image/*" class="postquee-input"
-                                            style="padding: 10px;">
-                                    </div>
-                                </div>
-
-                                <div class="postquee-form-group">
-                                    <label>Select Channels</label>
-                                    <?php if (empty($integrations)): ?>
-                                        <p style="color: #718096; font-style: italic;">No channels available.</p>
-                                    <?php else: ?>
-                                        <div class="postquee-channel-grid">
-                                            <?php foreach ($integrations as $integ):
-                                                $avatar_url = isset($integ['picture']) ? $integ['picture'] : '';
-                                                $provider = !empty($integ['providerIdentifier']) ? $integ['providerIdentifier'] : 'App';
-                                                ?>
-                                                <label class="postquee-channel-option">
-                                                    <input type="checkbox" name="channels[]"
-                                                        value="<?php echo esc_attr($integ['id']); ?>">
-                                                    <div class="postquee-channel-select-card" style="height: auto; padding: 12px;">
-                                                        <?php if ($avatar_url): ?>
-                                                            <img src="<?php echo esc_url($avatar_url); ?>" alt="Channel">
-                                                        <?php else: ?>
-                                                            <span class="dashicons dashicons-share channel-icon"></span>
-                                                        <?php endif; ?>
-
-                                                        <?php
-                                                        // Map provider to dashicon for modal
-                                                        $icon_class = 'dashicons-share';
-                                                        $prov_lower = strtolower($provider);
-                                                        if (strpos($prov_lower, 'twitter') !== false || strpos($prov_lower, 'x') !== false)
-                                                            $icon_class = 'dashicons-twitter';
-                                                        elseif (strpos($prov_lower, 'facebook') !== false)
-                                                            $icon_class = 'dashicons-facebook';
-                                                        elseif (strpos($prov_lower, 'instagram') !== false)
-                                                            $icon_class = 'dashicons-camera';
-                                                        elseif (strpos($prov_lower, 'linkedin') !== false)
-                                                            $icon_class = 'dashicons-businessman';
-                                                        elseif (strpos($prov_lower, 'youtube') !== false)
-                                                            $icon_class = 'dashicons-video-alt3';
-                                                        elseif (strpos($prov_lower, 'tiktok') !== false)
-                                                            $icon_class = 'dashicons-format-video';
-                                                        elseif (strpos($prov_lower, 'pinterest') !== false)
-                                                            $icon_class = 'dashicons-format-image';
-                                                        ?>
-                                                        <div class="postquee-provider-icon provider-<?php echo esc_attr($prov_lower); ?>"
-                                                            style="width:14px; height:14px; bottom: 0; right: 0;">
-                                                            <span class="dashicons <?php echo esc_attr($icon_class); ?>"
-                                                                style="font-size: 8px; width: 8px; height: 8px;"></span>
-                                                        </div>
-                                                        <span class="channel-name"
-                                                            style="font-weight: 600; margin-bottom: 4px;"><?php echo esc_html($integ['name']); ?></span>
-                                                        <span class="channel-name"
-                                                            style="font-size: 11px; color: #718096; text-transform: uppercase;"><?php echo esc_html($provider); ?></span>
-                                                    </div>
-                                                </label>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-
-                                <div class="postquee-form-group">
-                                    <label>Scheduling</label>
-                                    <div class="postquee-schedule-box">
-                                        <div class="postquee-radio-group">
-                                            <label class="postquee-radio-label">
-                                                <input type="radio" name="post_type_selector" value="now" checked
-                                                    id="postquee_now_radio">
-                                                Post Now
-                                            </label>
-                                            <label class="postquee-radio-label">
-                                                <input type="radio" name="post_type_selector" value="schedule"
-                                                    id="postquee_schedule_radio">
-                                                Schedule for Later
-                                            </label>
-                                        </div>
-
-                                        <div id="postquee_schedule_input" style="display: none; margin-top: 15px;">
-                                            <input type="datetime-local" name="schedule_date" class="postquee-input"
-                                                style="max-width: 300px;">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="postquee-actions">
-                                    <button type="submit" name="submit_post" class="postquee-btn-primary">
-                                        <span class="dashicons dashicons-paperplane"></span> Publish Post
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Preview Side -->
-                        <div>
-                            <span class="postquee-panel-title">Post Preview</span>
-                            <div class="postquee-preview-card">
-                                <div class="postquee-preview-header">
-                                    <div class="postquee-preview-avatar"></div>
-                                    <div class="postquee-preview-meta">
-                                        <span class="postquee-preview-name">Your Account</span>
-                                        <span class="postquee-preview-time">Just now</span>
-                                    </div>
-                                </div>
-                                <div class="postquee-preview-content" id="postquee_preview_content">Your post caption will
-                                    appear here...</div>
-                                <div class="postquee-preview-image empty" id="postquee_preview_image">
-                                    No image selected
-                                </div>
-                            </div>
-                            <p style="color: #718096; font-size: 12px; margin-top: 10px; text-align: center;">Preview is an
-                                approximation.</p>
-                        </div>
-
-                    </div>
+                <!-- React Application Root for Main Content -->
+                <div class="pq-main-content">
+                    <div id="postquee-calendar-root" style="height: 100%;"></div>
                 </div>
             </div>
+
+            <noscript>
+                <div class="notice notice-error">
+                    <p>JavaScript is required to use the PostQuee Dashboard.</p>
+                </div>
+            </noscript>
+
+            <script>
+                jQuery(document).ready(function ($) {
+                    $('#postquee_react_open_create').on('click', function (e) {
+                        e.preventDefault();
+                        // Dispatch event for React to listen to
+                        window.dispatchEvent(new CustomEvent('pq-open-create-modal', { detail: { date: new Date() } }));
+                    });
+                });
+            </script>
         </div>
         <?php
     }
+
+
 
     /**
      * Helper to render messages.
@@ -388,11 +205,12 @@ class Dashboard
     private function render_messages()
     {
         if (isset($_GET['postquee_msg'])) {
-            if ('success' === $_GET['postquee_msg']) {
+            $msg_type = sanitize_key($_GET['postquee_msg']);
+            if ('success' === $msg_type) {
                 echo '<div class="notice notice-success is-dismissible" style="margin-top: 20px;"><p><strong>Success!</strong> Your post has been created.</p></div>';
-            } elseif ('error' === $_GET['postquee_msg']) {
-                $err = isset($_GET['err']) ? urldecode($_GET['err']) : 'Unknown error';
-                echo '<div class="notice notice-error is-dismissible" style="margin-top: 20px;"><p><strong>Error:</strong> ' . esc_html($err) . '</p></div>';
+            } elseif ('error' === $msg_type) {
+                $err = isset($_GET['err']) ? esc_html(urldecode(sanitize_text_field($_GET['err']))) : 'Unknown error';
+                echo '<div class="notice notice-error is-dismissible" style="margin-top: 20px;"><p><strong>Error:</strong> ' . $err . '</p></div>';
             }
         }
     }
@@ -409,11 +227,11 @@ class Dashboard
 
         $url_redirect = admin_url('admin.php?page=postquee-dashboard');
 
-        // 1. Inputs
-        $content = isset($_POST['content']) ? trim($_POST['content']) : '';
-        $channels = isset($_POST['channels']) ? (array) $_POST['channels'] : array();
-        $post_type_sel = isset($_POST['post_type_selector']) ? $_POST['post_type_selector'] : 'now';
-        $schedule_date = isset($_POST['schedule_date']) ? $_POST['schedule_date'] : '';
+        // 1. Inputs - Sanitized
+        $content = isset($_POST['content']) ? sanitize_textarea_field(wp_unslash($_POST['content'])) : '';
+        $channels = isset($_POST['channels']) ? array_map('sanitize_text_field', (array) $_POST['channels']) : array();
+        $post_type_sel = isset($_POST['post_type_selector']) ? sanitize_key($_POST['post_type_selector']) : 'now';
+        $schedule_date = isset($_POST['schedule_date']) ? sanitize_text_field($_POST['schedule_date']) : '';
 
         if (empty($content)) {
             wp_safe_redirect(add_query_arg(array('postquee_msg' => 'error', 'err' => urlencode('Content is required')), $url_redirect));
@@ -631,5 +449,37 @@ class Dashboard
         // The /generate endpoint is not available in the public API
         // Return a helpful message instead of making a failing API call
         wp_send_json_error('AI content generation is not available in the PostQuee Public API. Please use the full PostQuee app at app.postquee.com for AI features.');
+    }
+
+    /**
+     * Handle AJAX Integration Function
+     */
+    public function handle_integration_function()
+    {
+        check_ajax_referer('postquee_ai_nonce', 'nonce');
+
+        $integration_id = isset($_POST['id']) ? sanitize_text_field($_POST['id']) : '';
+        $function_name = isset($_POST['function']) ? sanitize_text_field($_POST['function']) : '';
+        // Decode JSON data from frontend (wp_unslash for WordPress standards)
+        $data = isset($_POST['data']) ? json_decode(wp_unslash($_POST['data']), true) : [];
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        if (empty($integration_id) || empty($function_name)) {
+            wp_send_json_error('Missing required parameters');
+        }
+
+        $api_key = get_option(Settings::OPTION_API_KEY);
+        $client = new Client($api_key);
+        $endpoints = new Endpoints($client);
+
+        $result = $endpoints->call_integration_function($integration_id, $function_name, $data);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error($result->get_error_message());
+        }
+
+        wp_send_json_success($result);
     }
 }

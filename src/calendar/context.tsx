@@ -126,7 +126,7 @@ export function useCalendarPosts() {
   );
 
   return {
-    posts: (data as any)?.data || [],
+    posts: Array.isArray(data) ? data : (data as any)?.posts || (data as any)?.data || [],
     isLoading,
     error,
     refresh: mutate,

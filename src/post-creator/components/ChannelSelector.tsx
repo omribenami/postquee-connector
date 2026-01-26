@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Integration } from '../../calendar/types';
 import { SocialIcon } from '../../shared/components/SocialIcon';
+import { getPlatformColor, getPlatformGradient } from '../../shared/utils/platformColors';
 
 interface ChannelSelectorProps {
   integrations: Integration[];
@@ -57,11 +58,10 @@ export const ChannelSelector: React.FC<ChannelSelectorProps> = ({
               {/* Channel icon with platform badge */}
               <div className="relative">
                 <div
-                  className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${
-                    isSelected
-                      ? 'border-btnPrimary ring-2 ring-btnPrimary/30'
-                      : 'border-newBorder grayscale hover:grayscale-0'
-                  }`}
+                  className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all ${isSelected
+                    ? 'border-btnPrimary ring-2 ring-btnPrimary/30'
+                    : 'border-newBorder grayscale hover:grayscale-0'
+                    }`}
                 >
                   {integration.picture ? (
                     <img
@@ -77,8 +77,11 @@ export const ChannelSelector: React.FC<ChannelSelectorProps> = ({
                 </div>
 
                 {/* Social media platform badge */}
-                <div className="absolute bottom-0 right-0 w-5 h-5 bg-white rounded-full flex items-center justify-center border border-newBorder">
-                  <SocialIcon identifier={integration.identifier} className="w-3 h-3" />
+                <div
+                  className="absolute bottom-0 right-0 w-5 h-5 rounded-full flex items-center justify-center border border-newBorder"
+                  style={{ background: getPlatformGradient(integration.identifier) }}
+                >
+                  <SocialIcon identifier={integration.identifier} className="w-3 h-3 text-white" />
                 </div>
               </div>
 

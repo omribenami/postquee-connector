@@ -459,6 +459,7 @@ export const PostCreatorModal: React.FC<PostCreatorModalProps> = ({
               setTags([...tags, ...newTags]);
             }
           }}
+          maxLength={characterValidation.limit}
           onClose={() => setShowAIRefine(false)}
         />
       )}

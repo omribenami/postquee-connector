@@ -50,6 +50,13 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
     },
   });
 
+  // Sync content updates from parent
+  React.useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
+
   if (!editor) {
     return null;
   }
@@ -61,9 +68,8 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
         {/* Bold */}
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded hover:bg-newBoxHover ${
-            editor.isActive('bold') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
-          }`}
+          className={`p-2 rounded hover:bg-newBoxHover ${editor.isActive('bold') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
+            }`}
           title="Bold (Ctrl+B)"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,9 +80,8 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
         {/* Italic */}
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded hover:bg-newBoxHover ${
-            editor.isActive('italic') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
-          }`}
+          className={`p-2 rounded hover:bg-newBoxHover ${editor.isActive('italic') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
+            }`}
           title="Italic (Ctrl+I)"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,9 +92,8 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
         {/* Underline */}
         <button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`p-2 rounded hover:bg-newBoxHover ${
-            editor.isActive('underline') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
-          }`}
+          className={`p-2 rounded hover:bg-newBoxHover ${editor.isActive('underline') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
+            }`}
           title="Underline (Ctrl+U)"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,9 +111,8 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
               editor.chain().focus().setLink({ href: url }).run();
             }
           }}
-          className={`p-2 rounded hover:bg-newBoxHover ${
-            editor.isActive('link') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
-          }`}
+          className={`p-2 rounded hover:bg-newBoxHover ${editor.isActive('link') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
+            }`}
           title="Add Link"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,9 +123,8 @@ export const TipTapEditor: React.FC<TipTapEditorProps> = ({
         {/* Bullet List */}
         <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-2 rounded hover:bg-newBoxHover ${
-            editor.isActive('bulletList') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
-          }`}
+          className={`p-2 rounded hover:bg-newBoxHover ${editor.isActive('bulletList') ? 'bg-newBoxHover text-btnPrimary' : 'text-textItemBlur'
+            }`}
           title="Bullet List"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

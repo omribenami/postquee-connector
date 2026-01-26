@@ -133,10 +133,21 @@ class Client
         // Use original filename if provided, otherwise fallback to basename
         $filename = $original_filename ?: basename($file_path);
 
+        // Robust MIME type detection
+        $mime_type = 'application/octet-stream';
+        if (function_exists('mime_content_type')) {
+            $mime_type = mime_content_type($file_path);
+        } else {
+            $wp_filetype = wp_check_filetype($filename, null);
+            if ($wp_filetype['type']) {
+                $mime_type = $wp_filetype['type'];
+            }
+        }
+
         $body = '';
         $body .= '--' . $boundary . "\r\n";
         $body .= 'Content-Disposition: form-data; name="file"; filename="' . $filename . '"' . "\r\n";
-        $body .= 'Content-Type: ' . mime_content_type($file_path) . "\r\n\r\n";
+        $body .= 'Content-Type: ' . $mime_type . "\r\n\r\n";
         $body .= $file_contents . "\r\n";
         $body .= '--' . $boundary . '--';
 

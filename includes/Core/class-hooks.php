@@ -128,11 +128,13 @@ class Hooks
             return;
         }
 
-        if ('success' === $_GET['postquee_message']) {
+        $message_type = sanitize_key($_GET['postquee_message']);
+
+        if ('success' === $message_type) {
             echo '<div class="notice notice-success is-dismissible"><p>Post successfully sent to PostQuee!</p></div>';
-        } elseif ('error' === $_GET['postquee_message']) {
-            $msg = isset($_GET['postquee_error_msg']) ? urldecode($_GET['postquee_error_msg']) : 'Unknown error';
-            echo '<div class="notice notice-error is-dismissible"><p>PostQuee Sync Failed: ' . esc_html($msg) . '</p></div>';
+        } elseif ('error' === $message_type) {
+            $msg = isset($_GET['postquee_error_msg']) ? esc_html(urldecode(sanitize_text_field($_GET['postquee_error_msg']))) : 'Unknown error';
+            echo '<div class="notice notice-error is-dismissible"><p>PostQuee Sync Failed: ' . $msg . '</p></div>';
         }
     }
 
